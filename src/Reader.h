@@ -18,6 +18,19 @@ class Reader
         hitsTOF_selected,
         chargeFW,
         chargeFW_selected,
+        vertexZ,
+        vertexZ_selected,
+        ptMDC,
+        ptMDC_selected,
+        massTOF,
+        massTOF_selected,
+        rapidityMDC,
+        rapidityMDC_selected,
+        rapidityMDC_recentred,
+        phiMDC,
+        phiMDC_selected,
+        betaTOF,
+        betaTOF_selected,
         Num1DHistos
     };
     enum eHisto2DMap{
@@ -27,6 +40,8 @@ class Reader
         tracks_charge_selected,
         hits_charge,
         hits_charge_selected,
+        vertexX_vertexY,
+        vertexX_vertexY_selected,
         Num2DHistos
     };
     public:
