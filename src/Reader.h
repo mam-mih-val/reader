@@ -11,7 +11,8 @@ class Reader
     TChain* fChain;
     TBranch* DTEvent;
     DataTreeEvent* fEvent;
-    enum eHisto1DMap{
+    Selector selector;
+    enum eQAHisto1DMap{
         tracksMDC = 0,
         tracksMDC_selected,
         hitsTOF,
@@ -33,7 +34,7 @@ class Reader
         betaTOF_selected,
         Num1DHistos
     };
-    enum eHisto2DMap{
+    enum eQAHisto2DMap{
         tracks_hits = 0,
         tracks_hits_selected,
         tracks_charge,
@@ -44,9 +45,30 @@ class Reader
         vertexX_vertexY_selected,
         Num2DHistos
     };
+    enum eFlowProfile{
+        meanQx = 0,
+        meanQy,
+        resolution,
+        yMostCentral,
+        yMidCentral,
+        yPeripherial,
+        ptMostCentral,
+        ptMidCentral,
+        ptPeripherial,
+        NumOfFLowProfiles
+    };
+    enum eQvectorDistribution{
+        QxNotRecentred=0,
+        QyNotRecentred,
+        QxRecentred,
+        QyRecentred,
+        NumOfQvectorHistos
+    };
     public:
     TH1F* vHisto1D[Num1DHistos];
     TH2F* vHisto2D[Num2DHistos];
+    TProfile* pFlowProfiles[NumOfFLowProfiles];
+    TH1F*   vQvectorDistribution[4];
     Reader() {};
     ~Reader();
     Reader(char* cFileName);
@@ -54,7 +76,11 @@ class Reader
     DataTreeEvent*  GetEvent(int idx);
     void            loop();
     void            GetEvent();
-    void            SaveStatistics();
+    void            SaveQAStatistics();
     void            GetQualityAccurance();
-    void            InitHistos();
+    void            InitQAHistos();
+    void            InitFlowHistos();
+    void            GetFlow(int iNumHarm=1);
+    void            SaveFlowStatistics();
+    void            GetQ();
 };

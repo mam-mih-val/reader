@@ -9,8 +9,9 @@ class Selector
 {
     private:
     DataTreeEvent*  fEvent;
-    TH1F*           hRejected;
-    enum cuts{
+    TH1F*           hRejectedEvents;
+    TH1F*           hRejectedTracks;
+    enum event_cuts{
         cVeretexPositionZ = 0,
         cVeretexPositionXY,
         cVertexQuality,
@@ -20,11 +21,21 @@ class Selector
         cTriggerNoPileUp,
         cTriggerGoodStartVeto,
         cTriggerGoodStartMeta,
-        cTriggerNoVeto
+        cTriggerNoVeto,
+        cNumOfEventCuts
+    };
+    enum track_cuts{
+        cDCA = 0,
+        cTrackHitMatchX,
+        cTrackHitMatchY,
+        cChi2,
+        cBeta,
+        cNumOfTrackCuts
     };
     public:
     Selector();
     ~Selector();
-    Bool_t IsCorrect(DataTreeEvent* _fEvent);
+    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent);
+    Bool_t IsCorrectTrack(Int_t idx);
     void    SaveStatistics();
 };

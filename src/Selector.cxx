@@ -4,77 +4,115 @@
 Selector::Selector() 
 {
     fEvent = new DataTreeEvent;
-    hRejected = new TH1F("Amount of rejected events","",8,0,8);
+    hRejectedEvents = new TH1F("Amount of rejected events","",cNumOfEventCuts,0,8);
+    hRejectedTracks = new TH1F("Amount of rejected tracks","",cNumOfTrackCuts,0,8);
 }
 
 Selector::~Selector()
 {
     delete fEvent;
-    delete hRejected;
+    delete hRejectedEvents;
+    delete hRejectedTracks;
 }
 
-Bool_t Selector::IsCorrect(DataTreeEvent* _fEvent)
+Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent)
 {
     fEvent = _fEvent;
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )
     {
-        hRejected->Fill(cVeretexPositionZ);
+        hRejectedEvents->Fill(cVeretexPositionZ);
         return 0;
     }
     Float_t Rx = fEvent->GetVertexPositionComponent(0), Ry = fEvent->GetVertexPositionComponent(1);
     if ( sqrt(Rx*Rx+Ry*Ry) > 3 )
     {
-        hRejected->Fill(cVeretexPositionXY);
+        hRejectedEvents->Fill(cVeretexPositionXY);
         return 0;
     }
     if ( fEvent->GetVertexQuality() < 0.5 || fEvent->GetVertexQuality() > 40 )
     {
-        hRejected->Fill(cVertexQuality);
+        hRejectedEvents->Fill(cVertexQuality);
         return 0;
     }
     if ( !fEvent->GetTrigger(HADES_constants::kGoodVertexClust)->GetIsFired() ) 
     {
-        hRejected->Fill(cTriggerVertexClust);
+        hRejectedEvents->Fill(cTriggerVertexClust);
         return 0;
     }
     if ( ! fEvent->GetTrigger(HADES_constants::kGoodVertexCand)->GetIsFired() )
     {
-        hRejected->Fill(cTriggerVertexCand);
+        hRejectedEvents->Fill(cTriggerVertexCand);
         return 0;
     }
     if( !fEvent->GetTrigger(HADES_constants::kGoodSTART)->GetIsFired() )
     {
-        hRejected->Fill(cTriggerGoodStart);
+        hRejectedEvents->Fill(cTriggerGoodStart);
         return 0;
     }
     if( !fEvent->GetTrigger(HADES_constants::kNoPileUpSTART)->GetIsFired() )
     {
-        hRejected->Fill(cTriggerNoPileUp);
+        hRejectedEvents->Fill(cTriggerNoPileUp);
         return 0;
        
     }
     if( !fEvent->GetTrigger(HADES_constants::kGoodSTARTVETO)->GetIsFired() )
     {
-        hRejected->Fill(cTriggerGoodStartVeto);
+        hRejectedEvents->Fill(cTriggerGoodStartVeto);
         return 0;
     }
     if( !fEvent->GetTrigger(HADES_constants::kGoodSTARTMETA)->GetIsFired() )
     {
-        hRejected->Fill(cTriggerGoodStartMeta);
+        hRejectedEvents->Fill(cTriggerGoodStartMeta);
         return 0;
     }
     if( !fEvent->GetTrigger(HADES_constants::kNoVETO)->GetIsFired() )
     {
-        hRejected->Fill(cTriggerNoVeto);
+        hRejectedEvents->Fill(cTriggerNoVeto);
         return 0;
     }
     
     return 1;
 }
 
+Bool_t Selector::IsCorrectTrack(Int_t idx)
+{
+    DataTreeTrack* fTrack = fEvent->GetVertexTrack(idx);
+    DataTreeTOFHit* fHit = fEvent->GetTOFHit(idx);
+    Float_t fTof = fHit->GetTime();
+    Float_t fLen = fHit->GetPathLength();
+    //cout << len/tof/299.792458 << endl;
+    if ( fTrack->GetDCAComponent(1) > 15 )
+    {
+        hRejectedTracks->Fill(cDCA);
+        return 0;
+    }
+    if ( fLen/fTof/299.792458 > 1 ) 
+    {
+        hRejectedTracks->Fill(cBeta);
+        return 0;
+    }
+    if ( fHit->GetPositionComponent(0) < -5 || fHit->GetPositionComponent(0) > 5 )
+    {
+        hRejectedTracks->Fill(cTrackHitMatchX);
+        return 0;
+    }
+    if ( fHit->GetPositionComponent(1) < -5 || fHit->GetPositionComponent(1) > 5 )
+    {
+        hRejectedTracks->Fill(cTrackHitMatchY);
+        return 0;
+    }    
+    if ( fTrack->GetChi2() > 100 )
+    {
+        hRejectedTracks->Fill(cChi2);
+        return 0;
+    }    
+    return 1;
+}
+
 void Selector::SaveStatistics() 
 {  
-    TFile* fFile = new TFile("Selector_Statistics.root","recreate");
-    hRejected->Write();
+    TFile* fFile = new TFile("../histograms/SelectorStatisticsHistos.root","recreate");
+    hRejectedEvents->Write();
+    hRejectedTracks->Write();
     fFile->Close();
 }

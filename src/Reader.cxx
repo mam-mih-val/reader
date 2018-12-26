@@ -1,5 +1,7 @@
 #include "Reader.h"
 
+const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
+
 Reader::Reader(char* cFileName)
 {
     fChain = new TChain("DataTree");
@@ -18,8 +20,8 @@ Reader::~Reader()
 
 void Reader::GetQualityAccurance()
 {
+    this->InitQAHistos();
     Long64_t lNEvents = fChain->GetEntries();
-    Selector selector;
     Float_t fNHitsTOF;
     Float_t fNTracksMDC;
     Float_t fChargeFW;
@@ -58,11 +60,14 @@ void Reader::GetQualityAccurance()
         vHisto2D[tracks_charge]->Fill(fNTracksMDC,fChargeFW);
         vHisto2D[hits_charge]->Fill(fNHitsTOF,fChargeFW);
         vHisto2D[vertexX_vertexY]->Fill(fVertexPosition[0],fVertexPosition[1]);
-        if(!selector.IsCorrect(fEvent))
+        if(!selector.IsCorrectEvent(fEvent))
             continue;
 
         for (int j=0;j<iNTracks;j++)
         {
+            
+            if(!selector.IsCorrectTrack(j))
+                continue;
             fTrack = fEvent->GetVertexTrack(j);
             TLorentzVector fMomentum = fTrack->GetMomentum();
             fHit = fEvent->GetTOFHit(j);
@@ -74,6 +79,7 @@ void Reader::GetQualityAccurance()
             vHisto1D[betaTOF_selected]->Fill(fBeta);
             vHisto1D[massTOF_selected]->Fill(fMass2);
             vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
+            vHisto1D[rapidityMDC_recentred]->Fill(fMomentum.Rapidity()-YCOR);
             vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
         }
         vHisto1D[vertexZ_selected]->Fill(fVertexPosition[2]);
@@ -86,6 +92,7 @@ void Reader::GetQualityAccurance()
         vHisto2D[vertexX_vertexY_selected]->Fill(fVertexPosition[0],fVertexPosition[1]);
     }
     selector.SaveStatistics();
+    this->SaveQAStatistics();
     return;
 }
 
@@ -95,7 +102,7 @@ DataTreeEvent* Reader::GetEvent(int idx)
     return fEvent;
 }
 
-void Reader::InitHistos()
+void Reader::InitQAHistos()
 {
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC","",100,0,100);
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected","",100,0,100);
@@ -109,9 +116,9 @@ void Reader::InitHistos()
     vHisto1D[ptMDC_selected] =      new TH1F("ptMDC_selected","",100,0,2.5);
     vHisto1D[massTOF] =             new TH1F("massTOF","",100,0,4);
     vHisto1D[massTOF_selected] =    new TH1F("massTOF_selected","",100,0,4);
-    vHisto1D[rapidityMDC] =         new TH1F("rapidityMDC","",100,-2,4);
-    vHisto1D[rapidityMDC_selected]= new TH1F("rapidityMDC_selected","",100,-2,4);
-    vHisto1D[rapidityMDC_recentred]=new TH1F("rapidityMDC_recentred","",100,-2,4);
+    vHisto1D[rapidityMDC] =         new TH1F("rapidityMDC","",100,-1,2);
+    vHisto1D[rapidityMDC_selected]= new TH1F("rapidityMDC_selected","",100,-1,2);
+    vHisto1D[rapidityMDC_recentred]=new TH1F("rapidityMDC_recentred","",100,-1,2);
     vHisto1D[phiMDC] =              new TH1F("phiMDC","",100,-3.1415,3.1415);
     vHisto1D[phiMDC_selected] =     new TH1F("phiMDC_selected","",100,-3.1415,3.1415);
     vHisto1D[betaTOF] =             new TH1F("betaTOF","",100,0,1.2);
@@ -120,16 +127,60 @@ void Reader::InitHistos()
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits","",100,0,100,100,0,200);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected","",100,0,100,100,0,200);
     vHisto2D[tracks_charge] =       new TH2F("tracks&charge","",100,0,100,100,0,8000);
-    vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected","",100,0,100,0,8000);
+    vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected","",100,0,100,100,0,8000);
     vHisto2D[hits_charge] =         new TH2F("hits&charge","",100,0,200,100,0,8000);
     vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected","",100,0,200,100,0,8000);
-    vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY","",100,0,5,100,0,5);
-    vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected","",100,0,5,100,0,5);
+    vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY","",100,-5,5,100,-5,5);
+    vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected","",100,-5,5,100,-5,5);
 }
 
-void Reader::SaveStatistics()
+void Reader::GetFlow(int iNumHarm=1)
 {
-    TFile* fHistos = new TFile("../histograms/QualiryAccuranceHistos.root","recreate");
+    this->InitFlowHistos();
+    Qvector fQ;
+    Float_t fCentrality;
+    Long64_t lNEvents = fChain->GetEntries();
+    // Mean Q as function of Centrality loop
+    for (int i=0;i<lNEvents;i++)
+    {
+        fChain->GetEntry(i);
+        if( !selector.IsCorrectEvent(fEvent) )
+            continue;
+        fCentrality = fEvent->GetCentrality();
+        fQ.Estimate(fEvent);
+        pFlowProfiles[meanQx]->Fill(fCentrality,fQ.GetComponent(0));
+        pFlowProfiles[meanQy]->Fill(fCentrality,fQ.GetComponent(1));
+        vQvectorDistribution[QxNotRecentred]->Fill(fQ.GetComponent(0));
+        vQvectorDistribution[QyNotRecentred]->Fill(fQ.GetComponent(1));
+    }
+    // Event resolution as function of centrality
+    Float_t PsiEP[2];
+    Float_t* fQCorection = new Float_t[2];
+    for (int i=0;i<lNEvents;i++)
+    {
+        fChain->GetEntry(i);
+        if(!selector.IsCorrectEvent(fEvent))
+            continue;
+        fCentrality = fEvent->GetCentrality();
+        int bin = (fCentrality/5)+1;
+        fQ.Estimate(fEvent,1);
+        fQCorection[0] = pFlowProfiles[meanQx]->GetBinContent(bin);
+        fQCorection[1] = pFlowProfiles[meanQy]->GetBinContent(bin);
+        fQ.Recenter(fQCorection);
+        PsiEP[0] = fQ.GetPsiEP(0);
+        PsiEP[1] = fQ.GetPsiEP(1);
+        if ( PsiEP[0] != PsiEP[0] || PsiEP[1] != PsiEP[1] )
+            continue;
+        Float_t fRes = 2*cos(PsiEP[0]-PsiEP[1]);
+        pFlowProfiles[resolution]->Fill(fCentrality,fRes);
+    }
+
+    this->SaveFlowStatistics();
+}
+
+void Reader::SaveQAStatistics()
+{
+    TFile* fHistos = new TFile("../histograms/QualityAccuranceHistos.root","recreate");
     for(int i=0;i<Num1DHistos;i++)
     {
         vHisto1D[i]->Write();
@@ -138,4 +189,34 @@ void Reader::SaveStatistics()
     {
         vHisto2D[i]->Write();
     }
+}
+
+void Reader::InitFlowHistos()
+{
+    pFlowProfiles[meanQx] =         new TProfile("MeanQx vs Centrality","",10,0,50);
+    pFlowProfiles[meanQy] =         new TProfile("MeanQy vs Centrality","",10,0,50);
+    pFlowProfiles[resolution] =     new TProfile("Resolution vs Centrality","",10,0,50);
+
+    pFlowProfiles[yMostCentral] =   new TProfile("v1 vs y, most","",10,-0.8,0.8);
+    pFlowProfiles[yMidCentral] =    new TProfile("v1 vs y, mid","",10,-0.8,0.8);
+    pFlowProfiles[yPeripherial] =   new TProfile("v1 vs y, per","",10,-0.8,0.8);
+
+    pFlowProfiles[ptMostCentral] =  new TProfile("v1 vs pt, most","",10,0.0,2.0);
+    pFlowProfiles[ptMidCentral] =   new TProfile("v1 vs pt, mid","",10,0.0,2.0);
+    pFlowProfiles[ptPeripherial] =  new TProfile("v1 vs pt, per","",10,0.0,2.0);
+
+    vQvectorDistribution[QxNotRecentred] =       new TH1F("QxNotRecrntred","",100,-1,1);
+    vQvectorDistribution[QyNotRecentred] =       new TH1F("QyNotRecentred","",100,-1,1);
+    vQvectorDistribution[QxRecentred] =          new TH1F("QxRecentred","",100,-1,1);
+    vQvectorDistribution[QyRecentred] =          new TH1F("QyRecrntred","",100,-1,1);
+}
+
+void Reader::SaveFlowStatistics()
+{
+    TFile* fFile = new TFile("../histograms/FlowStatistics.root","recreate");
+    for(int i=0;i<NumOfFLowProfiles;i++)
+    {
+        pFlowProfiles[i]->Write();
+    }
+    fFile->Close();
 }
