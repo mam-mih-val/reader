@@ -1,9 +1,4 @@
-#include "TROOT.h"
-#include "TFile.h"
-#include "TH1.h"
-#include "TH2.h"
 #include "HADES_constants.h"
-#include "DataTreeEvent.h"
 
 class Reader
 {

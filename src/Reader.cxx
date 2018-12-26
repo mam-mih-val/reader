@@ -174,7 +174,6 @@ void Reader::GetFlow(int iNumHarm=1)
         Float_t fRes = 2*cos(PsiEP[0]-PsiEP[1]);
         pFlowProfiles[resolution]->Fill(fCentrality,fRes);
     }
-
     this->SaveFlowStatistics();
 }
 

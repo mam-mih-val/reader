@@ -1,3 +1,5 @@
+#include "HADES_constants.h"
+
 class Qvector
 {
     private:
