@@ -8,8 +8,7 @@ Reader::Reader(char* cFileName)
     fChain->Add(cFileName);
     cout << fChain->GetEntries() << endl;
     fEvent = new DataTreeEvent;
-    DTEvent = (TBranch*) fChain->GetBranch("DTEvent");
-    DTEvent->SetAddress(&fEvent);
+    fChain->SetBranchAddress("DTEvent", &fEvent);
 }
 
 Reader::~Reader()
@@ -148,6 +147,8 @@ void Reader::GetFlow(int iNumHarm=1)
             continue;
         fCentrality = fEvent->GetCentrality();
         fQ.Estimate(fEvent);
+        if( fQ.GetComponent(0)!=fQ.GetComponent(0) || fQ.GetComponent(1)!=fQ.GetComponent(1) )
+            continue;
         pFlowProfiles[meanQx]->Fill(fCentrality,fQ.GetComponent(0));
         pFlowProfiles[meanQy]->Fill(fCentrality,fQ.GetComponent(1));
         vQvectorDistribution[QxNotRecentred]->Fill(fQ.GetComponent(0));
