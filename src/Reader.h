@@ -7,6 +7,10 @@ class Reader
     TBranch* DTEvent;
     DataTreeEvent* fEvent;
     Selector selector;
+    TH1F* vHisto1D[Num1DHistos];
+    TH2F* vHisto2D[Num2DHistos];
+    TProfile* pFlowProfiles[NumOfFLowProfiles];
+    TH1F*   vQvectorDistribution[4];
     enum eQAHisto1DMap{
         tracksMDC = 0,
         tracksMDC_selected,
@@ -60,22 +64,16 @@ class Reader
         NumOfQvectorHistos
     };
     public:
-    TH1F* vHisto1D[Num1DHistos];
-    TH2F* vHisto2D[Num2DHistos];
-    TProfile* pFlowProfiles[NumOfFLowProfiles];
-    TH1F*   vQvectorDistribution[4];
     Reader() {};
-    ~Reader();
     Reader(char* cFileName);
-    void            Init();
-    DataTreeEvent*  GetEvent(int idx);
-    void            loop();
+    ~Reader();
+    void            FillCorrectionHistos();
+    DataTreeEvent*  GetEvent(int idx=0);
     void            GetEvent();
-    void            SaveQAStatistics();
+    void            GetFlow(int iNumHarm=1);
     void            GetQualityAccurance();
     void            InitQAHistos();
     void            InitFlowHistos();
-    void            GetFlow(int iNumHarm=1);
     void            SaveFlowStatistics();
-    void            GetQ();
+    void            SaveQAStatistics();
 };
