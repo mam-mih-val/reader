@@ -218,15 +218,14 @@ void Reader::GetFlow(int iNumHarm=1)
         fQCorection[1] = pFlowProfiles[meanQy]->GetBinContent(bin);
         fQ.Recenter(fQCorection);
         fPsiEP = fQ.GetPsiEP();
-        if(fPsiEP!=fPsiEP)
+        if(fPsiEP != fPsiEP)
             continue;
         Float_t fRes = pFlowProfiles[resolution]->GetBinContent(bin);
+        fRes = sqrt(fRes);
         Int_t iNumberOfTracks = fEvent->GetNVertexTracks();
         for(int j=0;j<iNumberOfTracks;j++)
         {
             fTrack =    fEvent->GetVertexTrack(j);
-            if(!selector.IsCorrectTrack(j))
-                continue;
             Float_t fPt =       fTrack->GetPt();
             Float_t fPhi =      fTrack->GetPhi();
             Float_t fRapidity = fTrack->GetRapidity();
