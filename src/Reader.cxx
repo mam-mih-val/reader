@@ -20,7 +20,7 @@ Reader::~Reader()
 void Reader::AddFile(char* cFileName)
 {
     fChain->Add(cFileName);
-    cout << fChain->GetEntries() << "events" << endl;
+    cout << fChain->GetEntries() << " " << "events" << endl;
 }
 
 void Reader::GetQualityAccurance()
