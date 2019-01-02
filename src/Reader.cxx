@@ -5,8 +5,7 @@ const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
 Reader::Reader(char* cFileName)
 {
     fChain = new TChain("DataTree");
-    fChain->Add(cFileName);
-    cout << fChain->GetEntries() << endl;
+    this->AddFile(cFileName);
     fEvent = new DataTreeEvent;
     fChain->SetBranchAddress("DTEvent", &fEvent);
 }
@@ -15,6 +14,12 @@ Reader::~Reader()
 {
     delete fChain;
     delete fEvent;
+}
+
+void Reader::AddFile(char* cFileName)
+{
+    fChain->Add(cFileName);
+    cout << fChain->GetEntries() << "events" << endl;
 }
 
 void Reader::GetQualityAccurance()
@@ -191,7 +196,7 @@ void Reader::FillCorrectionHistos()
         PsiEP[1] = fQ.GetPsiEP(1);
         if ( PsiEP[0] != PsiEP[0] || PsiEP[1] != PsiEP[1] )
             continue;
-        Float_t fRes = cos(PsiEP[0]-PsiEP[1]);
+        Float_t fRes = cos( PsiEP[0]-PsiEP[1] );
         pFlowProfiles[resolution]->Fill(fCentrality,fRes);
     }
 }
@@ -226,7 +231,7 @@ void Reader::GetFlow(int iNumHarm=1)
             fTrack =    fEvent->GetVertexTrack(j);
             Float_t fPt =       fTrack->GetPt();
             Float_t fPhi =      fTrack->GetPhi();
-            Float_t fRapidity = fTrack->GetRapidity();
+            Float_t fRapidity = fTrack->GetRapidity() - YCOR;
             Float_t vn =        cos(fPhi-fPsiEP)/fRes;
             if ( fCentrality > 0 && fCentrality < 20 )
             {
@@ -267,6 +272,7 @@ void Reader::SaveQAStatistics()
 void Reader::SaveFlowStatistics()
 {
     TFile* fFile = new TFile("../histograms/FlowStatistics.root","recreate");
+    fFile->cd();
     for(int i=0;i<NumOfFLowProfiles;i++)
     {
         pFlowProfiles[i]->Write();
