@@ -7,6 +7,7 @@ class Reader
     TBranch* DTEvent;
     DataTreeEvent* fEvent;
     Selector selector;
+    Qvector fQ;
     enum eQAHisto1DMap{
         tracksMDC = 0,
         tracksMDC_selected,

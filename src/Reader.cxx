@@ -135,9 +135,9 @@ void Reader::InitQAHistos()
 
 void Reader::InitFlowHistos()
 {
-    pFlowProfiles[meanQx] =         new TProfile("MeanQx vs Centrality",";centrality, \%;mean Qx",10,0,50);
-    pFlowProfiles[meanQy] =         new TProfile("MeanQy vs Centrality",";centrality, \%;mean Qy",10,0,50);
-    pFlowProfiles[resolution] =     new TProfile("Resolution vs Centrality",";centrality,\%;R_{1}",10,0,50);
+    pFlowProfiles[meanQx] =         new TProfile("MeanQx vs Centrality",";centrality;mean Qx",10,0,50);
+    pFlowProfiles[meanQy] =         new TProfile("MeanQy vs Centrality",";centrality;mean Qy",10,0,50);
+    pFlowProfiles[resolution] =     new TProfile("Resolution vs Centrality",";centrality;R_{1}",10,0,50);
 
     pFlowProfiles[yMostCentral] =   new TProfile("v1 vs y, most",";rapidity;v_{1}",10,-0.8,0.8);
     pFlowProfiles[yMidCentral] =    new TProfile("v1 vs y, mid",";rapidity;v_{1}",10,-0.8,0.8);
@@ -156,7 +156,6 @@ void Reader::InitFlowHistos()
 void Reader::FillCorrectionHistos()
 {
     this->InitFlowHistos();
-    Qvector fQ;
     Float_t fCentrality;
     Long64_t lNEvents = fChain->GetEntries();
     // Mean Q as function of Centrality loop
@@ -200,7 +199,6 @@ void Reader::FillCorrectionHistos()
 void Reader::GetFlow(int iNumHarm=1)
 {
     this->FillCorrectionHistos();
-    Qvector     fQ;
     Float_t     fCentrality;
     Float_t     fPsiEP;
     Float_t*    fQCorection = new Float_t[2];
