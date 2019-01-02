@@ -235,17 +235,17 @@ void Reader::GetFlow(int iNumHarm=1)
             if ( fCentrality>0 && fCentrality < 20 )
             {
                 pFlowProfiles[yMostCentral]->Fill(fRapidity,vn);
-                pFlowProfiles[ptMostCentral]->Fill(fPt,vn)
+                pFlowProfiles[ptMostCentral]->Fill(fPt,vn);
             }
             if ( fCentrality>=20 && fCentrality < 30 )
             {
                 pFlowProfiles[yMidCentral]->Fill(fRapidity,vn);
-                pFlowProfiles[ptMidCentral]->Fill(fPt,vn)
+                pFlowProfiles[ptMidCentral]->Fill(fPt,vn);
             }
             if ( fCentrality>=30 && fCentrality < 50 )
             {
                 pFlowProfiles[yPeripherial]->Fill(fRapidity,vn);
-                pFlowProfiles[ptPeripherial]->Fill(fPt,vn)
+                pFlowProfiles[ptPeripherial]->Fill(fPt,vn);
             }
         }
     }
