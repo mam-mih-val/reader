@@ -7,10 +7,6 @@ class Reader
     TBranch* DTEvent;
     DataTreeEvent* fEvent;
     Selector selector;
-    TH1F* vHisto1D[Num1DHistos];
-    TH2F* vHisto2D[Num2DHistos];
-    TProfile* pFlowProfiles[NumOfFLowProfiles];
-    TH1F*   vQvectorDistribution[4];
     enum eQAHisto1DMap{
         tracksMDC = 0,
         tracksMDC_selected,
@@ -63,6 +59,11 @@ class Reader
         QyRecentred,
         NumOfQvectorHistos
     };
+    
+    TH1F* vHisto1D[Num1DHistos];
+    TH2F* vHisto2D[Num2DHistos];
+    TProfile* pFlowProfiles[NumOfFLowProfiles];
+    TH1F*   vQvectorDistribution[4];
     public:
     Reader() {};
     Reader(char* cFileName);
