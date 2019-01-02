@@ -192,7 +192,7 @@ void Reader::FillCorrectionHistos()
         PsiEP[1] = fQ.GetPsiEP(1);
         if ( PsiEP[0] != PsiEP[0] || PsiEP[1] != PsiEP[1] )
             continue;
-        Float_t fRes = 2*cos(PsiEP[0]-PsiEP[1]);
+        Float_t fRes = cos(PsiEP[0]-PsiEP[1]);
         pFlowProfiles[resolution]->Fill(fCentrality,fRes);
     }
 }
@@ -200,6 +200,55 @@ void Reader::FillCorrectionHistos()
 void Reader::GetFlow(int iNumHarm=1)
 {
     this->FillCorrectionHistos();
+    Qvector fQ;
+    Float_t fCentrality;
+    Float_t fPsiEP;
+    Float_t* fQCorection = new Float_t[2];
+    Long64_t lNEvents = fChain->GetEntries();
+    DataTreeTrack* fTrack;
+    for(int i=0;i<lNEvents;i++)
+    {
+        fChain->GetEntry(i);
+        if(!selector.IsCorrectEvent(fEvent))
+            continue;
+        fCentrality = fEvent->GetCentrality();
+        int bin = (fCentrality/5)+1;
+        fQ.Estimate(fEvent);
+        fQCorection[0] = pFlowProfiles[meanQx]->GetBinContent(bin);
+        fQCorection[1] = pFlowProfiles[meanQy]->GetBinContent(bin);
+        fQ.Recenter(fQCorection);
+        fPsiEP = fQ.GetPsiEP();
+        if(fPsiEP!=fPsiEP)
+            continue;
+        Float_t fRes = pFlowProfiles[resolution]->GetBinContent(bin);
+        Int_t iNumberOfTracks = fEvent->GetNVertexTracks();
+        Float_t fPhi;
+        Float_t fPt;
+        Float_t fRapidity;
+        for(int j=0;j<iNumberOfTracks;j++)
+        {
+            fTrack =    fEvent->GetVertexTrack(j);
+            fPt =       fTrack->GetPt();
+            fPhi =      fTrack->GetPhi();
+            fRapidity = fTrack->GetRapidity();
+            Float_t vn = cos(fPhi-fPsiEP)/fRes;
+            if ( fCentrality>0 && fCentrality < 20 )
+            {
+                pFlowProfiles[yMostCentral]->Fill(fRapidity,vn);
+                pFlowProfiles[ptMostCentral]->Fill(fPt,vn)
+            }
+            if ( fCentrality>=20 && fCentrality < 30 )
+            {
+                pFlowProfiles[yMidCentral]->Fill(fRapidity,vn);
+                pFlowProfiles[ptMidCentral]->Fill(fPt,vn)
+            }
+            if ( fCentrality>=30 && fCentrality < 50 )
+            {
+                pFlowProfiles[yPeripherial]->Fill(fRapidity,vn);
+                pFlowProfiles[ptPeripherial]->Fill(fPt,vn)
+            }
+        }
+    }
     this->SaveFlowStatistics();
 }
 
