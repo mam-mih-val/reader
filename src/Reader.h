@@ -69,6 +69,7 @@ class Reader
     Reader() {};
     Reader(char* cFileName);
     ~Reader();
+    void            AddFile(char* cFileName);
     void            FillCorrectionHistos();
     DataTreeEvent*  GetEvent(int idx=0);
     void            GetEvent();
