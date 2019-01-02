@@ -5,7 +5,8 @@ const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
 Reader::Reader(char* cFileName)
 {
     fChain = new TChain("DataTree");
-    this->AddFile(cFileName);
+    fChain->Add(cFileName);
+    cout << fChain->GetEntries() << "events" << endl;
     fEvent = new DataTreeEvent;
     fChain->SetBranchAddress("DTEvent", &fEvent);
 }
