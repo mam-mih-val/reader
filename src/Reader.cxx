@@ -23,9 +23,36 @@ void Reader::AddFile(char* cFileName)
     cout << fChain->GetEntries() << " " << "events" << endl;
 }
 
+void Reader::DrawQA2DHistos()
+{
+    TCanvas canv = new TCanvas("canv","QA",1500,1000);
+    TPad* pad[6];
+    for(int i=0;i<3;i++)
+    {
+        pad[i] = new TPad(Form("pad",i),Form("pad",i),i*0.33,0.0,(i+1)*0.33,0.5);
+        pad[i]->Draw();
+        pad[i+3] = new TPad(Form("pad",i+3),Form("pad",i+3),i*0.33,0.5,(i+1)*0.33,1.0);
+        pad[i+3]->Draw();
+    }
+    pad[3]->cd();
+    vHisto2D[tracks_hits]->Draw();
+    pad[0]->cd();
+    vHisto2D[tracks_hits_selected]->Draw();
+    pad[4]->cd();
+    vHisto2D[tracks_charge]->Draw();
+    pad[1]->cd();
+    vHisto2D[tracks_charge_selected]->Draw();
+    pad[5]->cd();
+    vHisto2D[hits_charge]->Draw();
+    pad[2]->cd();
+    vHisto2D[hits_charge_selected]->Draw();
+    canv->SaveAs("QA2DHistograms.png");
+}
+
 void Reader::GetQualityAccurance()
 {
     this->InitQAHistos();
+    cout << "QA histograms are building" << endl;
     Long64_t lNEvents = fChain->GetEntries();
     Float_t fNHitsTOF;
     Float_t fNTracksMDC;
@@ -109,6 +136,7 @@ DataTreeEvent* Reader::GetEvent(int idx=0)
 
 void Reader::InitQAHistos()
 {
+    cout << "Initialization of QA histograms" << endl;
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC",";tracks MDC;counts",100,0,100);
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected",";selected tracks MDC;counts",100,0,100);
     vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",200,0,200);
@@ -141,6 +169,7 @@ void Reader::InitQAHistos()
 
 void Reader::InitFlowHistos()
 {
+    cout << "Initialization of flow histograms" << endl;
     pFlowProfiles[meanQx] =         new TProfile("MeanQx vs Centrality",";centrality;mean Qx",10,0,50);
     pFlowProfiles[meanQy] =         new TProfile("MeanQy vs Centrality",";centrality;mean Qy",10,0,50);
     pFlowProfiles[resolution] =     new TProfile("Resolution vs Centrality",";centrality;R_{1}",10,0,50);
@@ -162,6 +191,7 @@ void Reader::InitFlowHistos()
 void Reader::FillCorrectionHistos()
 {
     this->InitFlowHistos();
+    cout << "Mean Q-vector and EP resolution as funtions of centrality histograms are building" << endl;
     Float_t fCentrality;
     Long64_t lNEvents = fChain->GetEntries();
     // Mean Q as function of Centrality loop
@@ -205,6 +235,7 @@ void Reader::FillCorrectionHistos()
 void Reader::GetFlow(int iNumHarm=1)
 {
     this->FillCorrectionHistos();
+    cout << "v1 as function of centrality, rapidity and pt histograms are building" << endl;
     Float_t     fCentrality;
     Float_t     fPsiEP;
     Float_t*    fQCorection = new Float_t[2];
