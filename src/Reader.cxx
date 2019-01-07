@@ -25,7 +25,7 @@ void Reader::AddFile(char* cFileName)
 
 void Reader::DrawQA2DHistos()
 {
-    TCanvas canv = new TCanvas("canv","QA",1500,1000);
+    TCanvas* canv = new TCanvas("canv","QA",1500,1000);
     TPad* pad[6];
     for(int i=0;i<3;i++)
     {
@@ -46,7 +46,7 @@ void Reader::DrawQA2DHistos()
     vHisto2D[hits_charge]->Draw();
     pad[2]->cd();
     vHisto2D[hits_charge_selected]->Draw();
-    canv->SaveAs("QA2DHistograms.png");
+    canv->SaveAs("../histograms/QA2DHistograms.png");
 }
 
 void Reader::GetQualityAccurance()
