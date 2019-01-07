@@ -35,17 +35,23 @@ void Reader::DrawQA2DHistos()
         pad[i+3]->Draw();
     }
     pad[3]->cd();
-    vHisto2D[tracks_hits]->Draw();
+    vHisto2D[tracks_hits]->SetOptStat(0);
+    vHisto2D[tracks_hits]->Draw("colz");
     pad[0]->cd();
-    vHisto2D[tracks_hits_selected]->Draw();
+    vHisto2D[tracks_hits_selected]->SetOptStat(0);
+    vHisto2D[tracks_hits_selected]->Draw("colz");
     pad[4]->cd();
-    vHisto2D[tracks_charge]->Draw();
+    vHisto2D[tracks_charge]->SetOptStat(0);
+    vHisto2D[tracks_charge]->Draw("colz");
     pad[1]->cd();
-    vHisto2D[tracks_charge_selected]->Draw();
+    vHisto2D[tracks_charge_selected]->SetOptStat(0);
+    vHisto2D[tracks_charge_selected]->Draw("colz");
     pad[5]->cd();
-    vHisto2D[hits_charge]->Draw();
+    vHisto2D[hits_charge]->SetOptStat(0);
+    vHisto2D[hits_charge]->Draw("colz");
     pad[2]->cd();
-    vHisto2D[hits_charge_selected]->Draw();
+    vHisto2D[hits_charge_selected]->SetOptStat(0);
+    vHisto2D[hits_charge_selected]->Draw("colz");
     canv->SaveAs("../histograms/QA2DHistograms.png");
 }
 
