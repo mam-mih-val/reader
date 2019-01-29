@@ -15,7 +15,7 @@ Selector::~Selector()
     delete hRejectedTracks;
 }
 
-Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent)
+Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int fPT = HADES_constants::kPT1)
 {
     fEvent = _fEvent;
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )
@@ -70,7 +70,10 @@ Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent)
         hRejectedEvents->Fill(cTriggerNoVeto);
         return 0;
     }
-    
+    if( !fEvent->GetTrigger(fPT)->GetIsFired() )
+    {
+        return 0;
+    }
     return 1;
 }
 
