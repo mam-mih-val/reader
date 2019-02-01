@@ -35,7 +35,7 @@ void Reader::DrawQA2DHistos()
         pad[i+3]->Draw();
     }
     pad[3]->cd();
-    pad[3]->SetBorderSize(0.1);
+    pad[3]->SetBorderSize(10);
     pad[3]->SetLogz();
     //vHisto2D[tracks_hits]->SetOptStat(0);
     vHisto2D[tracks_hits]->Draw("colz");
@@ -45,22 +45,22 @@ void Reader::DrawQA2DHistos()
     //vHisto2D[tracks_hits_selected]->SetOptStat(0);
     vHisto2D[tracks_hits_selected]->Draw("colz");
     pad[4]->cd();
-    pad[4]->SetBorderSize(1);
+    pad[4]->SetBorderSize(10);
     pad[4]->SetLogz();
     //vHisto2D[tracks_charge]->SetOptStat(0);
     vHisto2D[tracks_charge]->Draw("colz");
     pad[1]->cd();
-    pad[1]->SetBorderSize(1);
+    pad[1]->SetBorderSize(10);
     pad[1]->SetLogz();
     //vHisto2D[tracks_charge_selected]->SetOptStat(0);
     vHisto2D[tracks_charge_selected]->Draw("colz");
     pad[5]->cd();
-    pad[5]->SetBorderSize(1);
+    pad[5]->SetBorderSize(10);
     pad[5]->SetLogz();
     //vHisto2D[hits_charge]->SetOptStat(0);
     vHisto2D[hits_charge]->Draw("colz");
     pad[2]->cd();
-    pad[2]->SetBorderSize(1);
+    pad[2]->SetBorderSize(10);
     pad[2]->SetLogz();
     //vHisto2D[hits_charge_selected]->SetOptStat(0);
     vHisto2D[hits_charge_selected]->Draw("colz");
