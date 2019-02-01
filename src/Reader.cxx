@@ -29,27 +29,33 @@ void Reader::DrawQA2DHistos()
     TPad* pad[6];
     for(int i=0;i<3;i++)
     {
-        pad[i] = new TPad(Form("pad",i),Form("pad",i),i*0.33,0.0,(i+1)*0.33,0.5);
+        pad[i] = new TPad(Form("pad",i),Form("pad",i),i*0.30,0.0,(i+1)*0.30,0.5);
         pad[i]->Draw();
-        pad[i+3] = new TPad(Form("pad",i+3),Form("pad",i+3),i*0.33,0.5,(i+1)*0.33,1.0);
+        pad[i+3] = new TPad(Form("pad",i+3),Form("pad",i+3),i*0.30,0.5,(i+1)*0.30,1.0);
         pad[i+3]->Draw();
     }
     pad[3]->cd();
+    pad[3]->SetLogz();
     //vHisto2D[tracks_hits]->SetOptStat(0);
     vHisto2D[tracks_hits]->Draw("colz");
     pad[0]->cd();
+    pad[0]->SetLogz()
     //vHisto2D[tracks_hits_selected]->SetOptStat(0);
     vHisto2D[tracks_hits_selected]->Draw("colz");
     pad[4]->cd();
+    pad[4]->SetLogz()
     //vHisto2D[tracks_charge]->SetOptStat(0);
     vHisto2D[tracks_charge]->Draw("colz");
     pad[1]->cd();
+    pad[1]->SetLogz()
     //vHisto2D[tracks_charge_selected]->SetOptStat(0);
     vHisto2D[tracks_charge_selected]->Draw("colz");
     pad[5]->cd();
+    pad[5]->SetLogz()
     //vHisto2D[hits_charge]->SetOptStat(0);
     vHisto2D[hits_charge]->Draw("colz");
     pad[2]->cd();
+    pad[2]->SetLogz()
     //vHisto2D[hits_charge_selected]->SetOptStat(0);
     vHisto2D[hits_charge_selected]->Draw("colz");
     canv->SaveAs("../histograms/QA2DHistograms.png");
