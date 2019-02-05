@@ -25,45 +25,33 @@ void Reader::AddFile(char* cFileName)
 
 void Reader::DrawQA2DHistos()
 {
-    TCanvas* canv = new TCanvas("canv","QA",1500,1000);
-    TPad* pad[6];
-    for(int i=0;i<3;i++)
-    {
-        pad[i] = new TPad(Form("pad",i),Form("pad",i),i*0.33,0.0,(i+1)*0.33,0.5);
-        pad[i]->Draw();
-        pad[i+3] = new TPad(Form("pad",i+3),Form("pad",i+3),i*0.33,0.5,(i+1)*0.33,1.0);
-        pad[i+3]->Draw();
-    }
-    pad[3]->cd();
-    pad[3]->SetBorderSize(10);
-    pad[3]->SetLogz();
-    //vHisto2D[tracks_hits]->SetOptStat(0);
-    vHisto2D[tracks_hits]->Draw("colz");
-    pad[0]->cd();
-    pad[0]->SetBorderSize(1);
-    pad[0]->SetLogz();
-    //vHisto2D[tracks_hits_selected]->SetOptStat(0);
-    vHisto2D[tracks_hits_selected]->Draw("colz");
-    pad[4]->cd();
-    pad[4]->SetBorderSize(10);
-    pad[4]->SetLogz();
-    //vHisto2D[tracks_charge]->SetOptStat(0);
-    vHisto2D[tracks_charge]->Draw("colz");
-    pad[1]->cd();
-    pad[1]->SetBorderSize(10);
-    pad[1]->SetLogz();
-    //vHisto2D[tracks_charge_selected]->SetOptStat(0);
-    vHisto2D[tracks_charge_selected]->Draw("colz");
-    pad[5]->cd();
-    pad[5]->SetBorderSize(10);
-    pad[5]->SetLogz();
+    TCanvas* canv = new TCanvas("canv","QA",4500,2000);
+    canv->Divide(3,2,0.005,0.0001);
+    
+    canv->cd(1)->SetLogz();
     //vHisto2D[hits_charge]->SetOptStat(0);
     vHisto2D[hits_charge]->Draw("colz");
-    pad[2]->cd();
-    pad[2]->SetBorderSize(10);
-    pad[2]->SetLogz();
+    
+    canv->cd(4)->SetLogz();
     //vHisto2D[hits_charge_selected]->SetOptStat(0);
     vHisto2D[hits_charge_selected]->Draw("colz");
+
+    canv->cd(2)->SetLogz();
+    //vHisto2D[tracks_charge]->SetOptStat(0);
+    vHisto2D[tracks_charge]->Draw("colz");
+    
+    canv->cd(5)->SetLogz();
+    //vHisto2D[tracks_charge_selected]->SetOptStat(0);
+    vHisto2D[tracks_charge_selected]->Draw("colz");
+    
+    canv->cd(3)->SetLogz();
+    //vHisto2D[tracks_hits]->SetOptStat(0);
+    vHisto2D[tracks_hits]->Draw("colz");
+    
+    canv->cd(6)->SetLogz();
+    //vHisto2D[tracks_hits_selected]->SetOptStat(0);
+    vHisto2D[tracks_hits_selected]->Draw("colz");
+    
     canv->SaveAs("../histograms/QA2DHistograms.png");
 }
 
@@ -179,8 +167,8 @@ void Reader::InitQAHistos()
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,200);
     vHisto2D[tracks_charge] =       new TH2F("tracks&charge",";tracks MDC;charge FW",100,0,100,100,0,8000);
     vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected",";selected tracks MDC;selected charge FW",100,0,100,100,0,8000);
-    vHisto2D[hits_charge] =         new TH2F("hits&charge","hits TOF+RPC;charge FW;",100,0,200,100,0,8000);
-    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected","selected hits TOF+RPC;selected charge FW",100,0,200,100,0,8000);
+    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;charge FW;",100,0,200,100,0,8000);
+    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected charge FW",100,0,200,100,0,8000);
     vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY",";vertex on X;vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
 }
