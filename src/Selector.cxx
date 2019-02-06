@@ -18,6 +18,11 @@ Selector::~Selector()
 Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int fPT)
 {
     fEvent = _fEvent;
+    if( !fEvent->GetTrigger(fPT)->GetIsFired() )
+    {
+        return 0;
+    }
+    
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )
     {
         hRejectedEvents->Fill(cVeretexPositionZ);
@@ -68,10 +73,6 @@ Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int fPT)
     if( !fEvent->GetTrigger(HADES_constants::kNoVETO)->GetIsFired() )
     {
         hRejectedEvents->Fill(cTriggerNoVeto);
-        return 0;
-    }
-    if( !fEvent->GetTrigger(fPT)->GetIsFired() )
-    {
         return 0;
     }
     return 1;
