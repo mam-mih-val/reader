@@ -134,7 +134,7 @@ void Reader::GetQualityAccurance()
     return;
 }
 
-DataTreeEvent* Reader::GetEvent(int idx=0)
+DataTreeEvent* Reader::GetEvent(int idx)
 {
     fChain->GetEntry(idx);
     return fEvent;
@@ -238,7 +238,7 @@ void Reader::FillCorrectionHistos()
     }
 }
 
-void Reader::GetFlow(int iNumHarm=1)
+void Reader::GetFlow(int iNumHarm)
 {
     this->FillCorrectionHistos();
     cout << "v1 as function of centrality, rapidity and pt histograms are building" << endl;

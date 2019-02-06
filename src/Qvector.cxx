@@ -12,7 +12,7 @@ Qvector::Qvector()
     }
 }
 
-void Qvector::Estimate(DataTreeEvent* fEvent, bool bSubEvent=0)
+void Qvector::Estimate(DataTreeEvent* fEvent, bool bSubEvent)
 {
     for (int i=0;i<2;i++)
     {
@@ -27,7 +27,7 @@ void Qvector::Estimate(DataTreeEvent* fEvent, bool bSubEvent=0)
     if (!bSubEvent) 
     {
         Float_t fChargeSum;
-        for(int i=0; i<iNPSDModules;i++)
+        for(unsigned int i=0; i<iNPSDModules;i++)
         {
             fModule = fEvent->GetPSDModule(i);
             if( fModule->GetId()<0 )
@@ -82,12 +82,12 @@ void Qvector::Recenter(Float_t* fCorrection)
     }
 }
 
-Float_t Qvector::GetComponent(int i, int j=0)
+Float_t Qvector::GetComponent(int i, int j)
 {
     return fQ[i][j];
 }
 
-Float_t Qvector::GetPsiEP(int j=0)
+Float_t Qvector::GetPsiEP(int j)
 {
     return atan2(fQ[1][j],fQ[0][j]);
 }

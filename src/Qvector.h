@@ -1,5 +1,8 @@
 #include "HADES_constants.h"
 
+#define  DATATREE_SHINE
+#include "DataTreeEvent.h"
+
 class Qvector
 {
     private:

@@ -1,3 +1,9 @@
+#include "TH1F.h"
+#include "TFile.h"
+
+#define  DATATREE_SHINE
+#include "DataTreeEvent.h"
+
 #include "HADES_constants.h"
 
 class Selector
@@ -30,7 +36,7 @@ class Selector
     public:
     Selector();
     ~Selector();
-    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int fPT = HADES_constants::kPT1);
+    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int fPT = HADES_constants::kPT2);
     Bool_t IsCorrectTrack(Int_t idx);
     void    SaveStatistics();
 };

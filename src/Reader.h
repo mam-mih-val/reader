@@ -1,3 +1,15 @@
+#include <iostream>
+
+#include "TROOT.h"
+#include "TH2F.h"
+#include "TProfile.h"
+#include "TCanvas.h"
+#include "TChain.h"
+#include "TMath.h"
+
+//#include "Selector.h"
+//#include "Qvector.h"
+
 #include "HADES_constants.h"
 
 class Reader
