@@ -46,7 +46,7 @@ void Qvector::Estimate(DataTreeEvent* fEvent, bool bSubEvent)
         Float_t fChargeSum[2];
         fChargeSum[0]=0; fChargeSum[1]=0;
         vector<DataTreePSDModule*> vModules;
-        for(int i=0; i<iNPSDModules;i++)
+        for(unsigned int i=0; i<iNPSDModules;i++)
         {
             fModule = fEvent->GetPSDModule(i);
             if( fModule->GetId()<0 )
@@ -54,7 +54,7 @@ void Qvector::Estimate(DataTreeEvent* fEvent, bool bSubEvent)
             vModules.push_back(fModule);
         }
         random_shuffle( vModules.begin(),vModules.end() );
-        for(int i=0;i<vModules.size();i++)
+        for(unsigned int i=0;i<vModules.size();i++)
         {
             fChargeModule = vModules[i]->GetEnergy();
             fPhi = vModules[i]->GetPhi();

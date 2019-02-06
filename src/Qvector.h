@@ -1,3 +1,4 @@
+#pragma once
 #include "HADES_constants.h"
 
 #define  DATATREE_SHINE

@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 #include "TROOT.h"
@@ -7,8 +8,8 @@
 #include "TChain.h"
 #include "TMath.h"
 
-//#include "Selector.h"
-//#include "Qvector.h"
+#include "Selector.h"
+#include "Qvector.h"
 
 #include "HADES_constants.h"
 
