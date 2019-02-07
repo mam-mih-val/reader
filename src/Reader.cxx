@@ -23,6 +23,38 @@ void Reader::AddFile(char* cFileName)
     cout << fChain->GetEntries() << " " << "events" << endl;
 }
 
+void Reader::DrawQA1DHistos(char* cPictureName)
+{
+    TCanvas* canv = new TCanvas("canv","QA",4500,2000);
+    canv->Divide(3,2,0.005,0.0001);
+    
+    canv->cd(1);
+    vHisto1D[vertexZ]->SetLineWidth(5);
+    vHisto1D[vertexZ]->Draw();
+    
+    canv->cd(4);
+    vHisto1D[vertexZ_selected]->SetLineWidth(5);
+    vHisto1D[vertexZ_selected]->Draw();
+
+    canv->cd(2);
+    vHisto1D[massTOF]->SetLineWidth(5);
+    vHisto1D[massTOF]->Draw();
+    
+    canv->cd(5);
+    vHisto1D[massTOF_selected]->SetLineWidth(5);
+    vHisto1D[massTOF_selected]->Draw();
+    
+    canv->cd(3)->SetLogy();
+    vHisto1D[betaTOF]->SetLineWidth(5);
+    vHisto1D[betaTOF]->Draw();
+    
+    canv->cd(6)->SetLogy();
+    vHisto1D[betaTOF_selected]->SetLineWidth(5);
+    vHisto1D[betaTOF_selected]->Draw();
+    
+    canv->SaveAs(cPictureName);
+}
+
 void Reader::DrawQA2DHistos(char* cPictureName)
 {
     TCanvas* canv = new TCanvas("canv","QA",4500,2000);
@@ -83,7 +115,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
             float fTof = fHit->GetTime(); 
             float fLen = fHit->GetPathLength();
             float fBeta = fLen/fTof/299.792458;
-            float fMass2 = fMomentum.P()*fMomentum.P()*(1-fBeta*fBeta)/(fBeta*fBeta);
+            float fMass2 = fMomentum.P()*fMomentum.P()*(1-fBeta*fBeta)/(fBeta*fBeta) * fHit->GetCharge();
             vHisto1D[ptMDC]->Fill(fTrack->GetPt());
             vHisto1D[betaTOF]->Fill(fBeta);
             vHisto1D[massTOF]->Fill(fMass2);
@@ -112,7 +144,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
             float fTof = fHit->GetTime(); 
             float fLen = fHit->GetPathLength();
             float fBeta = fLen/fTof/299.792458;
-            float fMass2 = fMomentum.P()*fMomentum.P()*(1-fBeta*fBeta)/(fBeta*fBeta);
+            float fMass2 = fMomentum.P()*fMomentum.P()*(1-fBeta*fBeta)/(fBeta*fBeta) * fHit->GetCharge();
             vHisto1D[ptMDC_selected]->Fill(fTrack->GetPt());
             vHisto1D[betaTOF_selected]->Fill(fBeta);
             vHisto1D[massTOF_selected]->Fill(fMass2);
@@ -153,15 +185,15 @@ void Reader::InitQAHistos()
     vHisto1D[vertexZ_selected] =    new TH1F("vertexZ_selected",";vertex on Z, selected;counts",100,-100,10);
     vHisto1D[ptMDC] =               new TH1F("ptMDC",";pt, [#frac{GeV}{c}];counts",100,0,2.5);
     vHisto1D[ptMDC_selected] =      new TH1F("ptMDC_selected",";pt selected, [#frac{GeV}{c}];counts",100,0,2.5);
-    vHisto1D[massTOF] =             new TH1F("massTOF",";m^{2}, [#frac{GeV}{c^{2}}];counts",100,0,4);
-    vHisto1D[massTOF_selected] =    new TH1F("massTOF_selected",";m^{2} selected, [#frac{GeV}{c^{2}}];counts",100,0,4);
+    vHisto1D[massTOF] =             new TH1F("massTOF",";m^{2}, [#frac{GeV}{c^{2}}];counts",100,-0.2,4);
+    vHisto1D[massTOF_selected] =    new TH1F("massTOF_selected",";m^{2} selected, [#frac{GeV}{c^{2}}];counts",100,-0.2,4);
     vHisto1D[rapidityMDC] =         new TH1F("rapidityMDC",";rapidity, y;counts",100,-1,2);
     vHisto1D[rapidityMDC_selected]= new TH1F("rapidityMDC_selected",";rapidity selected, y;counts",100,-1,2);
     vHisto1D[rapidityMDC_recentred]=new TH1F("rapidityMDC_recentred",";rapidity recentred, y;counts",100,-1,2);
     vHisto1D[phiMDC] =              new TH1F("phiMDC",";phi;counts",100,-3.1415,3.1415);
     vHisto1D[phiMDC_selected] =     new TH1F("phiMDC_selected",";#phi selected;counts",100,-3.1415,3.1415);
     vHisto1D[betaTOF] =             new TH1F("betaTOF",";#beta;counts",100,0,1.2);
-    vHisto1D[betaTOF_selected] =     new TH1F("betaTOFSelected",";beta selected;counts",100,0,1.2);
+    vHisto1D[betaTOF_selected] =     new TH1F("betaTOFSelected",";#beta selected;counts",100,0,1.2);
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,200);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,200);

@@ -83,7 +83,7 @@ class Reader
     Reader(char* cFileName);
     ~Reader();
     void            AddFile(char* cFileName);
-    void            DrawQA1DHistos();
+    void            DrawQA1DHistos(char* cPictureName);
     void            DrawQA2DHistos(char* cPictureName);
     void            FillCorrectionHistos();
     DataTreeEvent*  GetEvent(int idx=0);
