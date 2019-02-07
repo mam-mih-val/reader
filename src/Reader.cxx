@@ -23,7 +23,7 @@ void Reader::AddFile(char* cFileName)
     cout << fChain->GetEntries() << " " << "events" << endl;
 }
 
-void Reader::DrawQA2DHistos()
+void Reader::DrawQA2DHistos(char* cPictureName)
 {
     TCanvas* canv = new TCanvas("canv","QA",4500,2000);
     canv->Divide(3,2,0.005,0.0001);
@@ -52,10 +52,10 @@ void Reader::DrawQA2DHistos()
     //vHisto2D[tracks_hits_selected]->SetOptStat(0);
     vHisto2D[tracks_hits_selected]->Draw("colz");
     
-    canv->SaveAs("../histograms/QA2DHistograms.png");
+    canv->SaveAs(cPictureName);
 }
 
-void Reader::GetQualityAccurance()
+void Reader::GetQualityAssurance(Int_t iPT)
 {
     this->InitQAHistos();
     cout << "QA histograms are building" << endl;
@@ -98,7 +98,7 @@ void Reader::GetQualityAccurance()
         vHisto2D[tracks_charge]->Fill(fNTracksMDC,fChargeFW);
         vHisto2D[hits_charge]->Fill(fNHitsTOF,fChargeFW);
         vHisto2D[vertexX_vertexY]->Fill(fVertexPosition[0],fVertexPosition[1]);
-        if(!selector.IsCorrectEvent(fEvent))
+        if(!selector.IsCorrectEvent(fEvent, iPT))
             continue;
 
         for (int j=0;j<iNTracks;j++)
@@ -296,7 +296,7 @@ void Reader::GetFlow(int iNumHarm)
 
 void Reader::SaveQAStatistics()
 {
-    TFile* fHistos = new TFile("../histograms/QualityAccuranceHistos.root","recreate");
+    TFile* fHistos = new TFile("../histograms/QualityAssuranceHistos.root","recreate");
     for(int i=0;i<Num1DHistos;i++)
     {
         vHisto1D[i]->Write();

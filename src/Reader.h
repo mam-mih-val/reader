@@ -83,12 +83,13 @@ class Reader
     Reader(char* cFileName);
     ~Reader();
     void            AddFile(char* cFileName);
-    void            DrawQA2DHistos();
+    void            DrawQA1DHistos();
+    void            DrawQA2DHistos(char* cPictureName);
     void            FillCorrectionHistos();
     DataTreeEvent*  GetEvent(int idx=0);
     void            GetEvent();
     void            GetFlow(int iNumHarm=1);
-    void            GetQualityAccurance();
+    void            GetQualityAssurance(Int_t iPT=HADES_constants::kPT2);
     void            InitQAHistos();
     void            InitFlowHistos();
     void            SaveFlowStatistics();

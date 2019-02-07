@@ -15,10 +15,10 @@ Selector::~Selector()
     delete hRejectedTracks;
 }
 
-Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int fPT)
+Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int iPT)
 {
     fEvent = _fEvent;
-    if( !fEvent->GetTrigger(fPT)->GetIsFired() )
+    if( !fEvent->GetTrigger(iPT)->GetIsFired() )
     {
         return 0;
     }

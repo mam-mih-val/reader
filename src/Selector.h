@@ -37,7 +37,7 @@ class Selector
     public:
     Selector();
     ~Selector();
-    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int fPT = HADES_constants::kPT2);
+    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int iPT = HADES_constants::kPT2);
     Bool_t IsCorrectTrack(Int_t idx);
     void    SaveStatistics();
 };
