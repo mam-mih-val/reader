@@ -130,6 +130,14 @@ void Reader::GetQualityAssurance(Int_t iPT)
         vHisto2D[tracks_charge]->Fill(fNTracksMDC,fChargeFW);
         vHisto2D[hits_charge]->Fill(fNHitsTOF,fChargeFW);
         vHisto2D[vertexX_vertexY]->Fill(fVertexPosition[0],fVertexPosition[1]);
+        int iNPSDModules = fEvent->GetNPSDModules();
+        DataTreePSDModule* fPSDModule;
+        for(int j=0;j<iNPSDModules;j++)
+        {
+            fPSDModule = fEvent->GetPSDModule(j);
+            vHisto2D[hitsFW_X_Y]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1),fPSDModule->GetEnergy());
+
+        }
         if(!selector.IsCorrectEvent(fEvent, iPT))
             continue;
 
@@ -160,6 +168,14 @@ void Reader::GetQualityAssurance(Int_t iPT)
         vHisto2D[tracks_charge_selected]->Fill(fNTracksMDC,fChargeFW);
         vHisto2D[hits_charge_selected]->Fill(fNHitsTOF,fChargeFW);
         vHisto2D[vertexX_vertexY_selected]->Fill(fVertexPosition[0],fVertexPosition[1]);
+        iNPSDModules = fEvent->GetNPSDModules();
+        for(int j=0;j<iNPSDModules;j++)
+        {
+            fPSDModule = fEvent->GetPSDModule(j);
+            if ( fPSDModule->GetId() < 0 )
+                continue;
+            vHisto2D[hitsFW_X_Y_selected]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1),fPSDModule->GetEnergy());
+        }
     }
     selector.SaveStatistics();
     this->SaveQAStatistics();
@@ -203,6 +219,8 @@ void Reader::InitQAHistos()
     vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected charge FW",100,0,200,100,0,8000);
     vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY",";vertex on X;vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
+    vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
+    vHisto2D[hitsFW_X_Y_selected]=  new TH2F("selected hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
 }
 
 void Reader::InitFlowHistos()

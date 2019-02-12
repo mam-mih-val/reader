@@ -52,6 +52,8 @@ class Reader
         hits_charge_selected,
         vertexX_vertexY,
         vertexX_vertexY_selected,
+        hitsFW_X_Y,
+        hitsFW_X_Y_selected,
         Num2DHistos
     };
     enum eFlowProfile{
