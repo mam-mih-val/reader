@@ -161,7 +161,7 @@ void Selector::CheckEventCuts(DataTreeEvent* _fEvent)
     {
         hIncorrectEvent->Fill(cTriggerNoVeto);
     }
-    if( !fEvent->GetTrigger(HADES_constants::kPT2)->GetIsFired() )
+    if( fEvent->GetNTOFHitss()>5 )
     {
         hIncorrectEvent->Fill(cPT2);
     }
