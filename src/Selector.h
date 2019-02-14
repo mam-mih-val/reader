@@ -1,6 +1,9 @@
 #pragma once
 #include "TH1F.h"
 #include "TFile.h"
+#include "TCanvas.h"
+#include "TStyle.h"
+#include "TAxis.h"
 
 #define  DATATREE_SHINE
 #include "DataTreeEvent.h"
@@ -13,31 +16,38 @@ class Selector
     DataTreeEvent*  fEvent;
     TH1F*           hRejectedEvents;
     TH1F*           hRejectedTracks;
+    TH1F*           hIncorrectEvent;
+    TH1F*           hIncorrectTracks;
     enum event_cuts{
         cVeretexPositionZ = 0,
-        cVeretexPositionXY,
-        cVertexQuality,
-        cTriggerVertexClust,
-        cTriggerVertexCand,
-        cTriggerGoodStart,
-        cTriggerNoPileUp,
-        cTriggerGoodStartVeto,
-        cTriggerGoodStartMeta,
-        cTriggerNoVeto,
-        cNumOfEventCuts
+        cVeretexPositionXY, //1
+        cVertexQuality, //2
+        cTriggerVertexClust, //3
+        cTriggerVertexCand, //4
+        cTriggerGoodStart, //5
+        cTriggerNoPileUp, //6
+        cTriggerGoodStartVeto, //7
+        cTriggerGoodStartMeta, //8
+        cTriggerNoVeto, //9
+        cPT2, //10
+        cPT3, //11
+        cNumOfEventCuts //12
     };
     enum track_cuts{
         cDCA = 0,
-        cTrackHitMatchX,
-        cTrackHitMatchY,
-        cChi2,
-        cBeta,
-        cNumOfTrackCuts
+        cTrackHitMatchX, //1
+        cTrackHitMatchY, //2
+        cChi2, //3
+        cBeta, //4
+        cNumOfTrackCuts //5
     };
     public:
     Selector();
     ~Selector();
     Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int iPT = HADES_constants::kPT2);
     Bool_t IsCorrectTrack(Int_t idx);
+    void    CheckEventCuts(DataTreeEvent* _fEvent);
+    void    CheckTrackCuts(Int_t idx);
+    void    DrawStatistics();
     void    SaveStatistics();
 };

@@ -55,36 +55,42 @@ void Reader::DrawQA1DHistos(char* cPictureName)
     canv->SaveAs(cPictureName);
 }
 
-void Reader::DrawQA2DHistos(char* cPictureName)
+void Reader::DrawQA2DHistos(TString cPictureName)
 {
-    TCanvas* canv = new TCanvas("canv","QA",4500,2000);
-    canv->Divide(3,2,0.005,0.0001);
+    TCanvas* canv = new TCanvas("canv","QA",4000,2500);
+    TCanvas* canv1 = new TCanvas("canv1","QA",4000,2500);
+    
+    canv->Divide(2,2,0.005,0.0001);
+    canv1->Divide(2,2,0.005,0.0001);
     
     canv->cd(1)->SetLogz();
-    //vHisto2D[hits_charge]->SetOptStat(0);
     vHisto2D[hits_charge]->Draw("colz");
     
-    canv->cd(4)->SetLogz();
-    //vHisto2D[hits_charge_selected]->SetOptStat(0);
+    canv->cd(3)->SetLogz();
     vHisto2D[hits_charge_selected]->Draw("colz");
 
     canv->cd(2)->SetLogz();
-    //vHisto2D[tracks_charge]->SetOptStat(0);
     vHisto2D[tracks_charge]->Draw("colz");
     
-    canv->cd(5)->SetLogz();
-    //vHisto2D[tracks_charge_selected]->SetOptStat(0);
+    canv->cd(4)->SetLogz();
     vHisto2D[tracks_charge_selected]->Draw("colz");
     
-    canv->cd(3)->SetLogz();
-    //vHisto2D[tracks_hits]->SetOptStat(0);
+    canv1->cd(1)->SetLogz();
     vHisto2D[tracks_hits]->Draw("colz");
     
-    canv->cd(6)->SetLogz();
-    //vHisto2D[tracks_hits_selected]->SetOptStat(0);
+    canv1->cd(3)->SetLogz();
     vHisto2D[tracks_hits_selected]->Draw("colz");
+
+    canv1->cd(2);
+    vHisto2D[hitsFW_X_Y]->Draw("colz");
     
-    canv->SaveAs(cPictureName);
+    canv1->cd(4);
+    vHisto2D[hitsFW_X_Y_selected]->Draw("colz");
+
+    TString path = "../histograms/"+cPictureName+"_0.png";
+    TString path1 = "../histograms/"+cPictureName+"_1.png";
+    canv->SaveAs(path);
+    canv1->SaveAs(path1);
 }
 
 void Reader::GetQualityAssurance(Int_t iPT)
@@ -136,7 +142,6 @@ void Reader::GetQualityAssurance(Int_t iPT)
         {
             fPSDModule = fEvent->GetPSDModule(j);
             vHisto2D[hitsFW_X_Y]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1),fPSDModule->GetEnergy());
-
         }
         if(!selector.IsCorrectEvent(fEvent, iPT))
             continue;
