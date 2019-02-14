@@ -161,7 +161,7 @@ void Selector::CheckEventCuts(DataTreeEvent* _fEvent)
     {
         hIncorrectEvent->Fill(cTriggerNoVeto);
     }
-    if( fEvent->GetNTOFHitss()>5 )
+    if( fEvent->GetNTOFHits()<5 )
     {
         hIncorrectEvent->Fill(cPT2);
     }
