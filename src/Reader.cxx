@@ -55,11 +55,13 @@ void Reader::DrawQA1DHistos(TString cPictureName)
     TString path = "../histograms/"+cPictureName+"_0.png";
     canv->SaveAs(path);
 
-    TCanvas* canv1 = new TCanvas("canv1","QA",4000,2500);
+    TCanvas* canv1 = new TCanvas("canv1","QA1",4000,2500);
     canv1->Divide(2,2,0.005,0.0001);
 
     canv1->cd(1);
     vHisto1D[hitsTOF]->Draw();
+    vHisto1D[hitsTOF_selected]->SetLineColor(1);
+    vHisto1D[hitsTOF_selected]->Draw("same");
 
     canv1->cd(3);
     vHisto1D[hitsTOF_selected]->Draw();
