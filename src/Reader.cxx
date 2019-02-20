@@ -55,22 +55,18 @@ void Reader::DrawQA1DHistos(TString cPictureName)
     TString path = "../histograms/"+cPictureName+"_0.png";
     canv->SaveAs(path);
 
-    TCanvas* canv1 = new TCanvas("canv1","QA1",4000,2500);
-    canv1->Divide(2,2,0.005,0.0001);
+    TCanvas* canv1 = new TCanvas("canv1","QA1",2000,4500);
+    canv1->Divide(2,1,0.005,0.0001);
 
     canv1->cd(1);
     vHisto1D[hitsTOF]->Draw();
     vHisto1D[hitsTOF_selected]->SetLineColor(1);
     vHisto1D[hitsTOF_selected]->Draw("same");
 
-    canv1->cd(3);
-    vHisto1D[hitsTOF_selected]->Draw();
-
     canv1->cd(2);
     vHisto1D[hitsTOF_matched]->Draw();
-
-    canv1->cd(4);
-    vHisto1D[hitsTOF_matched_selected]->Draw();
+    vHisto1D[hitsTOF_matched_selected]->SetLineColor(1);
+    vHisto1D[hitsTOF_matched_selected]->Draw("same");
 
     path = "../histograms/"+cPictureName+"_1.png";
     canv1->SaveAs(path);
@@ -238,8 +234,8 @@ void Reader::InitQAHistos()
     vHisto1D[phiMDC_selected] =     new TH1F("phiMDC_selected",";#phi selected;counts",100,-3.1415,3.1415);
     vHisto1D[betaTOF] =             new TH1F("betaTOF",";#beta;counts",100,0,1.2);
     vHisto1D[betaTOF_selected] =    new TH1F("betaTOFSelected",";#beta selected;counts",100,0,1.2);
-    vHisto1D[hitsTOF_matched] =     new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",200,0,200);
-    vHisto1D[hitsTOF_matched_selected]=new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",200,0,200);
+    vHisto1D[hitsTOF_matched] =     new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",100,0,100);
+    vHisto1D[hitsTOF_matched_selected]=new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",100,0,100);
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,200);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,200);
