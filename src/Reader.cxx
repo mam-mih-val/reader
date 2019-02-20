@@ -23,7 +23,7 @@ void Reader::AddFile(char* cFileName)
     cout << fChain->GetEntries() << " " << "events" << endl;
 }
 
-void Reader::DrawQA1DHistos(char* cPictureName)
+void Reader::DrawQA1DHistos(TString cPictureName)
 {
     TCanvas* canv = new TCanvas("canv","QA",4500,2000);
     canv->Divide(3,2,0.005,0.0001);
@@ -52,7 +52,26 @@ void Reader::DrawQA1DHistos(char* cPictureName)
     vHisto1D[betaTOF_selected]->SetLineWidth(5);
     vHisto1D[betaTOF_selected]->Draw();
     
-    canv->SaveAs(cPictureName);
+    TString path = "../histograms/"+cPictureName+"_0.png";
+    canv->SaveAs(path);
+
+    TCanvas* canv1 = new TCanvas("canv1","QA",4000,2500);
+    canv1->Divide(2,2,0.005,0.0001);
+
+    canv1->cd(1);
+    vHisto1D[hitsTOF]->Draw();
+
+    canv1->cd(3);
+    vHisto1D[hitsTOF_selected]->Draw();
+
+    canv1->cd(2);
+    vHisto1D[hitsTOF_matched]->Draw();
+
+    canv1->cd(4);
+    vHisto1D[hitsTOF_matched_selected]->Draw();
+
+    path = "../histograms/"+cPictureName+"_1.png";
+    canv1->SaveAs(path);
 }
 
 void Reader::DrawQA2DHistos(TString cPictureName)
@@ -113,6 +132,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
         for(int j=0;j<3;j++)
             fVertexPosition[j] = fEvent->GetVertexPositionComponent(j);
         int iNTracks = fEvent->GetNVertexTracks();
+        vHisto1D[hitsTOF_matched]->Fill(fEvent->GetNTOFHits());
         for (int j=0;j<iNTracks;j++)
         {
             fTrack = fEvent->GetVertexTrack(j);
@@ -165,6 +185,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
             vHisto1D[rapidityMDC_recentred]->Fill(fMomentum.Rapidity()-YCOR);
             vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
         }
+        vHisto1D[hitsTOF_matched_selected]->Fill(fEvent->GetNTOFHits());
         vHisto1D[vertexZ_selected]->Fill(fVertexPosition[2]);
         vHisto1D[tracksMDC_selected]->Fill(fNTracksMDC);
         vHisto1D[hitsTOF_selected]->Fill(fNHitsTOF);
@@ -214,7 +235,9 @@ void Reader::InitQAHistos()
     vHisto1D[phiMDC] =              new TH1F("phiMDC",";phi;counts",100,-3.1415,3.1415);
     vHisto1D[phiMDC_selected] =     new TH1F("phiMDC_selected",";#phi selected;counts",100,-3.1415,3.1415);
     vHisto1D[betaTOF] =             new TH1F("betaTOF",";#beta;counts",100,0,1.2);
-    vHisto1D[betaTOF_selected] =     new TH1F("betaTOFSelected",";#beta selected;counts",100,0,1.2);
+    vHisto1D[betaTOF_selected] =    new TH1F("betaTOFSelected",";#beta selected;counts",100,0,1.2);
+    vHisto1D[hitsTOF_matched] =     new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",200,0,200);
+    vHisto1D[hitsTOF_matched_selected]=new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",200,0,200);
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,200);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,200);

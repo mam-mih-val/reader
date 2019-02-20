@@ -41,6 +41,8 @@ class Reader
         phiMDC_selected,
         betaTOF,
         betaTOF_selected,
+        hitsTOF_matched,
+        hitsTOF_matched_selected,
         Num1DHistos
     };
     enum eQAHisto2DMap{
@@ -85,7 +87,7 @@ class Reader
     Reader(char* cFileName);
     ~Reader();
     void            AddFile(char* cFileName);
-    void            DrawQA1DHistos(char* cPictureName);
+    void            DrawQA1DHistos(TString cPictureName);
     void            DrawQA2DHistos(TString cPictureName);
     void            FillCorrectionHistos();
     DataTreeEvent*  GetEvent(int idx=0);
