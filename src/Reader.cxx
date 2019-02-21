@@ -57,19 +57,23 @@ void Reader::DrawQA1DHistos(TString cPictureName)
 
     TCanvas* canv1 = new TCanvas("canv1","QA1",4500,2000);
     canv1->Divide(2,1,0.005,0.0001);
-    TLegend* legend = new TLegend(0.1,0.7,0.48,0.9);
+    TLegend* legend = new TLegend(0.1,0.8,0.38,0.9);
     legend->AddEntry(vHisto1D[hitsTOF],"Unselected");
     legend->AddEntry(vHisto1D[hitsTOF_selected],"Selected");
 
     canv1->cd(1);
+    vHisto1D[hitsTOF_selected]->SetLineWidth(5);
     vHisto1D[hitsTOF]->Draw();
     vHisto1D[hitsTOF_selected]->SetLineColor(1);
+    vHisto1D[hitsTOF_selected]->SetLineWidth(5);
     vHisto1D[hitsTOF_selected]->Draw("same");
     legend->Draw();
 
     canv1->cd(2);
+    vHisto1D[hitsTOF_uncuted]->SetLineWidth(5);
     vHisto1D[hitsTOF_uncuted]->Draw();
     vHisto1D[hitsTOF_uncuted_selected]->SetLineColor(1);
+    vHisto1D[hitsTOF_uncuted_selected]->SetLineWidth(5);
     vHisto1D[hitsTOF_uncuted_selected]->Draw("same");
     legend->Draw();
 
