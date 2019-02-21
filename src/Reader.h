@@ -44,6 +44,8 @@ class Reader
         betaTOF_selected,
         hitsTOF_uncuted,
         hitsTOF_uncuted_selected,
+        hitsTOF_matched,
+        hitsTOF_matched_selected,
         Num1DHistos
     };
     enum eQAHisto2DMap{
