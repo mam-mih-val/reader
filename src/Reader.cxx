@@ -29,29 +29,29 @@ void Reader::DrawQA1DHistos(TString cPictureName)
     TCanvas* canv = new TCanvas("canv","QA",4500,2000);
     canv->Divide(3,2,0.005,0.0001);
     
-    canv->cd(1);
-    vHisto1D[vertexZ]->SetLineWidth(5);
-    vHisto1D[vertexZ]->Draw();
+    canv->cd(1)->SetLogy();
+    vHisto1D[ptMDC]->SetLineWidth(5);
+    vHisto1D[ptMDC]->Draw();
     
-    canv->cd(4);
-    vHisto1D[vertexZ_selected]->SetLineWidth(5);
-    vHisto1D[vertexZ_selected]->Draw();
+    canv->cd(4)->SetLogy();
+    vHisto1D[ptMDC_selected]->SetLineWidth(5);
+    vHisto1D[ptMDC_selected]->Draw();
 
-    canv->cd(2);
-    vHisto1D[massTOF]->SetLineWidth(5);
-    vHisto1D[massTOF]->Draw();
+    canv->cd(2)->SetLogy();
+    vHisto1D[rapidityMDC]->SetLineWidth(5);
+    vHisto1D[rapidityMDC]->Draw();
     
-    canv->cd(5);
-    vHisto1D[massTOF_selected]->SetLineWidth(5);
-    vHisto1D[massTOF_selected]->Draw();
+    canv->cd(5)->SetLogy();
+    vHisto1D[rapidityMDC_selected]->SetLineWidth(5);
+    vHisto1D[rapidityMDC_selected]->Draw();
     
-    canv->cd(3)->SetLogy();
-    vHisto1D[betaTOF]->SetLineWidth(5);
-    vHisto1D[betaTOF]->Draw();
+    canv->cd(3);
+    vHisto1D[phiMDC]->SetLineWidth(5);
+    vHisto1D[phiMDC]->Draw();
     
-    canv->cd(6)->SetLogy();
-    vHisto1D[betaTOF_selected]->SetLineWidth(5);
-    vHisto1D[betaTOF_selected]->Draw();
+    canv->cd(6);
+    vHisto1D[phiMDC_selected]->SetLineWidth(5);
+    vHisto1D[phiMDC_selected]->Draw();
     
     TString path = "../histograms/"+cPictureName+"_0.png";
     canv->SaveAs(path);
