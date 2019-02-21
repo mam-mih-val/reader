@@ -354,6 +354,7 @@ void Reader::InitQAHistos()
     vHisto2D[pt_rapidity]  =        new TH2F("pt&rapidity",";pt, [GeV/c];rapidity",100,0,2,100,-1,1);
     vHisto2D[pt_rapidity_selected]= new TH2F("pt&rapidity_selected",";pt selected, [GeV/c];rapidity selected",100,0,2,100,-1,1);
     vHisto2D[phi_pseudorapidity]  = new TH2F("phi&pseudorapidity",";phi, [rad];pseudorapidity",100,-3.14,3.14,100,-1,1);
+    vHisto2D[phi_pseudorapidity_selected]  = new TH2F("phi&pseudorapidity_selected",";phi_selected, [rad];pseudorapidity_selected",100,-3.14,3.14,100,-1,1);
     vHisto2D[pt_pseudorapidity]  =  new TH2F("pt&pseudorapidity",";pt, [GeV/c];pseudorapidity",100,0,2,100,-1,1);
     vHisto2D[pt_pseudorapidity_selected]=new TH2F("pt&pseudorapidity_selected",";pt selected, [GeV/c];pseudorapidity selected",100,0,2,100,-1,1);
     vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";rapidity;pseudorapidity",100,-1,1,100,-1,1);
