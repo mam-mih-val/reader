@@ -181,7 +181,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
     Float_t fNTracksMDC;
     Float_t fChargeFW;
     Float_t fVertexPosition[3];
-    TVector3 b; b.SetXYZ(0,0,-BETA/2);
+    TVector3 b; b.SetXYZ(0,0,BETA/2);
     DataTreeTrack* fTrack;
     DataTreeTOFHit* fHit;
     for (long i=0; i<lNEvents; i++)
@@ -208,12 +208,12 @@ void Reader::GetQualityAssurance(Int_t iPT)
             fMomentum.Boost(b);
             vHisto1D[rapidityMDC]->Fill(fMomentum.Rapidity());
             vHisto1D[phiMDC]->Fill(fMomentum.Phi());
-            vHisto2D[phi_rapidity]->Fill(fMomentum.Phi(),fMomentum.Rapidity());
-            vHisto2D[phi_pt]->Fill(fMomentum.Phi(),fMomentum.Pt());
-            vHisto2D[pt_rapidity]->Fill(fMomentum.Pt(),fMomentum.Rapidity());
-            vHisto2D[phi_pseudorapidity]->Fill(fMomentum.Phi(),fMomentum.PseudoRapidity());
-            vHisto2D[pt_pseudorapidity]->Fill(fMomentum.Pt(),fMomentum.PseudoRapidity());
-            vHisto2D[rapidity_pseudorapidity]->Fill(fMomentum.Rapidity(),fMomentum.PseudoRapidity());
+            vHisto2D[phi_rapidity]->Fill(fMomentum.Rapidity(),fMomentum.Phi());
+            vHisto2D[phi_pt]->Fill(fMomentum.Pt(),fMomentum.Phi());
+            vHisto2D[pt_rapidity]->Fill(fMomentum.Rapidity(),fMomentum.Pt());
+            vHisto2D[phi_pseudorapidity]->Fill(fMomentum.PseudoRapidity(),fMomentum.Phi());
+            vHisto2D[pt_pseudorapidity]->Fill(fMomentum.PseudoRapidity(),fMomentum.Pt());
+            vHisto2D[rapidity_pseudorapidity]->Fill(fMomentum.PseudoRapidity(),fMomentum.Rapidity());
         }
         vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[tracksMDC]->Fill(fNTracksMDC);
