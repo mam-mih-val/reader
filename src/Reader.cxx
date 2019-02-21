@@ -249,7 +249,6 @@ void Reader::GetQualityAssurance(Int_t iPT)
             vHisto1D[ptMDC_selected]->Fill(fTrack->GetPt());
             vHisto1D[betaTOF_selected]->Fill(fBeta);
             vHisto1D[massTOF_selected]->Fill(fMass2);
-            vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
             fMomentum.Boost(b);
             vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
             vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
