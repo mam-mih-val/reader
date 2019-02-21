@@ -45,13 +45,13 @@ void Reader::DrawQA1DHistos(TString cPictureName)
     vHisto1D[rapidityMDC_selected]->SetLineWidth(5);
     vHisto1D[rapidityMDC_selected]->Draw();
     
-    canv->cd(3);
-    vHisto1D[phiMDC]->SetLineWidth(5);
-    vHisto1D[phiMDC]->Draw();
+    canv->cd(3)->SetLogy();
+    vHisto1D[pseudorapidityMDC]->SetLineWidth(5);
+    vHisto1D[pseudorapidityMDC]->Draw();
     
-    canv->cd(6);
-    vHisto1D[phiMDC_selected]->SetLineWidth(5);
-    vHisto1D[phiMDC_selected]->Draw();
+    canv->cd(6)->SetLogy();
+    vHisto1D[pseudorapidityMDC_selected]->SetLineWidth(5);
+    vHisto1D[pseudorapidityMDC_selected]->Draw();
     
     TString path = "../histograms/"+cPictureName+"_0.png";
     canv->SaveAs(path);
@@ -181,7 +181,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
     Float_t fNTracksMDC;
     Float_t fChargeFW;
     Float_t fVertexPosition[3];
-    TVector3 b; b.SetXYZ(0,0,BETA/2);
+    TVector3 b; b.SetXYZ(0,0,-BETA);
     DataTreeTrack* fTrack;
     DataTreeTOFHit* fHit;
     for (long i=0; i<lNEvents; i++)
@@ -207,6 +207,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
             vHisto1D[massTOF]->Fill(fMass2);
             fMomentum.Boost(b);
             vHisto1D[rapidityMDC]->Fill(fMomentum.Rapidity());
+            vHisto1D[pseudorapidityMDC]->Fill(fMomentum.PseudoRapidity());
             vHisto1D[phiMDC]->Fill(fMomentum.Phi());
             vHisto2D[phi_rapidity]->Fill(fMomentum.Rapidity(),fMomentum.Phi());
             vHisto2D[phi_pt]->Fill(fMomentum.Pt(),fMomentum.Phi());
@@ -251,6 +252,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
             vHisto1D[massTOF_selected]->Fill(fMass2);
             fMomentum.Boost(b);
             vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
+            vHisto1D[pseudorapidityMDC_selected]->Fill(fMomentum.PseudoRapidity());
             vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
             vHisto2D[phi_rapidity_selected]->Fill(fMomentum.Rapidity(),fMomentum.Phi());
             vHisto2D[phi_pt_selected]->Fill(fMomentum.Pt(),fMomentum.Phi());
@@ -326,6 +328,8 @@ void Reader::InitQAHistos()
     vHisto1D[massTOF_selected] =    new TH1F("massTOF_selected",";m^{2} selected, [#frac{GeV}{c^{2}}];counts",100,-0.2,4);
     vHisto1D[rapidityMDC] =         new TH1F("rapidityMDC",";rapidity, y;counts",100,-1,2);
     vHisto1D[rapidityMDC_selected]= new TH1F("rapidityMDC_selected",";rapidity selected, y;counts",100,-1,2);
+    vHisto1D[pseudorapidityMDC] =   new TH1F("pseudorapidityMDC",";pseudorapidity;counts",100,-1.5,1.5);
+    vHisto1D[pseudorapidityMDC_selected]=new TH1F("pseudorapidityMDC_selected",";pseudorapidity_selected;counts",100,-1.5,1.5);
     vHisto1D[rapidityMDC_recentred]=new TH1F("rapidityMDC_recentred",";rapidity recentred, y;counts",100,-1,2);
     vHisto1D[phiMDC] =              new TH1F("phiMDC",";phi;counts",100,-3.1415,3.1415);
     vHisto1D[phiMDC_selected] =     new TH1F("phiMDC_selected",";#phi selected;counts",100,-3.1415,3.1415);
