@@ -57,16 +57,21 @@ void Reader::DrawQA1DHistos(TString cPictureName)
 
     TCanvas* canv1 = new TCanvas("canv1","QA1",4500,2000);
     canv1->Divide(2,1,0.005,0.0001);
+    TLegend* legend = new TLegend(0.1,0.7,0.48,0.9);
+    legend->AddEntry(vHisto1D[hitsTOF],"Unselected");
+    legend->AddEntry(vHisto1D[hitsTOF_selected],"Selected");
 
     canv1->cd(1);
     vHisto1D[hitsTOF]->Draw();
     vHisto1D[hitsTOF_selected]->SetLineColor(1);
     vHisto1D[hitsTOF_selected]->Draw("same");
+    legend->Draw();
 
     canv1->cd(2);
     vHisto1D[hitsTOF_uncuted]->Draw();
     vHisto1D[hitsTOF_uncuted_selected]->SetLineColor(1);
     vHisto1D[hitsTOF_uncuted_selected]->Draw("same");
+    legend->Draw();
 
     path = "../histograms/"+cPictureName+"_1.png";
     canv1->SaveAs(path);
@@ -217,8 +222,8 @@ void Reader::InitQAHistos()
     cout << "Initialization of QA histograms" << endl;
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC",";tracks MDC;counts",100,0,100);
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected",";selected tracks MDC;counts",100,0,100);
-    vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",100,0,100);
-    vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",100,0,100);
+    vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",150,0,150);
+    vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",150,0,150);
     vHisto1D[chargeFW] =            new TH1F("chargeFW",";charge in FW;counts",100,0,8000);
     vHisto1D[chargeFW_selected] =   new TH1F("chargeFW_selected",";charge in FW selected;counts",100,0,8000);
     vHisto1D[vertexZ] =             new TH1F("vertexZ",";vertex on Z;conts",100,-100,10);
