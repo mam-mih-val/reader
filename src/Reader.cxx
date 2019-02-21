@@ -215,7 +215,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
     return;
 }
 
-void Reader::GetPTChecking(Int_t iPT=HADES_constants::kPT2)
+void Reader::GetPTChecking(Int_t iPT)
 {
     this->InitQAHistos();
     Long64_t lNEvents = fChain->GetEntries();
