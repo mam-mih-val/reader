@@ -215,6 +215,24 @@ void Reader::GetQualityAssurance(Int_t iPT)
     return;
 }
 
+void Reader::GetPTChecking(Int_t iPT=HADES_constants::kPT2)
+{
+    this->InitQAHistos();
+    Long64_t lNEvents = fChain->GetEntries();
+    
+    for (long i=0; i<lNEvents; i++)
+    {
+        vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
+        vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+    
+        if( !fEvent->GetTrigger(iPT)->GetIsFired() ) 
+            continue;
+    
+        vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
+        vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+    }
+}
+
 DataTreeEvent* Reader::GetEvent(int idx)
 {
     fChain->GetEntry(idx);
@@ -226,8 +244,8 @@ void Reader::InitQAHistos()
     cout << "Initialization of QA histograms" << endl;
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC",";tracks MDC;counts",100,0,100);
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected",";selected tracks MDC;counts",100,0,100);
-    vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",150,0,150);
-    vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",150,0,150);
+    vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",200,0,200);
+    vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",200,0,200);
     vHisto1D[chargeFW] =            new TH1F("chargeFW",";charge in FW;counts",100,0,8000);
     vHisto1D[chargeFW_selected] =   new TH1F("chargeFW_selected",";charge in FW selected;counts",100,0,8000);
     vHisto1D[vertexZ] =             new TH1F("vertexZ",";vertex on Z;conts",100,-100,10);

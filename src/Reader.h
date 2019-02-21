@@ -95,6 +95,7 @@ class Reader
     void            GetEvent();
     void            GetFlow(int iNumHarm=1);
     void            GetQualityAssurance(Int_t iPT=HADES_constants::kPT2);
+    void            GetPTChecking(Int_t iPT=HADES_constants::kPT2);
     void            InitQAHistos();
     void            InitFlowHistos();
     void            SaveFlowStatistics();
