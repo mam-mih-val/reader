@@ -5,6 +5,7 @@
 #include "TH2F.h"
 #include "TProfile.h"
 #include "TCanvas.h"
+#include "TLegend.h"
 #include "TChain.h"
 #include "TMath.h"
 
@@ -41,8 +42,8 @@ class Reader
         phiMDC_selected,
         betaTOF,
         betaTOF_selected,
-        hitsTOF_matched,
-        hitsTOF_matched_selected,
+        hitsTOF_uncuted,
+        hitsTOF_uncuted_selected,
         Num1DHistos
     };
     enum eQAHisto2DMap{
