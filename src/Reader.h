@@ -47,6 +47,8 @@ class Reader
         hitsTOF_uncuted_selected,
         hitsTOF_matched,
         hitsTOF_matched_selected,
+        pseudorapidityMDC,
+        pseudorapidityMDC_selected,
         Num1DHistos
     };
     enum eQAHisto2DMap{
