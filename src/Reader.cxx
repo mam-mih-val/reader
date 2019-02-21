@@ -222,6 +222,7 @@ void Reader::GetPTChecking(Int_t iPT)
     
     for (long i=0; i<lNEvents; i++)
     {
+        fChain->GetEntry(i);
         vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
     
