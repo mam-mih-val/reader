@@ -181,7 +181,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
     Float_t fNTracksMDC;
     Float_t fChargeFW;
     Float_t fVertexPosition[3];
-    TVector3 b; b.SetXYZ(0,0,BETA/2);
+    TVector3 b; b.SetXYZ(0,0,-BETA/2);
     DataTreeTrack* fTrack;
     DataTreeTOFHit* fHit;
     for (long i=0; i<lNEvents; i++)
@@ -253,12 +253,12 @@ void Reader::GetQualityAssurance(Int_t iPT)
             fMomentum.Boost(b);
             vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
             vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
-            vHisto2D[phi_rapidity_selected]->Fill(fMomentum.Phi(),fMomentum.Rapidity());
-            vHisto2D[phi_pt_selected]->Fill(fMomentum.Phi(),fMomentum.Pt());
-            vHisto2D[pt_rapidity_selected]->Fill(fMomentum.Pt(),fMomentum.Rapidity());
-            vHisto2D[phi_pseudorapidity_selected]->Fill(fMomentum.Phi(),fMomentum.PseudoRapidity());
-            vHisto2D[pt_pseudorapidity_selected]->Fill(fMomentum.Pt(),fMomentum.PseudoRapidity());
-            vHisto2D[rapidity_pseudorapidity_selected]->Fill(fMomentum.Rapidity(),fMomentum.PseudoRapidity());
+            vHisto2D[phi_rapidity_selected]->Fill(fMomentum.Rapidity(),fMomentum.Phi());
+            vHisto2D[phi_pt_selected]->Fill(fMomentum.Pt(),fMomentum.Phi());
+            vHisto2D[pt_rapidity_selected]->Fill(fMomentum.Rapidity(),fMomentum.Pt());
+            vHisto2D[phi_pseudorapidity_selected]->Fill(fMomentum.PseudoRapidity(),fMomentum.Phi());
+            vHisto2D[pt_pseudorapidity_selected]->Fill(fMomentum.PseudoRapidity(),fMomentum.Pt());
+            vHisto2D[rapidity_pseudorapidity_selected]->Fill(fMomentum.PseudoRapidity(),fMomentum.Rapidity());
         }
         vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[vertexZ_selected]->Fill(fVertexPosition[2]);
@@ -347,18 +347,18 @@ void Reader::InitQAHistos()
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
     vHisto2D[hitsFW_X_Y_selected]=  new TH2F("selected hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
-    vHisto2D[phi_rapidity]  =       new TH2F("phi&rapidity",";phi, [rad];rapidity",100,-3.14,3.14,100,-1,1);
-    vHisto2D[phi_rapidity_selected]=new TH2F("phi&rapidity_selected",";phi selected, [rad];rapidity selected",100,-3.14,3.14,100,-1,1);
-    vHisto2D[phi_pt]  =             new TH2F("phi&pt",";phi, [rad];pt, [GeV/c]",100,-3.14,3.14,100,0,2);
-    vHisto2D[phi_pt_selected]  =    new TH2F("phi&pt_selected",";phi selected, [rad];pt selected, [GeV/c]",100,-3.14,3.14,100,0,2);
-    vHisto2D[pt_rapidity]  =        new TH2F("pt&rapidity",";pt, [GeV/c];rapidity",100,0,2,100,-1,1);
-    vHisto2D[pt_rapidity_selected]= new TH2F("pt&rapidity_selected",";pt selected, [GeV/c];rapidity selected",100,0,2,100,-1,1);
-    vHisto2D[phi_pseudorapidity]  = new TH2F("phi&pseudorapidity",";phi, [rad];pseudorapidity",100,-3.14,3.14,100,-1,1);
-    vHisto2D[phi_pseudorapidity_selected]  = new TH2F("phi&pseudorapidity_selected",";phi_selected, [rad];pseudorapidity_selected",100,-3.14,3.14,100,-1,1);
-    vHisto2D[pt_pseudorapidity]  =  new TH2F("pt&pseudorapidity",";pt, [GeV/c];pseudorapidity",100,0,2,100,-1,1);
-    vHisto2D[pt_pseudorapidity_selected]=new TH2F("pt&pseudorapidity_selected",";pt selected, [GeV/c];pseudorapidity selected",100,0,2,100,-1,1);
-    vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";rapidity;pseudorapidity",100,-1,1,100,-1,1);
-    vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";rapidity selected;pseudorapidity selected",100,-1,1,100,-1,1);
+    vHisto2D[phi_rapidity]  =       new TH2F("phi&rapidity",";rapidity;phi, [rad]",100,-1,1,100,-3.14,3.14);
+    vHisto2D[phi_rapidity_selected]=new TH2F("phi&rapidity_selected",";rapidity selected;phi selected, [rad]",100,-1,1,100,-3.14,3.14);
+    vHisto2D[phi_pt]  =             new TH2F("phi&pt",";pt, [GeV/c];phi, [rad]",100,0,2,100,-3.14,3.14);
+    vHisto2D[phi_pt_selected]  =    new TH2F("phi&pt_selected",";pt selected, [GeV/c];phi selected, [rad]",100,0,2,100,-3.14,3.14);
+    vHisto2D[pt_rapidity]  =        new TH2F("pt&rapidity",";rapidity;pt, [GeV/c]",100,-1,1,100,0,2);
+    vHisto2D[pt_rapidity_selected]= new TH2F("pt&rapidity_selected",";rapidity selected;pt selected, [GeV/c]",100,-1,1,100,0,2);
+    vHisto2D[phi_pseudorapidity]  = new TH2F("phi&pseudorapidity",";pseudorapidity;phi, [rad]",100,-1,1,100,-3.14,3.14);
+    vHisto2D[phi_pseudorapidity_selected]  = new TH2F("phi&pseudorapidity_selected",";pseudorapidity_selected;phi_selected, [rad]",100,-1,1,100,-3.14,3.14);
+    vHisto2D[pt_pseudorapidity]  =  new TH2F("pt&pseudorapidity",";pseudorapidity;pt, [GeV/c]",100,-1,1,100,0,2);
+    vHisto2D[pt_pseudorapidity_selected]=new TH2F("pt&pseudorapidity_selected",";pseudorapidity selected;pt selected, [GeV/c]",100,-1,1,100,0,2);
+    vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";pseudorapidity;rapidity",100,-1,1,100,-1,1);
+    vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";pseudorapidity selected;rapidity selected",100,-1,1,100,-1,1);
 }
 
 void Reader::InitFlowHistos()
