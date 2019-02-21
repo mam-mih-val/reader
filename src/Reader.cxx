@@ -55,8 +55,8 @@ void Reader::DrawQA1DHistos(TString cPictureName)
     TString path = "../histograms/"+cPictureName+"_0.png";
     canv->SaveAs(path);
 
-    TCanvas* canv1 = new TCanvas("canv1","QA1",4500,2000);
-    canv1->Divide(2,1,0.005,0.0001);
+    TCanvas* canv1 = new TCanvas("canv1","QA1",4500,1500);
+    canv1->Divide(3,1,0.005,0.0001);
     TLegend* legend = new TLegend(0.1,0.8,0.38,0.9);
     legend->AddEntry(vHisto1D[hitsTOF],"Unselected");
     legend->AddEntry(vHisto1D[hitsTOF_selected],"Selected");
@@ -75,6 +75,14 @@ void Reader::DrawQA1DHistos(TString cPictureName)
     vHisto1D[hitsTOF_uncuted_selected]->SetLineColor(1);
     vHisto1D[hitsTOF_uncuted_selected]->SetLineWidth(5);
     vHisto1D[hitsTOF_uncuted_selected]->Draw("same");
+    legend->Draw();
+
+    canv1->cd(3);
+    vHisto1D[hitsTOF_matched]->SetLineWidth(5);
+    vHisto1D[hitsTOF_matched]->Draw();
+    vHisto1D[hitsTOF_matched_selected]->SetLineColor(1);
+    vHisto1D[hitsTOF_matched_selected]->SetLineWidth(5);
+    vHisto1D[hitsTOF_matched_selected]->Draw("same");
     legend->Draw();
 
     path = "../histograms/"+cPictureName+"_1.png";
@@ -225,12 +233,14 @@ void Reader::GetPTChecking(Int_t iPT)
         fChain->GetEntry(i);
         vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+        vHisto1D[hitsTOF_matched]->Fill( fEvent->GetNTOFHits() );
     
         if( !fEvent->GetTrigger(iPT)->GetIsFired() ) 
             continue;
     
         vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+        vHisto1D[hitsTOF_matched_selected]->Fill( fEvent->GetNTOFHits() );
     }
 }
 
@@ -245,8 +255,8 @@ void Reader::InitQAHistos()
     cout << "Initialization of QA histograms" << endl;
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC",";tracks MDC;counts",100,0,100);
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected",";selected tracks MDC;counts",100,0,100);
-    vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",200,0,200);
-    vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",200,0,200);
+    vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",250,0,250);
+    vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",250,0,250);
     vHisto1D[chargeFW] =            new TH1F("chargeFW",";charge in FW;counts",100,0,8000);
     vHisto1D[chargeFW_selected] =   new TH1F("chargeFW_selected",";charge in FW selected;counts",100,0,8000);
     vHisto1D[vertexZ] =             new TH1F("vertexZ",";vertex on Z;conts",100,-100,10);
@@ -262,8 +272,10 @@ void Reader::InitQAHistos()
     vHisto1D[phiMDC_selected] =     new TH1F("phiMDC_selected",";#phi selected;counts",100,-3.1415,3.1415);
     vHisto1D[betaTOF] =             new TH1F("betaTOF",";#beta;counts",100,0,1.2);
     vHisto1D[betaTOF_selected] =    new TH1F("betaTOFSelected",";#beta selected;counts",100,0,1.2);
-    vHisto1D[hitsTOF_uncuted] =     new TH1F("hitsTOF_uncuted",";hits in TOF+RPC uncuted;counts",200,0,200);
-    vHisto1D[hitsTOF_uncuted_selected]=new TH1F("hitsTOF_uncuted_selected",";hits in TOF+RPC uncuted selected;counts",200,0,200);
+    vHisto1D[hitsTOF_uncuted] =     new TH1F("hitsTOF_uncuted",";hits in TOF+RPC uncuted;counts",250,0,250);
+    vHisto1D[hitsTOF_uncuted_selected]=new TH1F("hitsTOF_uncuted_selected",";hits in TOF+RPC uncuted selected;counts",250,0,250);
+    vHisto1D[hitsTOF_matched] =     new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",100,0,100);
+    vHisto1D[hitsTOF_matched_selected]=new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",100,0,100);
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,200);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,200);
