@@ -1,6 +1,7 @@
 #include "Reader.h"
 
 const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
+const double BETA = sqrt( 1.0 - 0.938*0.938/1.23/1.23 );
 
 Reader::Reader(char* cFileName)
 {
@@ -87,6 +88,8 @@ void Reader::DrawQA1DHistos(TString cPictureName)
 
     path = "../histograms/"+cPictureName+"_1.png";
     canv1->SaveAs(path);
+
+
 }
 
 void Reader::DrawQA2DHistos(TString cPictureName)
@@ -123,8 +126,50 @@ void Reader::DrawQA2DHistos(TString cPictureName)
 
     TString path = "../histograms/"+cPictureName+"_0.png";
     TString path1 = "../histograms/"+cPictureName+"_1.png";
+    
     canv->SaveAs(path);
     canv1->SaveAs(path1);
+
+    TCanvas* canv2 = new TCanvas("canv2","QA",4000,2500);
+    canv2->Divide(2,2,0.005,0.0001);
+    
+    canv2->cd(1);
+    vHisto2D[phi_rapidity]->Draw("colz");
+
+    canv2->cd(3);
+    vHisto2D[phi_rapidity_selected]->Draw("colz");
+
+    canv2->cd(2);
+    vHisto2D[phi_pseudorapidity]->Draw("colz");
+
+    canv2->cd(4);
+    vHisto2D[phi_pseudorapidity_selected]->Draw("colz");
+    path1 = "../histograms/"+cPictureName+"_2.png";
+    canv2->SaveAs(path1);
+
+    TCanvas* canv3 = new TCanvas("canv3","QA",4500,2000);
+    canv3->Divide(3,2,0.005,0.0001);
+    
+    canv3->cd(1);
+    vHisto2D[pt_rapidity]->Draw("colz");
+
+    canv3->cd(4);
+    vHisto2D[pt_rapidity_selected]->Draw("colz");
+
+    canv3->cd(2);
+    vHisto2D[pt_pseudorapidity]->Draw("colz");
+
+    canv3->cd(5);
+    vHisto2D[pt_pseudorapidity_selected]->Draw("colz");
+
+    canv3->cd(3);
+    vHisto2D[rapidity_pseudorapidity]->Draw("colz");
+
+    canv3->cd(6);
+    vHisto2D[rapidity_pseudorapidity_selected]->Draw("colz");
+
+    path1 = "../histograms/"+cPictureName+"_3.png";
+    canv3->SaveAs(path1);
 }
 
 void Reader::GetQualityAssurance(Int_t iPT)
@@ -136,6 +181,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
     Float_t fNTracksMDC;
     Float_t fChargeFW;
     Float_t fVertexPosition[3];
+    TVector3 b; b.SetXYZ(0,0,BETA/2);
     DataTreeTrack* fTrack;
     DataTreeTOFHit* fHit;
     for (long i=0; i<lNEvents; i++)
@@ -159,8 +205,15 @@ void Reader::GetQualityAssurance(Int_t iPT)
             vHisto1D[ptMDC]->Fill(fTrack->GetPt());
             vHisto1D[betaTOF]->Fill(fBeta);
             vHisto1D[massTOF]->Fill(fMass2);
+            fMomentum.Boost(b);
             vHisto1D[rapidityMDC]->Fill(fMomentum.Rapidity());
             vHisto1D[phiMDC]->Fill(fMomentum.Phi());
+            vHisto2D[phi_rapidity]->Fill(fMomentum.Phi(),fMomentum.Rapidity());
+            vHisto2D[phi_pt]->Fill(fMomentum.Phi(),fMomentum.Pt());
+            vHisto2D[pt_rapidity]->Fill(fMomentum.Pt(),fMomentum.Rapidity());
+            vHisto2D[phi_pseudorapidity]->Fill(fMomentum.Phi(),fMomentum.PseudoRapidity());
+            vHisto2D[pt_pseudorapidity]->Fill(fMomentum.Pt(),fMomentum.PseudoRapidity());
+            vHisto2D[rapidity_pseudorapidity]->Fill(fMomentum.Rapidity(),fMomentum.PseudoRapidity());
         }
         vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[tracksMDC]->Fill(fNTracksMDC);
@@ -197,8 +250,15 @@ void Reader::GetQualityAssurance(Int_t iPT)
             vHisto1D[betaTOF_selected]->Fill(fBeta);
             vHisto1D[massTOF_selected]->Fill(fMass2);
             vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
-            vHisto1D[rapidityMDC_recentred]->Fill(fMomentum.Rapidity()-YCOR);
+            fMomentum.Boost(b);
+            vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
             vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
+            vHisto2D[phi_rapidity_selected]->Fill(fMomentum.Phi(),fMomentum.Rapidity());
+            vHisto2D[phi_pt_selected]->Fill(fMomentum.Phi(),fMomentum.Pt());
+            vHisto2D[pt_rapidity_selected]->Fill(fMomentum.Pt(),fMomentum.Rapidity());
+            vHisto2D[phi_pseudorapidity_selected]->Fill(fMomentum.Phi(),fMomentum.PseudoRapidity());
+            vHisto2D[pt_pseudorapidity_selected]->Fill(fMomentum.Pt(),fMomentum.PseudoRapidity());
+            vHisto2D[rapidity_pseudorapidity_selected]->Fill(fMomentum.Rapidity(),fMomentum.PseudoRapidity());
         }
         vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
         vHisto1D[vertexZ_selected]->Fill(fVertexPosition[2]);
@@ -287,6 +347,17 @@ void Reader::InitQAHistos()
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
     vHisto2D[hitsFW_X_Y_selected]=  new TH2F("selected hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
+    vHisto2D[phi_rapidity]  =       new TH2F("phi&rapidity",";phi, [rad];rapidity",100,-3.14,3.14,100,-1,1);
+    vHisto2D[phi_rapidity_selected]=new TH2F("phi&rapidity_selected",";phi selected, [rad];rapidity selected",100,-3.14,3.14,100,-1,1);
+    vHisto2D[phi_pt]  =             new TH2F("phi&pt",";phi, [rad];pt, [GeV/c]",100,-3.14,3.14,100,0,2);
+    vHisto2D[phi_pt_selected]  =    new TH2F("phi&pt_selected",";phi selected, [rad];pt selected, [GeV/c]",100,-3.14,3.14,100,0,2);
+    vHisto2D[pt_rapidity]  =        new TH2F("pt&rapidity",";pt, [GeV/c];rapidity",100,0,2,100,-1,1);
+    vHisto2D[pt_rapidity_selected]= new TH2F("pt&rapidity_selected",";pt selected, [GeV/c];rapidity selected",100,0,2,100,-1,1);
+    vHisto2D[phi_pseudorapidity]  = new TH2F("phi&pseudorapidity",";phi, [rad];pseudorapidity",100,-3.14,3.14,100,-1,1);
+    vHisto2D[pt_pseudorapidity]  =  new TH2F("pt&pseudorapidity",";pt, [GeV/c];pseudorapidity",100,0,2,100,-1,1);
+    vHisto2D[pt_pseudorapidity_selected]=new TH2F("pt&pseudorapidity_selected",";pt selected, [GeV/c];pseudorapidity selected",100,0,2,100,-1,1);
+    vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";rapidity;pseudorapidity",100,-1,1,100,-1,1);
+    vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";rapidity selected;pseudorapidity selected",100,-1,1,100,-1,1);
 }
 
 void Reader::InitFlowHistos()

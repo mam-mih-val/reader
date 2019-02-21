@@ -8,6 +8,7 @@
 #include "TLegend.h"
 #include "TChain.h"
 #include "TMath.h"
+#include "TVector3.h"
 
 #include "Selector.h"
 #include "Qvector.h"
@@ -59,6 +60,18 @@ class Reader
         vertexX_vertexY_selected,
         hitsFW_X_Y,
         hitsFW_X_Y_selected,
+        phi_rapidity,
+        phi_rapidity_selected,
+        phi_pt,
+        phi_pt_selected,
+        pt_rapidity,
+        pt_rapidity_selected,
+        phi_pseudorapidity,
+        phi_pseudorapidity_selected,
+        pt_pseudorapidity,
+        pt_pseudorapidity_selected,
+        rapidity_pseudorapidity,
+        rapidity_pseudorapidity_selected,
         Num2DHistos
     };
     enum eFlowProfile{

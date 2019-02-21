@@ -22,11 +22,11 @@ Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int iPT)
 {
     fEvent = _fEvent;
     this->CheckEventCuts(fEvent);
-    if( !fEvent->GetTrigger(iPT)->GetIsFired() )
+/*    if( !fEvent->GetTrigger(iPT)->GetIsFired() )
     {
         return 0;
     }
-    
+*/    
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )
     {
         hRejectedEvents->Fill(cVeretexPositionZ);
