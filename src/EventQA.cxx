@@ -80,7 +80,8 @@ void EventQA::FillHistograms(DataTreeEvent* fEvent)
         for(int j=0;j<iNPSDModules;j++)
         {
             fPSDModule = fEvent->GetPSDModule(j);
-            vHisto2D[hitsFW_X_Y_selected]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1),fPSDModule->GetEnergy());
+            if( fPSDModule->GetId() > 0 )
+                vHisto2D[hitsFW_X_Y_selected]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1),fPSDModule->GetEnergy());
         }   
     }
 }
