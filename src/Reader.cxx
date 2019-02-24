@@ -172,7 +172,7 @@ void Reader::DrawQA2DHistos(TString cPictureName)
     canv3->SaveAs(path1);
 }
 
-void Reader::GetQualityAssurance(Int_t iPT)
+/*void Reader::GetQualityAssurance(Int_t iPT)
 {
     this->InitQAHistos();
     cout << "QA histograms are building" << endl;
@@ -283,7 +283,7 @@ void Reader::GetQualityAssurance(Int_t iPT)
     this->SaveQAStatistics();
     return;
 }
-
+*/
 void Reader::GetPTChecking(Int_t iPT)
 {
     this->InitQAHistos();
@@ -311,7 +311,7 @@ DataTreeEvent* Reader::GetEvent(int idx)
     return fEvent;
 }
 
-void Reader::InitQAHistos()
+/*void Reader::InitQAHistos()
 {
     cout << "Initialization of QA histograms" << endl;
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC",";tracks MDC;counts",100,0,100);
@@ -363,7 +363,7 @@ void Reader::InitQAHistos()
     vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";pseudorapidity;rapidity",100,-1,1,100,-1,1);
     vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";pseudorapidity selected;rapidity selected",100,-1,1,100,-1,1);
 }
-
+*/
 void Reader::InitFlowHistos()
 {
     cout << "Initialization of flow histograms" << endl;
@@ -515,7 +515,7 @@ void Reader::BuildQAHistograms(TString sPicName)
     Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
-        fChain->GetEntry();
+        fChain->GetEntry(i);
         fEventQA.FillHistograms(fEvent);
     }
     fEventQA.SaveHistograms(sPicName);
