@@ -12,6 +12,7 @@
 
 #include "Selector.h"
 #include "Qvector.h"
+#include "EventQA.h"
 
 #include "HADES_constants.h"
 
@@ -113,6 +114,7 @@ class Reader
     void            GetFlow(int iNumHarm=1);
     void            GetQualityAssurance(Int_t iPT=HADES_constants::kPT2);
     void            GetPTChecking(Int_t iPT=HADES_constants::kPT2);
+    void            BuildQAHistograms(TString sPicName);
     void            InitQAHistos();
     void            InitFlowHistos();
     void            SaveFlowStatistics();

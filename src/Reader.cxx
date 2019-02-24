@@ -508,3 +508,16 @@ void Reader::SaveFlowStatistics()
     }
     fFile->Close();
 }
+
+void Reader::BuildQAHistograms(TString sPicName)
+{
+    EventQA fEventQA;
+    fEventQA.InitHistograms();
+    Long64_t lNEvents = fChain->GetEntries();
+    for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry();
+        fEventQA.FillHistograms(fEvent);
+    }
+    fEventQA.SaveHistograms(sPicName);
+}
