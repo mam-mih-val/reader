@@ -163,7 +163,7 @@ void EventQA::SaveHistograms(TString PicName)
 
     for(int i=0; i<NumCanvases; i++)
     {
-        TString sPath = "../histograms"+PicName+"_"+to_string(i)+".png";
+        TString sPath = "../histograms/"+PicName+"_"+to_string(i)+".png";
         vCanvas[i]->SaveAs(sPath);
     }
 }
