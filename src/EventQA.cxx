@@ -159,14 +159,14 @@ void EventQA::SaveHistograms(TString PicName)
 
     for(int i=0; i<NumCanvases; i++)
     {
-        TString sPath = "../histograms/"+PicName+"_"+to_string(i)+".png";
+        TString sPath = "../histograms/Event_"+PicName+"_"+to_string(i)+".png";
         vCanvas[i]->SaveAs(sPath);
     }
 }
 
 void EventQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = "../histograms"+FileName+".root";
+    TString sPath = "../histograms/"+"Event"+FileName+".root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)

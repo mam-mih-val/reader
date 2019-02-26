@@ -208,14 +208,14 @@ void TrackQA::SaveHistograms(TString PicName)
 // ***
 	for(int i=0; i<NumCanvases; i++)
     {
-        TString sPath = "../histograms/"+PicName+"_Pid_"+to_string(iPid)+"_"+to_string(i)+".png";
+        TString sPath = "../histograms/Track_"+PicName+"_Pid_"+to_string(iPid)+"_"+to_string(i)+".png";
         vCanvas[i]->SaveAs(sPath);
     }
 }
 
 void TrackQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = "../histograms"+FileName+"_Pid_"+to_string(iPid)+".root";
+    TString sPath = "../histograms/Track_"+FileName+"_Pid_"+to_string(iPid)+".root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)
