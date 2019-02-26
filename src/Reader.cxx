@@ -164,11 +164,14 @@ void Reader::SaveFlowStatistics()
 void Reader::BuildQAHistograms(TString sPicName)
 {
     EventQA fEventQA;
+	TrackQA fTrackQA;
     Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
         fEventQA.FillHistograms(fEvent);
+		fTrackQA.FillHistograms(fEvent);
     }
     fEventQA.SaveHistograms(sPicName);
+	fTrackQA.SaveHistograms(sPicName);
 }
