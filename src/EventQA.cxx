@@ -5,14 +5,9 @@ EventQA::EventQA()
     this->InitHistograms();
 }
 
-EventQA::~EventQA()
-{
-
-}
-
 void EventQA::InitHistograms()
 {
-    cout << "Initialization of QA histograms" << endl;
+    cout << "Initialization of Event QA histograms" << endl;
     vHisto1D[tracksMDC] =           new TH1F("tracksMDC",";tracks MDC;counts",100,0,100);
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected",";selected tracks MDC;counts",100,0,100);
     vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",250,0,250);
