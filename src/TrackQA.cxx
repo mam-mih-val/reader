@@ -23,8 +23,8 @@ void TrackQA::InitHistograms()
 	vHisto1D[betaTOF] =			 new TH1F("betaTOF",";#beta;counts",100,0,1.2);
 	vHisto1D[betaTOF_selected] =	new TH1F("betaTOFSelected",";#beta selected;counts",100,0,1.2);
 	
-	vHisto2D[phi_rapidity]  =	   new TH2F("phi&rapidity",";rapidity;phi, [rad]",100,-1,1,100,-3.14,3.14);
-	vHisto2D[phi_rapidity_selected]=new TH2F("phi&rapidity_selected",";rapidity selected;phi selected, [rad]",100,-1,1,100,-3.14,3.14);
+	vHisto2D[phi_rapidity]  =	   new TH2F("phi&rapidity",";rapidity;phi, [rad]",100,-1,2,100,-3.14,3.14);
+	vHisto2D[phi_rapidity_selected]=new TH2F("phi&rapidity_selected",";rapidity selected;phi selected, [rad]",100,-1,2,100,-3.14,3.14);
 	vHisto2D[phi_pt]  =			 new TH2F("phi&pt",";pt, [GeV/c];phi, [rad]",100,0,2.5,100,-3.14,3.14);
 	vHisto2D[phi_pt_selected]  =	new TH2F("phi&pt_selected",";pt selected, [GeV/c];phi selected, [rad]",100,0,2.5,100,-3.14,3.14);
 	vHisto2D[pt_rapidity]  =		new TH2F("pt&rapidity",";rapidity;pt, [GeV/c]",100,-1,2,100,0,2.5);
@@ -35,10 +35,10 @@ void TrackQA::InitHistograms()
 	vHisto2D[pt_pseudorapidity_selected]=new TH2F("pt&pseudorapidity_selected",";pseudorapidity selected;pt selected, [GeV/c]",100,0,3,100,0,2.5);
 	vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";pseudorapidity;rapidity",100,0,3,100,-1,2);
 	vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";pseudorapidity selected;rapidity selected",100,0,3,100,-1,2);
-	vHisto2D[dEdXTOF_p] =			  new TH2F("TOF_dE/dx&p",";p, [GeV/c]; #frac{dE}{dx}",100,0,2.5,100,0,10);
-	vHisto2D[dEdXTOF_p_selected] =	 new TH2F("TOF_dE/dx&p_selected",";p selected, [GeV/c]; #frac{dE}{dx} selected",100,0,2.5,100,0,10);
-	vHisto2D[dEdXMDC_p] =			  new TH2F("MDC_dE/dx&p",";p, [GeV/c]; #frac{dE}{dx}",100,0,2.5,100,0,20);
-	vHisto2D[dEdXMDC_p_selected] =	 new TH2F("MDC_dE/dx&p_selected",";p selected, [GeV/c]; #frac{dE}{dx} selected",100,0,2.5,100,0,20);
+	vHisto2D[dEdXTOF_p] =			  new TH2F("TOF_dE/dx&p",";p, [GeV/c]; #frac{dE}{dx} TOF",100,0,2.5,100,0,20);
+	vHisto2D[dEdXTOF_p_selected] =	 new TH2F("TOF_dE/dx&p_selected",";p selected, [GeV/c]; #frac{dE}{dx} TOF selected",100,0,2.5,100,0,20);
+	vHisto2D[dEdXMDC_p] =			  new TH2F("MDC_dE/dx&p",";p, [GeV/c]; #frac{dE}{dx} MDC",100,0,2.5,100,0,30);
+	vHisto2D[dEdXMDC_p_selected] =	 new TH2F("MDC_dE/dx&p_selected",";p selected, [GeV/c]; #frac{dE}{dx} MDC selected",100,0,2.5,100,0,30);
 	vHisto2D[beta_p] =	 new TH2F("beta&p_selected",";p selected, [GeV/c]; #beta",100,0,2.5,100,0.,1.1);
 	vHisto2D[beta_p_selected] =	 new TH2F("beta&p_selected",";p selected, [GeV/c]; #beta selected",100,0,2.5,100,0.,1.1);
 }

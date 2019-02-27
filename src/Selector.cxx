@@ -95,11 +95,11 @@ Bool_t Selector::IsCorrectTrack(Int_t idx)
         hRejectedTracks->Fill(cDCA);
         return 0;
     }
-    if ( fLen/fTof/299.792458 > 1 ) 
-    {
-        hRejectedTracks->Fill(cBeta);
-        return 0;
-    }
+//    if ( fLen/fTof/299.792458 > 1 ) 
+//    {
+//        hRejectedTracks->Fill(cBeta);
+//        return 0;
+//    }
     if ( fHit->GetPositionComponent(0) < -5 || fHit->GetPositionComponent(0) > 5 )
     {
         hRejectedTracks->Fill(cTrackHitMatchX);
