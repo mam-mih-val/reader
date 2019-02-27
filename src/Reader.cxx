@@ -164,14 +164,25 @@ void Reader::SaveFlowStatistics()
 void Reader::BuildQAHistograms(TString sPicName)
 {
     EventQA fEventQA;
-	TrackQA fTrackQA;
+	TrackQA fTrackQA[NumOfParticles];
+	fTrackQA[all].SetPid(-1);
+	fTrackQA[electron].SetPid(3);
+	fTrackQA[positron].SetPid(2);
+	fTrackQA[pi_minus].SetPid(9);
+	fTrackQA[pi_plus].SetPid(8);
+	fTrackQA[proton].SetPid(14);
+	fTrackQA[deuteron].SetPid(45);
+	fTrackQA[helium3].SetPid(49);
+	fTrackQA[helium4].SetPid(47);
     Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
         fEventQA.FillHistograms(fEvent);
-		fTrackQA.FillHistograms(fEvent);
+		for(int j=0; j<NumOfParticles;j++) 
+			fTrackQA[j].FillHistograms(fEvent);
     }
     fEventQA.SaveHistograms(sPicName);
-	fTrackQA.SaveHistograms(sPicName);
+	for(int j=0; j<NumOfParticles;j++) 
+		fTrackQA[j].SaveHistograms(sPicName);
 }

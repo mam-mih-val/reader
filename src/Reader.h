@@ -45,7 +45,18 @@ class Reader
         QyRecentred,
         NumOfQvectorHistos
     };
-
+	enum eParticleMap{
+		all = 0,
+		electron,
+		positron,
+		pi_minus,
+		pi_plus,
+		proton,
+		deuteron,
+		helium3,
+		helium4,
+		NumOfParticles
+	};
     TProfile* pFlowProfiles[NumOfFLowProfiles];
     TH1F*   vQvectorDistribution[4];
     public:
