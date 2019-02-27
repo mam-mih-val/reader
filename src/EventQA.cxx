@@ -166,7 +166,7 @@ void EventQA::SaveHistograms(TString PicName)
 
 void EventQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = "../histograms/"+"Event"+FileName+".root";
+    TString sPath = "../histograms/Event"+FileName+".root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)

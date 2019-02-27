@@ -215,7 +215,7 @@ void TrackQA::SaveHistograms(TString PicName)
 
 void TrackQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = "../histograms/Track_"+"FileName"+"_Pid_"+to_string(iPid)+".root";
+    TString sPath = "../histograms/Track_"+FileName+"_Pid_"+to_string(iPid)+".root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)
