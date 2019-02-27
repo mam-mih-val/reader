@@ -31,10 +31,10 @@ void TrackQA::InitHistograms()
 	vHisto2D[pt_rapidity_selected]= new TH2F("pt&rapidity_selected",";rapidity selected;pt selected, [GeV/c]",100,-1,1,100,0,2);
 	vHisto2D[phi_pseudorapidity]  = new TH2F("phi&pseudorapidity",";pseudorapidity;phi, [rad]",100,0,3,100,-3.14,3.14);
 	vHisto2D[phi_pseudorapidity_selected]  = new TH2F("phi&pseudorapidity_selected",";pseudorapidity_selected;phi_selected, [rad]",100,0,3,100,-3.14,3.14);
-	vHisto2D[pt_pseudorapidity]  =  new TH2F("pt&pseudorapidity",";pseudorapidity;pt, [GeV/c]",,100,0,3,100,0,2);
+	vHisto2D[pt_pseudorapidity]  =  new TH2F("pt&pseudorapidity",";pseudorapidity;pt, [GeV/c]",100,0,3,100,0,2);
 	vHisto2D[pt_pseudorapidity_selected]=new TH2F("pt&pseudorapidity_selected",";pseudorapidity selected;pt selected, [GeV/c]",100,0,3,100,0,2);
-	vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";pseudorapidity;rapidity",,100,0,3,100,-1,1);
-	vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";pseudorapidity selected;rapidity selected",,100,0,3,100,-1,1);
+	vHisto2D[rapidity_pseudorapidity]=new TH2F("rapidity&pseudorapidity",";pseudorapidity;rapidity",100,0,3,100,-1,1);
+	vHisto2D[rapidity_pseudorapidity_selected]=new TH2F("rapidity&pseudorapidity_selected",";pseudorapidity selected;rapidity selected",100,0,3,100,-1,1);
 	vHisto2D[dEdXTOF_p] =			  new TH2F("TOF_dE/dx&p",";p, [GeV/c]; #frac{dE}{dx}",100,0,2.5,100,0,100);
 	vHisto2D[dEdXTOF_p_selected] =	 new TH2F("TOF_dE/dx&p_selected",";p selected, [GeV/c]; #frac{dE}{dx} selected",100,0,2.5,100,0,100);
 	vHisto2D[dEdXMDC_p] =			  new TH2F("MDC_dE/dx&p",";p, [GeV/c]; #frac{dE}{dx}",100,0,2.5,100,0,100);
