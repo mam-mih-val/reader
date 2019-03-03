@@ -2,8 +2,9 @@
 
 const double BETA = sqrt( 1.0 - 0.938*0.938/1.23/1.23 );
 
-TrackQA::TrackQA()
+TrackQA::TrackQA(int _iPid)
 {
+	iPid = _iPid;
 	this->InitHistograms();
 }
 
@@ -12,8 +13,8 @@ void TrackQA::InitHistograms()
 	cout << "Initialization of Track QA histograms" << endl;
 	vHisto1D[ptMDC] =					new TH1F( Form("ptMDC_%i",iPid),";pt, [#frac{GeV}{c}];counts",100,0,2.5);
 	vHisto1D[ptMDC_selected] =			new TH1F( Form("ptMDC_%i_selected",iPid),";pt selected, [#frac{GeV}{c}];counts",100,0,2.5);
-	vHisto1D[massTOF] =			 		new TH1F( Form("massTOF_%i",iPid),";m^{2}, [#frac{GeV}{c^{2}}];counts",100,-0.2,4);
-	vHisto1D[massTOF_selected] =		new TH1F( Form("massTOF_%i_selected",iPid),";m^{2} selected, [#frac{GeV}{c^{2}}];counts",100,-0.2,4);
+	vHisto1D[massTOF] =			 		new TH1F( Form("massTOF_%i",iPid),";m^{2}, [#frac{GeV^{2}}{c^{4}}];counts",100,-0.2,18);
+	vHisto1D[massTOF_selected] =		new TH1F( Form("massTOF_%i_selected",iPid),";m^{2} selected, [#frac{GeV^{2}}{c^{4}}];counts",100,-0.2,18);
 	vHisto1D[rapidityMDC] =				new TH1F( Form("rapidityMDC_%i",iPid),";rapidity, y;counts",100,-1,2);
 	vHisto1D[rapidityMDC_selected]= 	new TH1F( Form("rapidityMDC_%i_selected",iPid),";rapidity selected, y;counts",100,-1,2);
 	vHisto1D[pseudorapidityMDC] =		new TH1F( Form("pseudorapidityMDC_%i",iPid),";pseudorapidity;counts",100,0,3);
@@ -35,12 +36,12 @@ void TrackQA::InitHistograms()
 	vHisto2D[pt_pseudorapidity_selected]=		new TH2F( Form("pt&pseudorapidity_%i_selected",iPid),";pseudorapidity selected;pt selected, [GeV/c]",100,0,3,100,0,2.5);
 	vHisto2D[rapidity_pseudorapidity]=			new TH2F( Form("rapidity&pseudorapidity_%i",iPid),";pseudorapidity;rapidity",100,0,3,100,-1,2);
 	vHisto2D[rapidity_pseudorapidity_selected]= new TH2F( Form("rapidity&pseudorapidity_%i_selected",iPid),";pseudorapidity selected;rapidity selected",100,0,3,100,-1,2);
-	vHisto2D[dEdXTOF_p] =			  			new TH2F( Form("TOF_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} TOF",100,0,2.5,100,0,20);
-	vHisto2D[dEdXTOF_p_selected] =	 			new TH2F( Form("TOF_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} TOF selected",100,0,2.5,100,0,20);
-	vHisto2D[dEdXMDC_p] =			  			new TH2F( Form("MDC_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} MDC",100,0,2.5,100,0,30);
-	vHisto2D[dEdXMDC_p_selected] =	 			new TH2F( Form("MDC_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} MDC selected",100,0,2.5,100,0,30);
-	vHisto2D[beta_p] =	 						new TH2F( Form("beta&p_%i_selected",iPid),";p selected, [GeV/c]; #beta",100,0,2.5,100,0.,1.1);
-	vHisto2D[beta_p_selected] =	 				new TH2F( Form("beta&p_%i_selected",iPid),";p selected, [GeV/c]; #beta selected",100,0,2.5,100,0.,1.1);
+	vHisto2D[dEdXTOF_p] =			  			new TH2F( Form("TOF_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} TOF",100,-2.5,2.5,100,0,20);
+	vHisto2D[dEdXTOF_p_selected] =	 			new TH2F( Form("TOF_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} TOF selected",100,-2.5,2.5,100,0,20);
+	vHisto2D[dEdXMDC_p] =			  			new TH2F( Form("MDC_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} MDC",100,-2.5,2.5,100,0,30);
+	vHisto2D[dEdXMDC_p_selected] =	 			new TH2F( Form("MDC_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} MDC selected",100,-2.5,2.5,100,0,30);
+	vHisto2D[beta_p] =	 						new TH2F( Form("beta&p_%i",iPid),";p, [GeV/c]; #beta",100,-2.5,2.5,100,0.,1.1);
+	vHisto2D[beta_p_selected] =	 				new TH2F( Form("beta&p_%i_selected",iPid),";p selected, [GeV/c]; #beta selected",100,-2.5,2.5,100,0.,1.1);
 }
 
 void TrackQA::FillHistograms(DataTreeEvent* fEvent)
@@ -61,19 +62,20 @@ void TrackQA::FillHistograms(DataTreeEvent* fEvent)
 		}
 		TLorentzVector fMomentum = fTrack->GetMomentum();
 		fHit = fEvent->GetTOFHit(i);
-		float fTof = fHit->GetTime(); 
+		float fTof = fHit->GetTime();
+		float fCharge = fHit->GetCharge(); 
 		float fLen = fHit->GetPathLength();
 		float fBeta = fLen/fTof/299.792458;
 		float fMass2 = fMomentum.P()*fMomentum.P()*(1-fBeta*fBeta)/(fBeta*fBeta) * fHit->GetCharge();
 		vHisto1D[ptMDC]->Fill(fTrack->GetPt());
 		vHisto1D[betaTOF]->Fill(fBeta);
-		vHisto1D[massTOF]->Fill(fMass2);
+		vHisto1D[massTOF]->Fill(fMass2*fCharge);
 		vHisto1D[pseudorapidityMDC]->Fill(fMomentum.PseudoRapidity());
 		vHisto2D[phi_pseudorapidity]->Fill(fMomentum.PseudoRapidity(),fMomentum.Phi());
 		vHisto2D[pt_pseudorapidity]->Fill(fMomentum.PseudoRapidity(),fMomentum.Pt());
-		vHisto2D[dEdXMDC_p]->Fill( fMomentum.P(),fTrack->GetdEdx(HADES_constants::kMDC_all) );
-		vHisto2D[dEdXTOF_p]->Fill( fMomentum.P(),fTrack->GetdEdx(HADES_constants::kMETA) );
-		vHisto2D[beta_p]->Fill(fMomentum.P(),fBeta);
+		vHisto2D[dEdXMDC_p]->Fill( fMomentum.P()*fCharge,fTrack->GetdEdx(HADES_constants::kMDC_all) );
+		vHisto2D[dEdXTOF_p]->Fill( fMomentum.P()*fCharge,fTrack->GetdEdx(HADES_constants::kMETA) );
+		vHisto2D[beta_p]->Fill(fMomentum.P()*fCharge,fBeta);
 		float fPR = fMomentum.PseudoRapidity();
 		fMomentum.Boost(b);
 		vHisto1D[rapidityMDC]->Fill(fMomentum.Rapidity());
@@ -88,14 +90,14 @@ void TrackQA::FillHistograms(DataTreeEvent* fEvent)
 		
 		vHisto1D[ptMDC_selected]->Fill(fTrack->GetPt());
 		vHisto1D[betaTOF_selected]->Fill(fBeta);
-		vHisto1D[massTOF_selected]->Fill(fMass2);
+		vHisto1D[massTOF_selected]->Fill(fMass2*fCharge);
 		fMomentum = fTrack->GetMomentum();
 		vHisto1D[pseudorapidityMDC_selected]->Fill(fMomentum.PseudoRapidity());
 		vHisto2D[phi_pseudorapidity_selected]->Fill(fMomentum.PseudoRapidity(),fMomentum.Phi());
 		vHisto2D[pt_pseudorapidity_selected]->Fill(fMomentum.PseudoRapidity(),fMomentum.Pt());
-		vHisto2D[dEdXMDC_p_selected]->Fill( fMomentum.P(),fTrack->GetdEdx(HADES_constants::kMDC_all) );
-		vHisto2D[dEdXTOF_p_selected]->Fill( fMomentum.P(),fTrack->GetdEdx(HADES_constants::kMETA) );
-		vHisto2D[beta_p_selected]->Fill(fMomentum.P(),fBeta);
+		vHisto2D[dEdXMDC_p_selected]->Fill( fMomentum.P()*fCharge,fTrack->GetdEdx(HADES_constants::kMDC_all) );
+		vHisto2D[dEdXTOF_p_selected]->Fill( fMomentum.P()*fCharge,fTrack->GetdEdx(HADES_constants::kMETA) );
+		vHisto2D[beta_p_selected]->Fill(fMomentum.P()*fCharge,fBeta);
 		fMomentum.Boost(b);
 		vHisto1D[rapidityMDC_selected]->Fill(fMomentum.Rapidity());
 		vHisto1D[phiMDC_selected]->Fill(fMomentum.Phi());
