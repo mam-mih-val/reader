@@ -111,7 +111,7 @@ void TrackQA::SaveHistograms(TString PicName)
 	
 	for(int i=0; i<NumCanvases; i++)
 	{
-		vCanvas[i] = new TCanvas(Form("Canvas_%i",i),"QA",4500,2000);
+		vCanvas[i] = new TCanvas(Form("Canvas_%i_%i",i,iPid),"QA",4500,2000);
 		vCanvas[i]->Divide(3,2,0.005,0.0001);
 	}
 
