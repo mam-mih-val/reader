@@ -42,6 +42,8 @@ void TrackQA::InitHistograms()
 	vHisto2D[dEdXMDC_p_selected] =	 			new TH2F( Form("MDC_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} MDC selected",100,-2.5,2.5,100,0,30);
 	vHisto2D[beta_p] =	 						new TH2F( Form("beta&p_%i",iPid),";p, [GeV/c]; #beta",100,-2.5,2.5,100,0.,1.1);
 	vHisto2D[beta_p_selected] =	 				new TH2F( Form("beta&p_%i_selected",iPid),";p selected, [GeV/c]; #beta selected",100,-2.5,2.5,100,0.,1.1);
+	vHisto2D[DCA_X_Y] = 						new TH2F( Form("DCA_X_Y_%i",iPid),"; DCA_X, [mm]; DCA_Y, [mm]",100,-30,30,100,30,30);
+	vHisto2D[DCA_X_Y_selected] = 				new TH2F( Form("DCA_X_Y_%i_selected",iPid),"; DCA_X, selected, [mm]; DCA_Y, selected, [mm]",100,-30,30,100,30,30);
 }
 
 void TrackQA::FillHistograms(DataTreeEvent* fEvent)
@@ -67,6 +69,7 @@ void TrackQA::FillHistograms(DataTreeEvent* fEvent)
 		float fLen = fHit->GetPathLength();
 		float fBeta = fLen/fTof/299.792458;
 		float fMass2 = fMomentum.P()*fMomentum.P()*(1-fBeta*fBeta)/(fBeta*fBeta) * fHit->GetCharge();
+		vHisto2D[DCA_X_Y]->Fill( fTrack->GetDCAComponent(0), fTrack->GetDCAComponent(1) );
 		vHisto1D[ptMDC]->Fill(fTrack->GetPt());
 		vHisto1D[betaTOF]->Fill(fBeta);
 		vHisto1D[massTOF]->Fill(fMass2*fCharge);
@@ -88,6 +91,7 @@ void TrackQA::FillHistograms(DataTreeEvent* fEvent)
 		if ( !fSelector.IsCorrectEvent(fEvent) || !fSelector.IsCorrectTrack(i) )
 			continue;
 		
+		vHisto2D[DCA_X_Y_selected]->Fill( fTrack->GetDCAComponent(0), fTrack->GetDCAComponent(1) );
 		vHisto1D[ptMDC_selected]->Fill(fTrack->GetPt());
 		vHisto1D[betaTOF_selected]->Fill(fBeta);
 		vHisto1D[massTOF_selected]->Fill(fMass2*fCharge);

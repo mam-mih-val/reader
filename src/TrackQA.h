@@ -51,21 +51,25 @@ class TrackQA
         dEdXMDC_p_selected, // 15
         beta_p, // 16
         beta_p_selected, // 17
-        Num2DHistos // 18
+		DCA_X_Y, // 18
+		DCA_X_Y_selected, // 19
+        Num2DHistos // 20
     };
     enum eCanvasMap{
         OneDimHist = 0, // 
         phi_kinematics, // 1, phi vs pt, y, eta
         pt_kinematics, // 2, pt vs y, eta & y vs eta
         mass_qa, // 3
-        NumCanvases // 4
+		DCA, //4
+        NumCanvases // 5
     };
     TH1F* vHisto1D[Num1DHistos];
     TH2F* vHisto2D[Num2DHistos];
     TCanvas* vCanvas[NumCanvases];
     Selector fSelector;
     public:
-    TrackQA();
+    TrackQA() {};
+	TrackQA(int iPid);
     ~TrackQA();
     void    InitHistograms();
     void    SetPid(int _Pid=-1) { iPid = _Pid; }
