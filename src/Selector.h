@@ -18,6 +18,7 @@ class Selector
     TH1F*           hRejectedTracks;
     TH1F*           hIncorrectEvent;
     TH1F*           hIncorrectTracks;
+	bool			bSaveStat = 1;
     enum event_cuts{
         cVeretexPositionZ = 0,
         cVeretexPositionXY, //1
@@ -38,14 +39,14 @@ class Selector
         cTrackHitMatchX, //1
         cTrackHitMatchY, //2
         cChi2, //3
-        cBeta, //4
         cNumOfTrackCuts //5
     };
     public:
     Selector();
     ~Selector();
-    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int iPT = HADES_constants::kPT2);
+    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int iPT = -1);
     Bool_t IsCorrectTrack(Int_t idx);
+	void	SetStatOption(bool _bSaveStat = 1) { bSaveStat = _bSaveStat; }
     void    CheckEventCuts(DataTreeEvent* _fEvent);
     void    CheckTrackCuts(Int_t idx);
     void    DrawStatistics();

@@ -22,11 +22,21 @@ Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int iPT)
 {
     fEvent = _fEvent;
     this->CheckEventCuts(fEvent);
-/*    if( !fEvent->GetTrigger(iPT)->GetIsFired() )
-    {
-        return 0;
-    }
-*/    
+
+	if( iPT!=-1 )
+	{
+    	if( !fEvent->GetTrigger(iPT)->GetIsFired() )
+    	{
+        	return 0;
+    	}
+	}
+    if( iPT == -1 )
+	{
+		if( !fEvent->GetTrigger(HADES_constants::kPT2)->GetIsFired() || !fEvent->GetTrigger(HADES_constants::kPT3)->GetIsFired() )
+		{
+			return 0;
+		}
+	}
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )
     {
         hRejectedEvents->Fill(cVeretexPositionZ);
@@ -90,16 +100,14 @@ Bool_t Selector::IsCorrectTrack(Int_t idx)
     Float_t fLen = fHit->GetPathLength();
     this->CheckTrackCuts(idx);
     //cout << len/tof/299.792458 << endl;
-    if ( fTrack->GetDCAComponent(1) > 15 )
+	Float_t fDCAx = fTrack->GetDCAComponent(0);
+	Float_t fDCAy = fTrack->GetDCAComponent(1);
+	Float_t fDCA = sqrt( fDCAx*fDCAx + fDCAy*fDCAy );
+    if ( fDCA > 15 )
     {
         hRejectedTracks->Fill(cDCA);
         return 0;
     }
-//    if ( fLen/fTof/299.792458 > 1 ) 
-//    {
-//        hRejectedTracks->Fill(cBeta);
-//        return 0;
-//    }
     if ( fHit->GetPositionComponent(0) < -5 || fHit->GetPositionComponent(0) > 5 )
     {
         hRejectedTracks->Fill(cTrackHitMatchX);
@@ -161,7 +169,7 @@ void Selector::CheckEventCuts(DataTreeEvent* _fEvent)
     {
         hIncorrectEvent->Fill(cTriggerNoVeto);
     }
-    if( fEvent->GetNTOFHits()<5 )
+    if( !fEvent->GetTrigger(HADES_constants::kPT2)->GetIsFired() )
     {
         hIncorrectEvent->Fill(cPT2);
     }
@@ -178,13 +186,12 @@ void Selector::CheckTrackCuts(Int_t idx)
     Float_t fTof = fHit->GetTime();
     Float_t fLen = fHit->GetPathLength();
     //cout << len/tof/299.792458 << endl;
-    if ( fTrack->GetDCAComponent(1) > 15 )
+	Float_t fDCAx = fTrack->GetDCAComponent(0);
+	Float_t fDCAy = fTrack->GetDCAComponent(1);
+	Float_t fDCA = sqrt( fDCAx*fDCAx + fDCAy*fDCAy );
+    if ( fDCA > 15 )
     {
         hIncorrectTracks->Fill(cDCA);
-    }
-    if ( fLen/fTof/299.792458 > 1 ) 
-    {
-        hIncorrectTracks->Fill(cBeta);
     }
     if ( fHit->GetPositionComponent(0) < -5 || fHit->GetPositionComponent(0) > 5 )
     {
@@ -228,7 +235,6 @@ void Selector::DrawStatistics()
     hIncorrectTracks->GetXaxis()->SetBinLabel(cTrackHitMatchX+1,"Track-Hit Match on X");
     hIncorrectTracks->GetXaxis()->SetBinLabel(cTrackHitMatchY+1,"Track-Hit Match on Y");
     hIncorrectTracks->GetXaxis()->SetBinLabel(cChi2+1,"Chi2");
-    hIncorrectTracks->GetXaxis()->SetBinLabel(cBeta+1,"Beta");
     hIncorrectTracks->GetXaxis()->SetTitle("");
 
     TCanvas* canv1 = new TCanvas("canv1","Tracks",4000,3000);
@@ -239,8 +245,9 @@ void Selector::DrawStatistics()
 }
 
 void Selector::SaveStatistics() 
-{  
-    this->DrawStatistics();
+{
+	if( bSaveStat )
+    	this->DrawStatistics();
     TFile* fFile = new TFile("../histograms/SelectorStatisticsHistos.root","recreate");
     hRejectedEvents->Write();
     hRejectedTracks->Write();
