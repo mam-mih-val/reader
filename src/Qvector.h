@@ -1,4 +1,10 @@
 #pragma once
+#include "TH1F.h"
+#include "TProfile.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TMath.h"
+
 #include "HADES_constants.h"
 
 #define  DATATREE_SHINE
@@ -8,12 +14,45 @@ class Qvector
 {
     private:
     Float_t fQ[2][2];
-    DataTreeEvent* fEvent;
-    public:
+	enum eFlowProfile{
+        meanQx1 = 0,
+        meanQy1, // 1
+		meanQx2, // 2
+        meanQy2, // 3
+        resolution, // 4
+        NumOfFLowProfiles // 5
+    };
+     enum eQvectorDistribution{
+        QxNotRecentred1=0,
+		QxNotRecentred2, // 1
+        QyNotRecentred1, // 2
+		QyNotRecentred2, // 3
+        QxRecentred1, // 4
+        QxRecentred2, // 5
+		QyRecentred1, // 6
+		QyRecentred2,  // 7
+		PsiEPNotRecentred1, // 8
+		PsiEPNotRecentred2, // 9
+		PsiEPRecentred1, // 10
+		PsiEPRecentred2, // 11
+        NumOfQvectorHistos // 12
+    };
+	enum eCanvasMap{
+		MeanQvectors = 0,
+		QvectorsDistribution,
+		NumOfCanvases
+	};
+	TProfile* vProfile[NumOfFLowProfiles];
+    TH1F*   vHisto1D[NumOfQvectorHistos];
+	TCanvas* vCanvas[NumOfCanvases];
+    
+	public:
     Qvector();
     ~Qvector() {};
-    void        Estimate(DataTreeEvent* fEvent, bool bSubEvent=0);
-    void        Recenter(Float_t* fCorrection);
+    void        FillCorrections(DataTreeEvent* fEvent);
+    void        Estimate(DataTreeEvent* fEvent);
+	void		InitHistograms();
+	void		SaveHistograms(TString sPicName);
     Float_t     GetComponent(int i, int j=0);
     Float_t     GetPsiEP(int j=0);
 };

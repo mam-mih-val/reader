@@ -28,7 +28,7 @@ DataTreeEvent* Reader::GetEvent(int idx)
     fChain->GetEntry(idx);
     return fEvent;
 }
-
+/*
 void Reader::InitFlowHistos()
 {
     cout << "Initialization of flow histograms" << endl;
@@ -160,7 +160,7 @@ void Reader::SaveFlowStatistics()
     }
     fFile->Close();
 }
-
+*/
 void Reader::BuildQAHistograms(TString sPicName)
 {
     EventQA* fEventQA = new EventQA;
@@ -188,4 +188,23 @@ void Reader::BuildQAHistograms(TString sPicName)
     fEventQA->SaveHistograms(sPicName);
 	for(int j=0; j<NumOfParticles;j++) 
 		fTrackQA[j]->SaveHistograms(sPicName);
+}
+
+void Reader::BuildQvectorHistograms(TString sPicName)
+{
+	Long64_t lNEvents = fChain->GetEntries();
+	Qvector* fQ =  new Qvector;
+    
+	for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry(i);
+		fQ->FillCorrections(fEvent);
+    }
+	
+	for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry(i);
+		fQ->Estimate(fEvent);
+    }
+	fQ->SaveHistograms(sPicName);
 }

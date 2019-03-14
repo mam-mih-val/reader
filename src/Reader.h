@@ -24,7 +24,6 @@ class Reader
     TBranch* DTEvent;
     DataTreeEvent* fEvent;
     Selector selector;
-    Qvector fQ;
     
     enum eFlowProfile{
         meanQx = 0,
@@ -69,5 +68,6 @@ class Reader
     void            GetFlow(int iNumHarm=1);
     void            BuildQAHistograms(TString sPicName);
     void            InitFlowHistos();
+	void			BuildQvectorHistograms(TString sPicName);
     void            SaveFlowStatistics();
 };
