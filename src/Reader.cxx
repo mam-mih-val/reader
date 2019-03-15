@@ -165,9 +165,6 @@ void Reader::BuildQAHistograms(TString sPicName)
 {
     EventQA* fEventQA = new EventQA;
 	TrackQA* fTrackQA[NumOfParticles];
-	/*
-	for(int j=0; j<NumOfParticles;j++) 
-		fTrackQA[j] = new TrackQA; */
 	fTrackQA[all] = 		new TrackQA(-1);
 	fTrackQA[electron] = 	new TrackQA(3);
 	fTrackQA[positron] = 	new TrackQA(2);
@@ -194,16 +191,20 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 {
 	Long64_t lNEvents = fChain->GetEntries();
 	Qvector* fQ =  new Qvector;
-    
+    Selector* fSelector = new Selector; 
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
+		if( !fSelector->IsCorrectEvent(fEvent) )
+			continue;
 		fQ->FillCorrections(fEvent);
     }
 	
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
+		if( !fSelector->IsCorrectEvent(fEvent) )
+			continue;
 		fQ->Estimate(fEvent);
     }
 	fQ->SaveHistograms(sPicName);
