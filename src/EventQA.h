@@ -6,6 +6,7 @@
 #include "TStyle.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TProfile.h"
 #include "TCanvas.h"
 #include "TLegend.h"
 
@@ -44,14 +45,21 @@ class EventQA
         hitsFW_X_Y_selected,
         Num2DHistos
     };
+	enum eQAProfileMap{
+		hits_centrality = 0,
+		hits_centrality_selected,
+		NumProfiles
+	};
     enum eCanvasMap{
         multiplicity_vertex = 0,
         multiplicity_charge,
         vertex_charge,
+		centrality,
         NumCanvases
     };
     TH1F* vHisto1D[Num1DHistos];
     TH2F* vHisto2D[Num2DHistos];
+	TProfile* vProfile[NumProfiles];
     TCanvas* vCanvas[NumCanvases];
     Selector fSelector;
     public:

@@ -21,20 +21,24 @@ void EventQA::InitHistograms()
     vHisto1D[hitsTOF_matched] =     new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",100,0,100);
     vHisto1D[hitsTOF_matched_selected]=new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",100,0,100);
 
-    vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,200);
-    vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,200);
+    vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,250);
+    vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,250);
     vHisto2D[tracks_charge] =       new TH2F("tracks&charge",";tracks MDC;charge FW",100,0,100,100,0,8000);
     vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected",";selected tracks MDC;selected charge FW",100,0,100,100,0,8000);
-    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;charge FW;",100,0,200,100,0,8000);
-    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected charge FW",100,0,200,100,0,8000);
+    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;charge FW;",100,0,250,100,0,8000);
+    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected charge FW",100,0,250,100,0,8000);
     vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY",";vertex on X;vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
-    vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
-    vHisto2D[hitsFW_X_Y_selected]=  new TH2F("selected hits in FW coordinates",";X, [mm];Y, [mm]",49,-1000,1000,49,-1000,1000);
+    vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",50,-1000,1000,50,-1000,1000);
+    vHisto2D[hitsFW_X_Y_selected]=  new TH2F("selected hits in FW coordinates",";X, [mm];Y, [mm]",50,-1000,1000,50,-1000,1000);
+
+	vProfile[hits_centrality] = 		new TProfile("NumOfHits_centrality",";centrality;Hits TOF+RPC",10,0,50);
+	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality;Hits TOF+RPC",10,0,50);
 }
 
 void EventQA::FillHistograms(DataTreeEvent* fEvent)
 {
+	vProfile[hits_centrality]->Fill( fEvent->GetCentrality(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
     vHisto1D[tracksMDC]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
     vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
     vHisto1D[chargeFW]->Fill( fEvent->GetPSDEnergy() );
@@ -58,6 +62,7 @@ void EventQA::FillHistograms(DataTreeEvent* fEvent)
 
     if ( fSelector.IsCorrectEvent(fEvent) ) 
     {
+		vProfile[hits_centrality_selected]->Fill( fEvent->GetCentrality(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
         vHisto1D[tracksMDC_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
         vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
         vHisto1D[chargeFW_selected]->Fill( fEvent->GetPSDEnergy() );
@@ -89,6 +94,7 @@ void EventQA::SaveHistograms(TString PicName)
     vCanvas[multiplicity_charge]->Divide(3,2,0.005,0.0001);
     vCanvas[vertex_charge] = new TCanvas("vertex&charge","QA",4000,2500);
     vCanvas[vertex_charge]->Divide(2,2,0.005,0.0001);
+	vCanvas[centrality] = new TCanvas("centrality&multiplicity","QA",4000,2500);
 
     gStyle->SetOptStat(0);
     TLegend* legend = new TLegend(0.1,0.8,0.38,0.9);
@@ -156,6 +162,10 @@ void EventQA::SaveHistograms(TString PicName)
 
     vCanvas[vertex_charge]->cd(4)->SetLogz();
     vHisto2D[hitsFW_X_Y_selected]->Draw("colz");
+	
+	vCanvas[centrality]->cd();
+	vProfile[hits_centrality]->Draw();
+	vProfile[hits_centrality]->Draw("same");
 
     for(int i=0; i<NumCanvases; i++)
     {
