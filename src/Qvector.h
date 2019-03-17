@@ -1,4 +1,5 @@
 #pragma once
+#include "TVector2.h"
 #include "TH1F.h"
 #include "TProfile.h"
 #include "TCanvas.h"
@@ -13,7 +14,9 @@
 class Qvector
 {
     private:
-    Float_t fQ[2][2];
+    Int_t iNumberOfSE;
+	float fQ[2][2];
+    std::vector<TVector2> fQvector(iNumberOfSE);
 	enum eFlowProfile{
         meanQx1 = 0,
         meanQy1, // 1
@@ -45,11 +48,20 @@ class Qvector
 	TProfile* vProfile[NumOfFLowProfiles];
     TH1F*   vHisto1D[NumOfQvectorHistos];
 	TCanvas* vCanvas[NumOfCanvases];
-    
+	
+	vector<TProfile*> hMeanQx(iNumberOfSE);
+	vector<TProfile*> hMeanQy(iNumberOfSE);
+	vector<TH1F*> hQx(2*iNumberOfSE);
+	vector<TH1F*> hQy(2*iNumberOfSE);
+	vector<TH1F*> hPsiEP(2*iNumberOfSE); 
+
+	void Estimate2SE(DataTreeEvent* fEvent);
+	void Estimate3SE(DataTreeEvent* fEvent);
 	public:
     Qvector();
     ~Qvector() {};
     void        FillCorrections(DataTreeEvent* fEvent);
+	void		SetNumberOfSE(int iNum) { iNumberOfSE = iNum; }
     void        Estimate(DataTreeEvent* fEvent);
 	void		InitHistograms();
 	void		SaveHistograms(TString sPicName);

@@ -9,6 +9,7 @@ Qvector::Qvector()
             fQ[i][j]=0;
         }
     }
+	NumberOfSE=2;
 	this->InitHistograms();
 }
 
@@ -34,6 +35,18 @@ void Qvector::InitHistograms()
     vHisto1D[QyRecentred2] =          	new TH1F("QyRecrntred subevent 2",";Qy recentred;counts",100,-1,1);
 	vHisto1D[PsiEPNotRecentred2]=		new TH1F("PsiEPNotRecentred subevent 2",";#PsiEP [rad];counts",100,-3.15,3.15);
 	vHisto1D[PsiEPRecentred2]=			new TH1F("PsiEPRecentred subevent 2",";#PsiEP recentred [rad];counts",100,-3.15,3.15);
+
+	for(int i=0; i<NumOfSE; i++)
+	{
+		hMeanQx[i] = 	new TProfile( Form("MeanQxSE%i",i),";Centrality;Qx", 10,0,50 );
+		hMeanQy[i] = 	new TProfile( Form("MeanQySE%i",i),";Centrality;Qy", 10,0,50 );
+		hQx[i] =		new TH1F( Form("QxSE%i",i),";Qx;counts",100,-1.,1.);
+		hQx[NumOfSE+i] =		new TH1F( Form("QxRecentredSE%i",i),";Qx;counts",100,-1.,1.);
+		hQy[i] =		new TH1F( Form("QySE%i",i),";Qy;counts",100,-1.,1.);
+		hQy[NumOfSE+i] =		new TH1F( Form("QyRecentredSE%i",i),";Qy;counts",100,-1.,1.);
+		hPsiEP[i] =		new TH1F( Form("PsiEPSE%i",i),";PsiEP;counts",100,-3.15,3.15);
+		hPsiEP[NumOfSE+i] =		new TH1F( Form("PsiEPRecentredSE%i",i),";PsiEP;counts",100,-3.15,3.15);
+	}
 }
 
 void Qvector::FillCorrections(DataTreeEvent* fEvent)
@@ -45,6 +58,16 @@ void Qvector::FillCorrections(DataTreeEvent* fEvent)
             fQ[i][j]=0;
         }
     }
+	this->Estimane2SE(fEvent);
+	for(int i=0;i<NumOfSE;i++)
+	{
+		fQvector[i]=fQvector[i].Unit();
+		hMeanQx[i]->Fill( fEvent->GetCentrality(), fQvector[i].X() );
+		hMeanQy[i]->Fill( fEvent->GetCentrality(), fQvector[i].Y() );
+		hQx[i]->Fill( fQvector[i].X() );
+		hQy[i]->Fill( fQvector[i].Y() );
+		hPsiEP[i]->Fill( fQvector[i].Phi() );
+	}
     Int_t iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fModule;
     Float_t fPhi;
@@ -97,6 +120,7 @@ void Qvector::FillCorrections(DataTreeEvent* fEvent)
 
 void Qvector::Estimate(DataTreeEvent* fEvent)
 {
+	
 	for (int i=0;i<2;i++)
     {
         for (int j=0;j<2;j++)
@@ -104,6 +128,19 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
             fQ[i][j]=0;
         }
     }
+	this->Estimane2SE(fEvent);
+	Float_t fCentrality = fEvent->GetCentrality();
+	int iCentralityBin = fCentrality/5+1;
+	for(int i=0;i<NumOfSE;i++)
+	{
+		fQvector[i]=fQvector[i].Unit();
+		TVector2 fCorrVec;
+		fCorrVec.Set( hMeanQx[i]->GetBinContent(iCentralityBin), hMeanQy[i]->GetBinContent(iCentralityBin) );
+		fQvector-=fCorrVec;
+		hQx[NumOfSE+i]->Fill( fQvector[i].X() );
+		hQy[NumOfSE+i]->Fill( fQvector[i].Y() );
+		hPsiEP[NumOfSE+i]->Fill( fQvector[i].Phi() );
+	}
     Int_t iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fModule;
     Float_t fPhi;
@@ -135,8 +172,6 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 			fQ[i][j]/=fChargeSum[j];
 		}
 	}
-	Float_t fCentrality = fEvent->GetCentrality();
-	int iCentralityBin = fCentrality/5+1;
 	//cout << vProfile[meanQx1]->GetBinContent( iCentralityBin ) << endl;
 	fQ[0][0] -= vProfile[meanQx1]->GetBinContent( iCentralityBin );
 	fQ[0][1] -= vProfile[meanQx2]->GetBinContent( iCentralityBin );
@@ -163,6 +198,7 @@ Float_t Qvector::GetPsiEP(int j)
 
 void Qvector::SaveHistograms(TString sPicName)
 {
+	/*
 	vCanvas[QvectorsDistribution] = new TCanvas("Canvas1","Qvectors",4500,2000);
 	vCanvas[QvectorsDistribution]->Divide(3,2,0.005,0.0001);
 	TLegend* legend = new TLegend(0.1,0.8,0.38,0.9);
@@ -251,4 +287,81 @@ void Qvector::SaveHistograms(TString sPicName)
 	vProfile[meanQy2]->Draw();
 
 	vCanvas[MeanQvectors]->SaveAs("../histograms/"+sPicName+"_1.png");
+	*/
+	//***************************************************************************************************//
+	vector<TCanvas*> cCanvases(2);
+	cCanvas[0] = new TCanvas("canvas0","Qvectors",4000,2500); // Q-vector components distribution
+	cCanvas[0]->Divide(iNumberOfSE,2,0.005,0.0001); 
+	cCanvas[1] = new TCanvas("canvas1","Qvectors",4000,2500); // Mean Q-vector component distribution
+	cCanvas[1]->Divide(iNumberOfSE,2,0.005,0.0001);
+	
+	for(int i=0; i<iNumberOfSE;i++)
+	{
+		TLegend* leg = new TLegend();
+		// Qx-distribution is draqwing
+		cCanvas[0]->cd(i+1);
+		hQx[i]->SetLineWidth(5);
+		hQx[i+NumberOfSE]->SetLineColor(3);
+		hQx[i+NumberOfSE]->SetLineWidth(5);
+		leg->AddEntry(hQx[i],"Not Recentred");
+		leg->AddEntry(hQx[i+NumberOfSE],"Not Recentred");
+		hQx[i]->Draw();
+		hQx[i+NumberOfSE]->Draw("same");
+		// Qy-distribution is draqwing
+		cCanvas[0]->cd(i+1+iNumberOfSE);
+		hQy[i]->SetLineWidth(5);
+		hQy[i+NumberOfSE]->SetLineColor(3);
+		hQy[i+NumberOfSE]->SetLineWidth(5);
+		hQy[i]->Draw();
+		hQy[i+NumberOfSE]->Draw("same");
+		// Mean Qx vs Centrality is drawing
+		cCanvas[1]->cd(i+1);
+		hMeanQx[i]->SetLineWidth(5);
+		hMeanQx[i]->SetLineColor(1);
+		hMeanQx[i]->MarkerSize(4);
+		hMeanQx[i]->MarkerStyle(20);
+		hMeanQx[i]->Draw();
+		// Qy-distribution is draqwing
+		cCanvas[1]->cd(i+1+iNumberOfSE);
+		hMeanQy[i+iNumberOfSE]->SetLineWidth(5);
+		hMeanQy[i+iNumberOfSE]->SetLineColor(1);
+		hMeanQy[i+iNumberOfSE]->MarkerSize(4);
+		hMeanQy[i+iNumberOfSE]->MarkerStyle(20);
+		hMeanQy[i+iNumberOfSE]->Draw();
+	}
+
+	for(int i=0;i<cCanvas.size();i++)
+	{
+		cCanvas[i]->SaveAs( "../histograms/"+sPicName+Form("_%i.png",i) )
+	}
+}
+
+void Qvector::Estimate2SE(DataTreeEvent* fEvent)
+{
+	for (int i=0; i<iNumOfSE; i++)
+	{
+		fQvector[i].Set(0.,0.);
+	}
+	Int_t iNPSDModules = fEvent->GetNPSDModules();
+    DataTreePSDModule* fModule;
+    Float_t fPhi;
+	Float_t fChargeModule;
+	vector<DataTreePSDModule*> vModules;
+	for(unsigned int i=0; i<iNPSDModules;i++)
+	{
+		fModule = fEvent->GetPSDModule(i);
+		if( fModule->GetId()<0 )
+			continue;
+		vModules.push_back(fModule);
+	}
+	random_shuffle( vModules.begin(),vModules.end() );
+	for(unsigned int i=0; i<vModules.size() ;i++)
+	{
+		fChargeModule = vModules[i]->GetEnergy();
+		fPhi = vModules[i]->GetPhi();
+		int p = i%2;
+		TVector2 fAddition;
+		fAddition.SetMagPhi( vModules[i]->GetEnergy(), vModules[i]->GetPhi() );
+		fQvector[p]+=fAddition;
+	}
 }
