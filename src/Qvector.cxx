@@ -28,7 +28,10 @@ void Qvector::InitHistograms()
 	}
 	for( unsigned int i=0; i<iNumberOfSE-1; i++ )
 	{
-		hCorrelation.push_back( new TProfile( "Qx_{1}Qx_{2}",";Centrality;Qx", 10,0,50 ) )
+		hCorrelation.push_back( new TProfile( Form("Qx_{%i}Qx_{%i}",i+1,i+2),";Centrality;Qx", 10,0,50 ) );
+		hCorrelation.push_back( new TProfile( Form("Qy_{%i}Qy_{%i}",i+1,i+2),";Centrality;Qy", 10,0,50 ) );
+		hCorrelation.push_back( new TProfile( Form("Qx_{%i}Qy_{%i}",i+1,i+2),";Centrality;Qx", 10,0,50 ) );
+		hCorrelation.push_back( new TProfile( Form("Qy_{%i}Qx_{%i}",i+1,i+2),";Centrality;Qx", 10,0,50 ) );
 	}
 }
 
@@ -63,6 +66,10 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 		hQy[iNumberOfSE+i]->Fill( fQvector.at(i).Y() );
 		hPsiEP[iNumberOfSE+i]->Fill( fQvector.at(i).Phi() );
 	}
+	hCorrelation.at(0)->Fill( fCentrality,fQvector.at(0).X() * fQvector.at(1).X() );
+	hCorrelation.at(1)->Fill( fCentrality,fQvector.at(0).Y() * fQvector.at(1).Y() );
+	hCorrelation.at(2)->Fill( fCentrality,fQvector.at(0).X() * fQvector.at(1).Y() );
+	hCorrelation.at(3)->Fill( fCentrality,fQvector.at(0).Y() * fQvector.at(1).X() );
 }
 
 void Qvector::SaveHistograms(TString sPicName)
@@ -172,5 +179,7 @@ void Qvector::SaveHistogramsToROOTFile(TString sFileName)
 		(*histo)->Write();
 	for( auto histo = begin(hPsiEP); histo != end(hPsiEP); ++histo )
 		(*histo)->Write();
+	for( auto histo : hCorrelation )
+		histo->Write();
 	file->Close();
 }
