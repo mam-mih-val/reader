@@ -192,6 +192,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 	Long64_t lNEvents = fChain->GetEntries();
 	Qvector* fQ =  new Qvector;
     Selector* fSelector = new Selector; 
+	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
@@ -199,7 +200,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 			continue;
 		fQ->FillCorrections(fEvent);
     }
-	
+	cout << "Estimating Q-vectors" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
@@ -207,5 +208,5 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 			continue;
 		fQ->Estimate(fEvent);
     }
-	fQ->SaveHistograms(sPicName);
+	fQ->SaveHistogramsToROOTFile(sPicName);
 }
