@@ -26,13 +26,10 @@ void Qvector::InitHistograms()
 		hQy.push_back( new TH1F( Form("QyRecentredSE%i",i-iNumberOfSE),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPRecentredSE%i",i-iNumberOfSE),";PsiEP;counts",100,0,6.3) );
 	}
-	for( unsigned int i=0; i<iNumberOfSE-1; i++ )
-	{
-		hCorrelation.push_back( new TProfile( Form("Qx_{%i}Qx_{%i}",i+1,i+2),";Centrality;Qx", 10,0,50 ) );
-		hCorrelation.push_back( new TProfile( Form("Qy_{%i}Qy_{%i}",i+1,i+2),";Centrality;Qy", 10,0,50 ) );
-		hCorrelation.push_back( new TProfile( Form("Qx_{%i}Qy_{%i}",i+1,i+2),";Centrality;Qx", 10,0,50 ) );
-		hCorrelation.push_back( new TProfile( Form("Qy_{%i}Qx_{%i}",i+1,i+2),";Centrality;Qx", 10,0,50 ) );
-	}
+	hCorrelation.push_back( new TProfile("Qx_{1}Qx_{2}", ";Centrality;Qx_{1}Qx_{2}", 10, 0, 50) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{1}Qy_{2}", ";Centrality;Qy_{1}Qy_{2}", 10, 0, 50) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{1}Qy_{2}", ";Centrality;Qx_{1}Qy_{2}", 10, 0, 50) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{1}Qx_{2}", ";Centrality;Qy_{1}Qx_{2}", 10, 0, 50) ); // 3
 }
 
 void Qvector::FillCorrections(DataTreeEvent* fEvent)
@@ -66,10 +63,13 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 		hQy[iNumberOfSE+i]->Fill( fQvector.at(i).Y() );
 		hPsiEP[iNumberOfSE+i]->Fill( fQvector.at(i).Phi() );
 	}
-	hCorrelation.at(0)->Fill( fCentrality,fQvector.at(0).X() * fQvector.at(1).X() );
-	hCorrelation.at(1)->Fill( fCentrality,fQvector.at(0).Y() * fQvector.at(1).Y() );
-	hCorrelation.at(2)->Fill( fCentrality,fQvector.at(0).X() * fQvector.at(1).Y() );
-	hCorrelation.at(3)->Fill( fCentrality,fQvector.at(0).Y() * fQvector.at(1).X() );
+	if( fQvector.at(0).X() != -999. && fQvector.at(1).X() != -999. )
+	{
+		hCorrelation.at(0)->Fill( fCentrality, ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality, ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(2)->Fill( fCentrality, ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality, ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+	}
 }
 
 void Qvector::SaveHistograms(TString sPicName)
