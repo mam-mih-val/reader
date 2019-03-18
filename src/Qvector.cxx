@@ -75,54 +75,72 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 void Qvector::SaveHistograms(TString sPicName)
 {
 	cout << "Drawing Qvector histograms" << endl;
-	vector<TCanvas*> cCanvas(2);
-	//vector<TLegend*> leg(iNumberOfSE);
-	cCanvas[0] = new TCanvas("canvas0","Qvectors",4000,2500); // Q-vector components distribution
-	cCanvas[0]->Divide(iNumberOfSE,2,0.005,0.0001); 
-	cCanvas[1] = new TCanvas("canvas1","Qvectors",4000,2500); // Mean Q-vector component distribution
-	cCanvas[1]->Divide(iNumberOfSE,2,0.005,0.0001);
+	vector<TCanvas*> cCanvas;
 	
-	for(int i=0; i<iNumberOfSE;i++)
+	vector<TLegend*> legend;
+	cCanvas.push_back( new TCanvas("canvas0","Qvectors",4000,2500) );
+	cCanvas.back()->Divide(iNumberOfSE,2,0.005,0.0001);
+	for(int i=0;i<iNumberOfSE;i++)
 	{
-		cout << i << " " << i+iNumberOfSE << endl; 
-		//leg[i] = new TLegend(0.1,0.8,0.38,0.9);
-		// Qx-distribution is draqwing
-		cCanvas[0]->cd(i+1);
-		hQx[i]->SetLineWidth(5);
-		hQx[i+iNumberOfSE]->SetLineColor(3);
-		hQx[i+iNumberOfSE]->SetLineWidth(5);
-		//leg[i]->AddEntry(hQx[i],"Not Recentred");
-		//leg[i]->AddEntry(hQx[i+iNumberOfSE],"Not Recentred");
-		hQx[i]->Draw();
-		hQx[i+iNumberOfSE]->Draw("same");
-		//leg[i]->Draw();
+		cCanvas.back()->cd(i+1);
+		legend.push_back( new TLegend(0.1,0.8,0.38,0.9) );
+		hQx.at(i)->SetLineWidth(5);
+		hQx.at(i+iNumberOfSE)->SetLineColor(3);
+		hQx.at(i+iNumberOfSE)->SetLineWidth(5);
+		legend.back()->AddEntry(hQx.at(i),"Not Recentred");
+		legend.back()->AddEntry(hQx.at(i+iNumberOfSE),"Not Recentred");
+		hQx.at(i)->Draw();
+		hQx.at(i+iNumberOfSE)->Draw("same");
+		legend.back()->Draw();
 		// Qy-distribution is draqwing
-		cCanvas[0]->cd(i+iNumberOfSE);
-		hQy[i]->SetLineWidth(5);
-		hQy[i+iNumberOfSE]->SetLineColor(3);
-		hQy[i+iNumberOfSE]->SetLineWidth(5);
-		hQy[i]->Draw();
-		hQy[i+iNumberOfSE]->Draw("same");
-		//leg[i]->Draw();
-		// Mean Qx vs Centrality is drawing
-		cCanvas[1]->cd(i+1);
-		hMeanQx[i]->SetLineWidth(5);
-		hMeanQx[i]->SetLineColor(1);
-		hMeanQx[i]->SetMarkerSize(4);
-		hMeanQx[i]->SetMarkerStyle(20);
-		hMeanQx[i]->Draw();
-		// Qy-distribution is draqwing
-		cCanvas[1]->cd(i+iNumberOfSE);
-		hMeanQy[i+iNumberOfSE]->SetLineWidth(5);
-		hMeanQy[i+iNumberOfSE]->SetLineColor(1);
-		hMeanQy[i+iNumberOfSE]->SetMarkerSize(4);
-		hMeanQy[i+iNumberOfSE]->SetMarkerStyle(20);
-		hMeanQy[i+iNumberOfSE]->Draw();
+		cCanvas.back()->cd(i+1+iNumberOfSE);
+		hQy.at(i)->SetLineWidth(5);
+		hQy.at(i+iNumberOfSE)->SetLineColor(3);
+		hQy.at(i+iNumberOfSE)->SetLineWidth(5);
+		hQy.at(i)->Draw();
+		hQy.at(i+iNumberOfSE)->Draw("same");
+		legend.back()->Draw();
 	}
-	cout << "Saving Pictures as PNG" << endl;
-	for( auto canvas=begin(cCanvas); canvas != end(cCanvas); ++canvas )
+	/*
+	// Mean Qx vs Centrality is drawing
+	cCanvas.push_back( new TCanvas("canvas1","Qvectors",4000,2500) ); // 1, Mean Q-vector component distribution
+	cCanvas[1]->Divide(iNumberOfSE,2,0.005,0.0001);
+		cCanvas.at(1)->cd(i+1);
+		hMeanQx.at(i)->SetLineWidth(5);
+		hMeanQx.at(i)->SetLineColor(1);
+		hMeanQx.at(i)->SetMarkerSize(4);
+		hMeanQx.at(i)->SetMarkerStyle(20);
+		hMeanQx.at(i)->Draw();
+		// Qy-distribution is draqwing
+		cCanvas.at(1)->cd(i+iNumberOfSE+1);
+		hMeanQy.at(i+iNumberOfSE)->SetLineWidth(5);
+		hMeanQy.at(i+iNumberOfSE)->SetLineColor(1);
+		hMeanQy.at(i+iNumberOfSE)->SetMarkerSize(4);
+		hMeanQy.at(i+iNumberOfSE)->SetMarkerStyle(20);
+		hMeanQy.at(i+iNumberOfSE)->Draw();
+	*/
+	cCanvas.push_back( new TCanvas("canvas2","Qvectors",4000,2500) ); // 2, Q-vector correlations
+	cCanvas.back()->cd();
+	int i=1;
+	THStack* hStack = new THStack("Stack",";Centrality;Correlations");
+	for( auto histo : hCorrelation )
 	{
-		(*canvas)->SaveAs( "../histograms/"+sPicName+"_i.png" );
+		histo->SetLineWidth(7);
+		histo->SetMarkerSize(4);
+		histo->SetLineColor(i);
+		histo->SetMarkerColor(i);
+		histo->SetMarkerStyle(20+i);
+		hStack->Add(histo);
+		i++;
+	}
+	hStack->Draw();
+	gPad->BuildLegend();
+	cout << "Saving Pictures as PNG" << endl;
+	i=0;
+	for( auto canvas : cCanvas )
+	{
+		canvas->SaveAs( "../histograms/"+sPicName+Form("_%i.png",i) );
+		i++;
 	}
 }
 

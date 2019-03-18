@@ -3,6 +3,8 @@
 #include "TH1F.h"
 #include "TProfile.h"
 #include "TCanvas.h"
+#include "TPad.h"
+#include "THStack.h"
 #include "TLegend.h"
 #include "TMath.h"
 #include "TFile.h"
@@ -15,7 +17,7 @@
 class Qvector
 {
     private:
-    Int_t iNumberOfSE;
+    unsigned int iNumberOfSE;
     vector<TVector2> fQvector;	
 	vector<TProfile*> hMeanQx;
 	vector<TProfile*> hMeanQy;
@@ -30,11 +32,12 @@ class Qvector
     Qvector();
     ~Qvector() {};
     void        FillCorrections(DataTreeEvent* fEvent);
-	void		SetNumberOfSE(int iNum) { iNumberOfSE = iNum; }
+	void		SetNumberOfSE(unsigned int iNum) { iNumberOfSE = iNum; }
     void        Estimate(DataTreeEvent* fEvent);
 	void		InitHistograms();
 	void		SaveHistograms(TString sPicName);
 	void		SaveHistogramsToROOTFile(TString sFileName);
+	TVector2	GetQvector(unsigned int iSubEv=0) { return fQvector.at(iSubEv); }
     Float_t     GetComponent(int i, int j=0);
-    Float_t     GetPsiEP(int j=0);
+    Float_t     GetPsiEP(unsigned int iSubEv=0) { return fQvector.at(iSubEv).Phi(); }
 };
