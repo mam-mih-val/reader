@@ -3,7 +3,7 @@
 Qvector::Qvector()
 {
 	iNumberOfSE=2;
-	for(int i=0;i<iNumberOfSE;i++)
+	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
 	this->InitHistograms();
 }
@@ -52,7 +52,7 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 	this->Estimate2SE(fEvent);
 	Float_t fCentrality = fEvent->GetCentrality();
 	int iCentralityBin = fCentrality/5+1;
-	for(int i=0;i<fQvector.size();i++)
+	for(unsigned int i=0;i<fQvector.size();i++)
 	{
 		if( fQvector.at(i).X() == -999. )
 			continue;
@@ -80,7 +80,7 @@ void Qvector::SaveHistograms(TString sPicName)
 	vector<TLegend*> legend;
 	cCanvas.push_back( new TCanvas("canvas0","Qvectors",4000,2500) );
 	cCanvas.back()->Divide(iNumberOfSE,2,0.005,0.0001);
-	for(int i=0;i<iNumberOfSE;i++)
+	for(unsigned int i=0;i<iNumberOfSE;i++)
 	{
 		cCanvas.back()->cd(i+1);
 		legend.push_back( new TLegend(0.1,0.8,0.38,0.9) );
@@ -125,16 +125,17 @@ void Qvector::SaveHistograms(TString sPicName)
 	THStack* hStack = new THStack("Stack",";Centrality;Correlations");
 	for( auto histo : hCorrelation )
 	{
+		hStack->Add(histo);
 		histo->SetLineWidth(7);
 		histo->SetMarkerSize(4);
 		histo->SetLineColor(i);
 		histo->SetMarkerColor(i);
 		histo->SetMarkerStyle(20+i);
-		hStack->Add(histo);
+		histo->GetYaxis()->SetRangeUser(-0.01, 0.07);
 		i++;
 	}
 	hStack->Draw();
-	gPad->BuildLegend();
+	gPad->BuildLegend(0.1,0.8,0.38,0.9);
 	cout << "Saving Pictures as PNG" << endl;
 	i=0;
 	for( auto canvas : cCanvas )
@@ -151,7 +152,7 @@ void Qvector::Estimate2SE(DataTreeEvent* fEvent)
 	Int_t iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fModule;
 	vector<DataTreePSDModule*> vModules;
-	for(unsigned int i=0; i<iNPSDModules;i++)
+	for(int i=0; i<iNPSDModules;i++)
 	{
 		fModule = fEvent->GetPSDModule(i);
 		if( fModule->GetId() < 0 )
