@@ -75,6 +75,10 @@ Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int iPT)
     {
         return 0;
     }
+	if( fEvent->GetPSDEnergy() == 0 )
+	{
+		return 0;
+	}
     return 1;
 }
 
