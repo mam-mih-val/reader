@@ -101,25 +101,7 @@ void Qvector::SaveHistograms(TString sPicName)
 		hQy.at(i+iNumberOfSE)->Draw("same");
 		legend.back()->Draw();
 	}
-	/*
-	// Mean Qx vs Centrality is drawing
-	cCanvas.push_back( new TCanvas("canvas1","Qvectors",4000,2500) ); // 1, Mean Q-vector component distribution
-	cCanvas[1]->Divide(iNumberOfSE,2,0.005,0.0001);
-		cCanvas.at(1)->cd(i+1);
-		hMeanQx.at(i)->SetLineWidth(5);
-		hMeanQx.at(i)->SetLineColor(1);
-		hMeanQx.at(i)->SetMarkerSize(4);
-		hMeanQx.at(i)->SetMarkerStyle(20);
-		hMeanQx.at(i)->Draw();
-		// Qy-distribution is draqwing
-		cCanvas.at(1)->cd(i+iNumberOfSE+1);
-		hMeanQy.at(i+iNumberOfSE)->SetLineWidth(5);
-		hMeanQy.at(i+iNumberOfSE)->SetLineColor(1);
-		hMeanQy.at(i+iNumberOfSE)->SetMarkerSize(4);
-		hMeanQy.at(i+iNumberOfSE)->SetMarkerStyle(20);
-		hMeanQy.at(i+iNumberOfSE)->Draw();
-	*/
-	cCanvas.push_back( new TCanvas("canvas2","Qvectors",4000,2500) ); // 2, Q-vector correlations
+	cCanvas.push_back( new TCanvas("canvas2","Qvectors",4000,2500) ); // Q-vector correlations
 	cCanvas.back()->cd();
 	int i=1;
 	THStack* hStack = new THStack("Stack",";Centrality;Correlations");

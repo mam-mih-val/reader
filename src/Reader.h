@@ -23,7 +23,7 @@ class Reader
     TChain* fChain;
     TBranch* DTEvent;
     DataTreeEvent* fEvent;
-    Selector selector;
+    //Selector selector;
     
     enum eFlowProfile{
         meanQx = 0,
