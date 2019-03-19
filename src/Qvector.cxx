@@ -26,10 +26,10 @@ void Qvector::InitHistograms()
 		hQy.push_back( new TH1F( Form("QyRecentredSE%i",i-iNumberOfSE),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPRecentredSE%i",i-iNumberOfSE),";PsiEP;counts",100,0,6.3) );
 	}
-	hCorrelation.push_back( new TProfile("Qx_{1}Qx_{2}", ";Centrality;Qx_{1}Qx_{2}", 10, 0, 50) ); // 0
-	hCorrelation.push_back( new TProfile("Qy_{1}Qy_{2}", ";Centrality;Qy_{1}Qy_{2}", 10, 0, 50) ); // 1
-	hCorrelation.push_back( new TProfile("Qx_{1}Qy_{2}", ";Centrality;Qx_{1}Qy_{2}", 10, 0, 50) ); // 2
-	hCorrelation.push_back( new TProfile("Qy_{1}Qx_{2}", ";Centrality;Qy_{1}Qx_{2}", 10, 0, 50) ); // 3
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", 10, 0, 50) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", 10, 0, 50) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", 10, 0, 50) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", 10, 0, 50) ); // 3
 }
 
 void Qvector::FillCorrections(DataTreeEvent* fEvent)
@@ -134,7 +134,7 @@ void Qvector::SaveHistograms(TString sPicName)
 		histo->GetYaxis()->SetRangeUser(-0.01, 0.07);
 		i++;
 	}
-	hStack->Draw();
+	hStack->Draw("NOSTACK");
 	gPad->BuildLegend(0.1,0.8,0.38,0.9);
 	cout << "Saving Pictures as PNG" << endl;
 	i=0;
@@ -201,4 +201,48 @@ void Qvector::SaveHistogramsToROOTFile(TString sFileName)
 	for( auto histo : hCorrelation )
 		histo->Write();
 	file->Close();
+}
+
+void Qvector::Estimate3SE(DataTreeEvent* fEvent)
+{
+	for( auto vector : fQvector )
+		vector.Set( 0., 0. );
+	Int_t iNPSDModules = fEvent->GetNPSDModules();
+    DataTreePSDModule* fModule;
+	vector<float> fSumCharge(3);
+	TVector2 fAddition;
+	for(int i=0; i<iNPSDModules;i++)
+	{
+		fModule = fEvent->GetPSDModule(i);
+		if( fModule->GetId() < 0 )
+			continue;
+		float charge = fModule->GetEnergy();
+		float phi = fModule->GetPhi();
+		fAddition.Set( charge*cos(phi), charge*sin(phi) );
+		if( fModule->GetId() <= 4 )
+		{
+			fQvector.at(0)+=fAddition;
+			fSumCharge.at(0)+=charge;
+		}
+		if( fModule->GetId() == 5 || fModule->GetId() == 6 )
+		{
+			fQvector.at(1)+=fAddition;
+			fSumCharge.at(1)+=charge;
+		}
+		if( fModule->GetId() >= 7 )
+		{
+			fQvector.at(2)+=fAddition;
+			fSumCharge.at(2)+=charge;
+		}
+	}
+	for( unsigned int i=0; i<fQvector.size(); i++ )
+	{
+		if( fSumCharge.at(i) == 0 )
+		{
+			fQvector.at(i).
+			Set( -999., -999. );
+			continue;
+		}
+		fQvector.at(i)*=1/fSumCharge.at(i);
+	}
 }
