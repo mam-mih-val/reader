@@ -76,6 +76,6 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 			continue;
 		fQ->Estimate(fEvent);
     }
+	fQ->SaveHistogramsToROOTFile(sPicName);
 	fQ->SaveHistograms(sPicName);
-	//fQ->SaveHistogramsToROOTFile(sPicName);
 }

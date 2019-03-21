@@ -38,17 +38,17 @@ void EventQA::InitHistograms()
 
 void EventQA::FillHistograms(DataTreeEvent* fEvent)
 {
-	vProfile[hits_centrality]->Fill( fEvent->GetCentrality(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+	vProfile[hits_centrality]->Fill( fEvent->GetCentrality(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
     vHisto1D[tracksMDC]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
-    vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+    vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
     vHisto1D[chargeFW]->Fill( fEvent->GetPSDEnergy() );
     vHisto1D[vertexZ]->Fill( fEvent->GetVertexPositionComponent(2) );
-    vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
+    vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC) );
     vHisto1D[hitsTOF_matched]->Fill( fEvent->GetNTOFHits() );
 
-    vHisto2D[tracks_hits]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+    vHisto2D[tracks_hits]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
     vHisto2D[tracks_charge]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetPSDEnergy() );
-    vHisto2D[hits_charge]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut), fEvent->GetPSDEnergy() );
+    vHisto2D[hits_charge]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut), fEvent->GetPSDEnergy() );
     vHisto2D[vertexX_vertexY]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );
     vHisto2D[hitsFW_X_Y]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );
     int iNPSDModules = fEvent->GetNPSDModules();
@@ -62,17 +62,17 @@ void EventQA::FillHistograms(DataTreeEvent* fEvent)
 
     if ( fSelector.IsCorrectEvent(fEvent) ) 
     {
-		vProfile[hits_centrality_selected]->Fill( fEvent->GetCentrality(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+		vProfile[hits_centrality_selected]->Fill( fEvent->GetCentrality(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
         vHisto1D[tracksMDC_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
-        vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+        vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
         vHisto1D[chargeFW_selected]->Fill( fEvent->GetPSDEnergy() );
         vHisto1D[vertexZ_selected]->Fill( fEvent->GetVertexPositionComponent(2) );
-        vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC) );
+        vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC) );
         vHisto1D[hitsTOF_matched_selected]->Fill( fEvent->GetNTOFHits() );
 
-        vHisto2D[tracks_hits_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+        vHisto2D[tracks_hits_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
         vHisto2D[tracks_charge_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetPSDEnergy() );
-        vHisto2D[hits_charge_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut), fEvent->GetPSDEnergy() );
+        vHisto2D[hits_charge_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut), fEvent->GetPSDEnergy() );
         vHisto2D[vertexX_vertexY_selected]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );
         vHisto2D[hitsFW_X_Y_selected]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );
         int iNPSDModules = fEvent->GetNPSDModules();
