@@ -5,7 +5,7 @@ Qvector::Qvector()
 	iNumberOfSE=2;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
-	this->LoadCentralityPercentile("~/centrality_epcorr_apr12_gen8_2018_07.root");
+	this->LoadCentralityPercentile("centrality_epcorr_apr12_gen8_2018_07.root");
 	this->InitHistograms();
 }
 
