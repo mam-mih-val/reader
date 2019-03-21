@@ -18,6 +18,7 @@ class Qvector
 {
     private:
     unsigned int iNumberOfSE;
+	TH1F* hCentralityPercentile;
     vector<TVector2> fQvector;	
 	vector<TProfile*> hMeanQx;
 	vector<TProfile*> hMeanQy;
@@ -26,11 +27,13 @@ class Qvector
 	vector<TH1F*> hQy;
 	vector<TH1F*> hPsiEP; 
 
-	void Estimate2SE(DataTreeEvent* fEvent);
-	void Estimate3SE(DataTreeEvent* fEvent);
+	void 	Estimate2SE(DataTreeEvent* fEvent);
+	void 	Estimate3SE(DataTreeEvent* fEvent);
+	float	GetCentralityClass(DataTreeEvent* fEvent);
 	public:
     Qvector();
     ~Qvector() {};
+	void		LoadCentralityPercentile(TString FileName);
     void        FillCorrections(DataTreeEvent* fEvent);
 	void		SetNumberOfSE(unsigned int iNum) { iNumberOfSE = iNum; }
     void        Estimate(DataTreeEvent* fEvent);
