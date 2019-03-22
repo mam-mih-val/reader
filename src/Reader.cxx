@@ -58,8 +58,10 @@ void Reader::BuildQAHistograms(TString sPicName)
 void Reader::BuildQvectorHistograms(TString sPicName)
 {
 	Long64_t lNEvents = fChain->GetEntries();
-	Qvector* fQ =  new Qvector;
-    Selector* fSelector = new Selector; 
+    Selector* fSelector = new Selector;
+	Centrality* fCentrality = new Centrality("centrality_epcorr_apr12_gen8_2018_07.root");
+	Qvector* fQ =  new Qvector(fCentrality,2);
+	//fQ->LoadCentrality(fCentrality);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {

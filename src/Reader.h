@@ -14,6 +14,7 @@
 #include "Qvector.h"
 #include "EventQA.h"
 #include "TrackQA.h"
+#include "Centrality.h"
 
 #include "HADES_constants.h"
 

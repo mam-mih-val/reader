@@ -30,6 +30,8 @@ class EventQA
         hitsTOF_uncuted_selected,
         hitsTOF_matched,
         hitsTOF_matched_selected,
+		histo_centrality,
+		histo_centrality_selected,
         Num1DHistos
     };
     enum eQAHisto2DMap{

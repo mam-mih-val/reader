@@ -1,18 +1,19 @@
 #include "Qvector.h"
 
-Qvector::Qvector()
+Qvector::Qvector(Centrality* _centrality, unsigned int NumSE)
 {
-	iNumberOfSE=2;
+	iNumberOfSE = NumSE;
+	fCentrality = _centrality;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
-	this->LoadCentralityPercentile("centrality_epcorr_apr12_gen8_2018_07.root");
+	//this->LoadCentralityPercentile("centrality_epcorr_apr12_gen8_2018_07.root");
 	this->InitHistograms();
 }
 
 void Qvector::InitHistograms()
 {
 	cout << "Initialization of Qvector histograms" << endl;
-	auto nbins = hCentralityPercentile->GetNbinsX();
+	auto nbins = fCentrality->GetNumClasses();
 	for(unsigned int i=0; i<iNumberOfSE; i++)
 	{
 		hMeanQx.push_back( new TProfile( Form("MeanQxSE%i",i),";Centrality;Qx", nbins, 0, nbins ) );
@@ -27,13 +28,18 @@ void Qvector::InitHistograms()
 		hQy.push_back( new TH1F( Form("QyRecentredSE%i",i-iNumberOfSE),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPRecentredSE%i",i-iNumberOfSE),";PsiEP;counts",100,0,6.3) );
 	}
-	hPsiEP.push_back( new TH1F("PsiEP",";#Psi_{a}-#Psi_{b};counts",100,0,3.1415) );
+	//hPsiEP.push_back( new TH1F("PsiEP",";#Psi_{a}-#Psi_{b};counts",100,0,3.1415) );
 	if( iNumberOfSE == 2 )
 	{
 		hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 0, nbins) ); // 0
 		hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", nbins, 0, nbins) ); // 1
 		hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", nbins, 0, nbins) ); // 2
 		hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", nbins, 0, nbins) ); // 3
+
+		for(int i=0; i< nbins; i++)
+		{
+			hDeltaPsiEP.push_back( new TH1F( Form("PsiA_PsiB_centr_%i",i), Form("centrality %i;#Psi_{a}-#Psi_{b};counts",i), 100,0,3.1415) );
+		}
 	}
 	if( iNumberOfSE == 3 )
 	{
@@ -67,8 +73,8 @@ void Qvector::FillCorrections(DataTreeEvent* fEvent)
 	{
 		if( fQvector.at(i).X() < -990. )
 			continue;
-		hMeanQx.at(i)->Fill( this->GetCentralityClass(fEvent), fQvector.at(i).X() );
-		hMeanQy.at(i)->Fill( this->GetCentralityClass(fEvent), fQvector.at(i).Y() );
+		hMeanQx.at(i)->Fill( fCentrality->GetCentralityClass(fEvent), fQvector.at(i).X() );
+		hMeanQy.at(i)->Fill( fCentrality->GetCentralityClass(fEvent), fQvector.at(i).Y() );
 		hQx.at(i)->Fill( fQvector.at(i).X() );
 		hQy.at(i)->Fill( fQvector.at(i).Y() );
 		hPsiEP.at(i)->Fill( fQvector.at(i).Phi() );
@@ -83,7 +89,7 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 		this->Estimate3SE(fEvent);
 
 	//Float_t fCentrality = fEvent->GetCentrality();
-	int iCentralityBin = (int) this->GetCentralityClass(fEvent);
+	int iCentralityBin = (int) fCentrality->GetCentralityClass(fEvent);
 	for(unsigned int i=0;i<fQvector.size();i++)
 	{
 		if( fQvector.at(i).X() < -990. )
@@ -97,30 +103,31 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 	}
 	if ( iNumberOfSE == 2 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
 	{
-		hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
-		hCorrelation.at(0)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
-		hCorrelation.at(1)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
-		hCorrelation.at(2)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
-		hCorrelation.at(3)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+		hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass(fEvent) )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+		//hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
 	}
 	if ( iNumberOfSE == 3 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. && fQvector.at(2).X() > -990. )
 	{
-		hCorrelation.at(0)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
-		hCorrelation.at(1)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
-		hCorrelation.at(2)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
+		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
+		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
 		
-		hCorrelation.at(3)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
-		hCorrelation.at(4)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
-		hCorrelation.at(5)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(4)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
+		hCorrelation.at(5)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
 		
-		hCorrelation.at(6)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
-		hCorrelation.at(7)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+		hCorrelation.at(6)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(7)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
 		
-		hCorrelation.at(8)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
-		hCorrelation.at(9)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
+		hCorrelation.at(8)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
+		hCorrelation.at(9)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
 		
-		hCorrelation.at(10)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
-		hCorrelation.at(11)->Fill( this->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
+		hCorrelation.at(10)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
+		hCorrelation.at(11)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
 	}
 }
 
@@ -172,14 +179,19 @@ void Qvector::SaveHistograms(TString sPicName)
 	hStack->Draw("NOSTACK");
 	gPad->BuildLegend(0.1,0.8,0.38,0.9);
 	cout << "Saving Pictures as PNG" << endl;
-	cCanvas.push_back( new TCanvas("Psi","canv",1500,1000) );
+	cCanvas.push_back( new TCanvas("Psi","canv",4000,4000) );
 	cCanvas.back()->cd();
-	hPsiEP.back()->SetLineWidth(5);
-	hPsiEP.back()->Draw();
+	THStack* hStack1 = new THStack("Stack"," ");
+	for( auto histo : hDeltaPsiEP )
+	{
+		histo->SetLineWidth(3);
+		hStack1->Add(histo);
+	}
+	hStack1->Draw("PADS");
 	i=0;
 	for( auto canvas : cCanvas )
 	{
-		canvas->SaveAs( "../histograms/"+sPicName+Form("_%i.png",i) );
+		canvas->SaveAs( "../histograms/"+sPicName+Form("_%i_%i_SE.png",i,iNumberOfSE) );
 		i++;
 	}
 }
@@ -314,29 +326,5 @@ void Qvector::Estimate3SE(DataTreeEvent* fEvent)
 		if( fQvector.at(i).Mod() >= 1 )
 			cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
 			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
-	}
-}
-
-float Qvector::GetCentralityClass(DataTreeEvent* fEvent)
-{ 	
-	auto TOFRPChits = fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut);
-	auto bin = hCentralityPercentile->FindBin(TOFRPChits);
-	return hCentralityPercentile->GetBinContent(bin);
-}
-
-void Qvector::LoadCentralityPercentile(TString FileName)
-{
-	auto file = new TFile(FileName);
-	if ( file->IsOpen() )
-	{
-		cout << "Centrality file loaded" << endl;
-		file->cd("/Centrality/");
-		hCentralityPercentile = (TH1F*) file->Get("/Centrality/TOFRPCtot_5pc_fixedCuts");
-		cout << hCentralityPercentile->GetNbinsX() << " centrality classes" << endl;
-	}
-	else
-	{
-		cout << "Couldn't open the file" << endl;
-		return;
 	}
 }

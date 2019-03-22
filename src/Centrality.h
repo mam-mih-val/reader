@@ -17,5 +17,6 @@ class Centrality
 	Centrality(TString FileName);
 	~Centrality() {};
 	float	GetCentralityClass(DataTreeEvent* fEvent);
+	int		GetNumClasses() { return hCentralityPercentile->GetNbinsX(); }
 	void	LoadCentralityPercentile(TString FileName);
 };
