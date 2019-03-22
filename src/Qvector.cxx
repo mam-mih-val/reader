@@ -1,7 +1,8 @@
 #include "Qvector.h"
 
-Qvector::Qvector(Centrality* _centrality, unsigned int NumSE)
+Qvector::Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE)
 {
+	fEvent = _fEvent;
 	iNumberOfSE = NumSE;
 	fCentrality = _centrality;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
@@ -28,7 +29,7 @@ void Qvector::InitHistograms()
 		hQy.push_back( new TH1F( Form("QyRecentredSE%i",i-iNumberOfSE),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPRecentredSE%i",i-iNumberOfSE),";PsiEP;counts",100,0,6.3) );
 	}
-	//hPsiEP.push_back( new TH1F("PsiEP",";#Psi_{a}-#Psi_{b};counts",100,0,3.1415) );
+	hResolution.push_back( new TProfile("MeanCosine",";centrality class;<cos(#Psi_{a}-#Psi_{b})>",nbins,0,nbins) ); // 0 
 	if( iNumberOfSE == 2 )
 	{
 		hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 0, nbins) ); // 0
@@ -62,12 +63,12 @@ void Qvector::InitHistograms()
 	}
 }
 
-void Qvector::FillCorrections(DataTreeEvent* fEvent)
+void Qvector::FillCorrections()
 {
 	if( iNumberOfSE == 2 )
-		this->Estimate2SE(fEvent);
+		this->Estimate2SE();
 	if( iNumberOfSE == 3 )
-		this->Estimate3SE(fEvent);
+		this->Estimate3SE();
 	
 	for(int i=0;i<iNumberOfSE;i++)
 	{
@@ -81,12 +82,12 @@ void Qvector::FillCorrections(DataTreeEvent* fEvent)
 	}
 }
 
-void Qvector::Estimate(DataTreeEvent* fEvent)
+void Qvector::Estimate()
 {
 	if( iNumberOfSE == 2 )
-		this->Estimate2SE(fEvent);
+		this->Estimate2SE();
 	if( iNumberOfSE == 3 )
-		this->Estimate3SE(fEvent);
+		this->Estimate3SE();
 
 	//Float_t fCentrality = fEvent->GetCentrality();
 	int iCentralityBin = (int) fCentrality->GetCentralityClass(fEvent);
@@ -101,6 +102,7 @@ void Qvector::Estimate(DataTreeEvent* fEvent)
 		hQy[iNumberOfSE+i]->Fill( fQvector.at(i).Y() );
 		hPsiEP[iNumberOfSE+i]->Fill( fQvector.at(i).Phi() );
 	}
+	this->FillResolutionProfile();
 	if ( iNumberOfSE == 2 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
 	{
 		hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass(fEvent) )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
@@ -188,6 +190,14 @@ void Qvector::SaveHistograms(TString sPicName)
 		hStack1->Add(histo);
 	}
 	hStack1->Draw("PADS");
+	cCanvas.push_back( new TCanvas("Resolution","canv",4000,3500) );
+	cCanvas.back()->cd();
+	hResolution.back()->SetLineWidth(7);
+	hResolution.back()->SetMarkerSize(5);
+	hResolution.back()->SetLineColor(9);
+	hResolution.back()->SetMarkerColor(9);
+	hResolution.back()->SetMarkerStyle(20);
+	hResolution.back()->Draw();
 	i=0;
 	for( auto canvas : cCanvas )
 	{
@@ -196,7 +206,7 @@ void Qvector::SaveHistograms(TString sPicName)
 	}
 }
 
-void Qvector::Estimate2SE(DataTreeEvent* fEvent)
+void Qvector::Estimate2SE()
 {
 	for( auto vector = begin(fQvector); vector != end(fQvector); ++vector )
 		vector->Set( 0., 0. );
@@ -269,7 +279,7 @@ void Qvector::SaveHistogramsToROOTFile(TString sFileName)
 	file->Close();
 }
 
-void Qvector::Estimate3SE(DataTreeEvent* fEvent)
+void Qvector::Estimate3SE()
 {
 	for( auto vector : fQvector )
 		vector.Set( 0., 0. );
@@ -327,4 +337,16 @@ void Qvector::Estimate3SE(DataTreeEvent* fEvent)
 			cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
 			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
 	}
+}
+
+void Qvector::FillResolutionProfile()
+{
+	if( fQvector.at(0).X() > -990.0 && fQvector.at(1).X() > -990.0  )
+		hResolution.back()->Fill( fCentrality->GetCentralityClass(fEvent), cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
+}
+
+float Qvector::GetResolution()
+{
+	auto bin = (int)hResolution.back()->FindBin( (float)fCentrality->GetCentralityClass(fEvent) );
+	return hResolution.back()->GetBinContent(bin);
 }

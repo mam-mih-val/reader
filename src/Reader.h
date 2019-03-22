@@ -61,7 +61,7 @@ class Reader
     TH1F*   vQvectorDistribution[4];
     public:
     Reader() {};
-    Reader(char* cFileName);
+    Reader(TString cFileName);
     ~Reader();
     void            AddFile(char* cFileName);
     void            FillCorrectionHistos();

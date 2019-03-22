@@ -11,6 +11,7 @@
 #include "TLegend.h"
 
 #include "Selector.h"
+#include "Centrality.h"
 
 #include "HADES_constants.h"
 
@@ -63,11 +64,14 @@ class EventQA
     TH2F* vHisto2D[Num2DHistos];
 	TProfile* vProfile[NumProfiles];
     TCanvas* vCanvas[NumCanvases];
-    Selector fSelector;
-    public:
+    Selector* fSelector;
+	Centrality* fCentrality;
     EventQA();
+    public:
+	EventQA(Selector* _selector, Centrality* _centrality);
     ~EventQA();
     void    InitHistograms();
+	void	LoadCentrality(Centrality* _centrality) { fCentrality = _centrality; }
     void    FillHistograms(DataTreeEvent* fEvent);
     void    SaveHistograms(TString PicName);
     void    SaveHisogramsToROOTFile(TString FileName);

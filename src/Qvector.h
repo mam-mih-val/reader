@@ -20,28 +20,32 @@ class Qvector
     private:
 	Centrality* fCentrality;
     unsigned int iNumberOfSE;
-    vector<TVector2> fQvector;	
+	DataTreeEvent* fEvent;
+    vector<TVector2> fQvector;
 	vector<TProfile*> hMeanQx;
 	vector<TProfile*> hMeanQy;
 	vector<TProfile*> hCorrelation;
+	vector<TProfile*> hResolution;
 	vector<TH1F*> hQx;
 	vector<TH1F*> hQy;
 	vector<TH1F*> hPsiEP;
 	vector<TH1F*> hDeltaPsiEP; 
 
     Qvector() {};
-	void 	Estimate2SE(DataTreeEvent* fEvent);
-	void 	Estimate3SE(DataTreeEvent* fEvent);
+	void 	Estimate2SE();
+	void 	Estimate3SE();
+	void	FillResolutionProfile();
 	public:
-    Qvector(Centrality* _centrality, unsigned int NumSE=2);
+    Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE=2);
     ~Qvector() {};
 	void		LoadCentrality(Centrality* _centrality) { fCentrality = _centrality; }
-    void        FillCorrections(DataTreeEvent* fEvent);
+    void        FillCorrections();
 	void		SetNumberOfSE(unsigned int iNum) { iNumberOfSE = iNum; }
-    void        Estimate(DataTreeEvent* fEvent);
+    void        Estimate();
 	void		InitHistograms();
 	void		SaveHistograms(TString sPicName);
 	void		SaveHistogramsToROOTFile(TString sFileName);
+	float		GetResolution();
 	TVector2	GetQvector(unsigned int iSubEv=0) { return fQvector.at(iSubEv); }
     Float_t     GetComponent(int i, int j=0);
     Float_t     GetPsiEP(unsigned int iSubEv=0) { return fQvector.at(iSubEv).Phi(); }

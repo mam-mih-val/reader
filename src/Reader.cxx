@@ -2,12 +2,12 @@
 
 const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
 
-Reader::Reader(char* cFileName)
+Reader::Reader(TString cFileName)
 {
     fChain = new TChain("DataTree");
     fChain->Add(cFileName);
     cout << fChain->GetEntries() << "events" << endl;
-    fEvent = new DataTreeEvent;
+	fEvent = nullptr;
     fChain->SetBranchAddress("DTEvent", &fEvent);
 }
 
@@ -31,7 +31,9 @@ DataTreeEvent* Reader::GetEvent(int idx)
 
 void Reader::BuildQAHistograms(TString sPicName)
 {
-    EventQA* fEventQA = new EventQA;
+	Selector* fSelector = new Selector();
+	Centrality* fCentrality = new Centrality("centrality_epcorr_apr12_gen8_2018_07.root");
+    EventQA* fEventQA = new EventQA(fSelector, fCentrality);
 	TrackQA* fTrackQA[NumOfParticles];
 	fTrackQA[all] = 		new TrackQA(-1);
 	fTrackQA[electron] = 	new TrackQA(3);
@@ -60,15 +62,14 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector;
 	Centrality* fCentrality = new Centrality("centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector* fQ =  new Qvector(fCentrality,2);
-	//fQ->LoadCentrality(fCentrality);
+	Qvector* fQ =  new Qvector(fEvent, fCentrality, 2);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
 		if( !fSelector->IsCorrectEvent(fEvent) )
 			continue;
-		fQ->FillCorrections(fEvent);
+		fQ->FillCorrections();
     }
 	cout << "Estimating Q-vectors" << endl;
 	for(int i=0; i<lNEvents; i++)
@@ -76,7 +77,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
         fChain->GetEntry(i);
 		if( !fSelector->IsCorrectEvent(fEvent) )
 			continue;
-		fQ->Estimate(fEvent);
+		fQ->Estimate();
     }
 	fQ->SaveHistogramsToROOTFile(sPicName);
 	fQ->SaveHistograms(sPicName);
