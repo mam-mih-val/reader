@@ -185,7 +185,7 @@ void EventQA::SaveHistograms(TString PicName)
 
     for(int i=0; i<NumCanvases; i++)
     {
-        TString sPath = "../histograms/Event_"+PicName+"_"+to_string(i)+".png";
+        TString sPath = "../histograms/Event_"+PicName+Form("_%i.png",i);
         vCanvas[i]->SaveAs(sPath);
     }
 }

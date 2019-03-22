@@ -15,6 +15,10 @@
 
 #include "HADES_constants.h"
 
+using std::vector;
+using std::cout;
+using std::endl;
+
 class EventQA
 {
     private:

@@ -8,6 +8,10 @@
 #define  DATATREE_SHINE
 #include "DataTreeEvent.h"
 
+using std::vector;
+using std::cout;
+using std::endl;
+
 class Centrality
 {
 	private:
