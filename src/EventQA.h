@@ -70,13 +70,14 @@ class EventQA
     TCanvas* vCanvas[NumCanvases];
     Selector* fSelector;
 	Centrality* fCentrality;
+	DataTreeEvent* fEvent;
     EventQA();
     public:
-	EventQA(Selector* _selector, Centrality* _centrality);
+	EventQA(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality);
     ~EventQA();
     void    InitHistograms();
 	void	LoadCentrality(Centrality* _centrality) { fCentrality = _centrality; }
-    void    FillHistograms(DataTreeEvent* fEvent);
+    void    FillHistograms();
     void    SaveHistograms(TString PicName);
     void    SaveHisogramsToROOTFile(TString FileName);
 };

@@ -1,7 +1,8 @@
 #include "Centrality.h"
 
-Centrality::Centrality(TString FileName)
+Centrality::Centrality(DataTreeEvent* _fEvent, TString FileName)
 {
+	fEvent = _fEvent;
 	this->LoadCentralityPercentile(FileName);
 }
 
@@ -14,14 +15,20 @@ void Centrality::LoadCentralityPercentile(TString FileName)
 		file->cd("/Centrality/");
 		hCentralityPercentile = (TH1F*) file->Get("/Centrality/TOFRPCtot_5pc_fixedCuts");
 		cout << hCentralityPercentile->GetNbinsX() << " centrality classes" << endl;
+		//file->Close();
 	}
 	else
 		cout << "Couldn't open the file" << endl;
 }
 
-float Centrality::GetCentralityClass(DataTreeEvent* fEvent)
+float Centrality::GetCentralityClass()
 {
 	auto TOFRPChits = fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut);
 	auto bin = hCentralityPercentile->FindBin(TOFRPChits);
 	return hCentralityPercentile->GetBinContent(bin);
+}
+
+int	Centrality::GetNumClasses() 
+{ 
+	return hCentralityPercentile->GetNbinsX(); 
 }

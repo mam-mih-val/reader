@@ -45,13 +45,14 @@ class Selector
         cChi2, //3
         cNumOfTrackCuts //5
     };
+	Selector();
     public:
-    Selector();
+    Selector(DataTreeEvent* fEvent);
     ~Selector();
-    Bool_t IsCorrectEvent(DataTreeEvent* _fEvent, int iPT = -1);
+    Bool_t IsCorrectEvent(int iPT = -1);
     Bool_t IsCorrectTrack(Int_t idx);
 	void	SetStatOption(bool _bSaveStat = 1) { bSaveStat = _bSaveStat; }
-    void    CheckEventCuts(DataTreeEvent* _fEvent);
+    void    CheckEventCuts();
     void    CheckTrackCuts(Int_t idx);
     void    DrawStatistics();
     void    SaveStatistics();

@@ -2,8 +2,10 @@
 
 const double BETA = sqrt( 1.0 - 0.938*0.938/1.23/1.23 );
 
-TrackQA::TrackQA(int _iPid)
+TrackQA::TrackQA(DataTreeEvent* _fEvent, Selector* _fSelector, int _iPid)
 {
+	fEvent = _fEvent;
+	fSelector = _fSelector;
 	iPid = _iPid;
 	this->InitHistograms();
 }
@@ -46,7 +48,7 @@ void TrackQA::InitHistograms()
 	vHisto2D[DCA_X_Y_selected] = 				new TH2F( Form("DCA_X_Y_%i_selected",iPid),"; DCA_X, selected, [mm]; DCA_Y, selected, [mm]",100,-30,30,100,30,30);
 }
 
-void TrackQA::FillHistograms(DataTreeEvent* fEvent)
+void TrackQA::FillHistograms()
 {
 	int iNTracks = fEvent->GetNVertexTracks();
 	DataTreeTrack* fTrack;
@@ -88,7 +90,7 @@ void TrackQA::FillHistograms(DataTreeEvent* fEvent)
 		vHisto2D[pt_rapidity]->Fill(fMomentum.Rapidity(),fMomentum.Pt());
 		vHisto2D[rapidity_pseudorapidity]->Fill(fPR,fMomentum.Rapidity());
 
-		if ( !fSelector.IsCorrectEvent(fEvent) || !fSelector.IsCorrectTrack(i) )
+		if ( !fSelector->IsCorrectEvent() || !fSelector->IsCorrectTrack(i) )
 			continue;
 		
 		vHisto2D[DCA_X_Y_selected]->Fill( fTrack->GetDCAComponent(0), fTrack->GetDCAComponent(1) );

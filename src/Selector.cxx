@@ -1,24 +1,22 @@
 #include "Selector.h"
 
 
-Selector::Selector() 
+Selector::Selector(DataTreeEvent* _fEvent) 
 {
-    fEvent = new DataTreeEvent;
+    fEvent = _fEvent;
     hIncorrectEvent = new TH1F("Amount of rejected events on this cut",";code of the cut;counts",cNumOfEventCuts,0,cNumOfEventCuts);
     hIncorrectTracks= new TH1F("Amount of rejected tracks on this cut",";code of the cut;counts",cNumOfTrackCuts,0,cNumOfTrackCuts);
 }
 
 Selector::~Selector()
 {
-    delete fEvent;
     delete hIncorrectEvent;
 	delete hIncorrectTracks;
 }
 
-Bool_t Selector::IsCorrectEvent(DataTreeEvent* _fEvent, int iPT)
+Bool_t Selector::IsCorrectEvent(int iPT)
 {
-    fEvent = _fEvent;
-    this->CheckEventCuts(fEvent);
+    this->CheckEventCuts();
 
 	if( iPT!=-1 )
 	{
@@ -112,7 +110,7 @@ Bool_t Selector::IsCorrectTrack(Int_t idx)
     return 1;
 }
 
-void Selector::CheckEventCuts(DataTreeEvent* _fEvent)
+void Selector::CheckEventCuts()
 {
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )
     {

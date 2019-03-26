@@ -70,14 +70,15 @@ class TrackQA
     TH1F* vHisto1D[Num1DHistos];
     TH2F* vHisto2D[Num2DHistos];
     TCanvas* vCanvas[NumCanvases];
-    Selector fSelector;
+    Selector* fSelector;
+	DataTreeEvent* fEvent;
     public:
     TrackQA() {};
-	TrackQA(int iPid);
+	TrackQA(DataTreeEvent* _fEvent, Selector* _fSelector, int _iPid=-1);
     ~TrackQA();
     void    InitHistograms();
     void    SetPid(int _Pid=-1) { iPid = _Pid; }
-    void    FillHistograms(DataTreeEvent* fEvent);
+    void    FillHistograms();
     void    SaveHistograms(TString PicName);
     void    SaveHisogramsToROOTFile(TString FileName);
 };

@@ -3,11 +3,10 @@
 Qvector::Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE)
 {
 	fEvent = _fEvent;
-	iNumberOfSE = NumSE;
 	fCentrality = _centrality;
+	iNumberOfSE = NumSE;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
-	//this->LoadCentralityPercentile("centrality_epcorr_apr12_gen8_2018_07.root");
 	this->InitHistograms();
 }
 
@@ -74,8 +73,8 @@ void Qvector::FillCorrections()
 	{
 		if( fQvector.at(i).X() < -990. )
 			continue;
-		hMeanQx.at(i)->Fill( fCentrality->GetCentralityClass(fEvent), fQvector.at(i).X() );
-		hMeanQy.at(i)->Fill( fCentrality->GetCentralityClass(fEvent), fQvector.at(i).Y() );
+		hMeanQx.at(i)->Fill( fCentrality->GetCentralityClass(), fQvector.at(i).X() );
+		hMeanQy.at(i)->Fill( fCentrality->GetCentralityClass(), fQvector.at(i).Y() );
 		hQx.at(i)->Fill( fQvector.at(i).X() );
 		hQy.at(i)->Fill( fQvector.at(i).Y() );
 		hPsiEP.at(i)->Fill( fQvector.at(i).Phi() );
@@ -90,7 +89,7 @@ void Qvector::Estimate()
 		this->Estimate3SE();
 
 	//Float_t fCentrality = fEvent->GetCentrality();
-	int iCentralityBin = (int) fCentrality->GetCentralityClass(fEvent);
+	int iCentralityBin = (int) fCentrality->GetCentralityClass();
 	for(unsigned int i=0;i<fQvector.size();i++)
 	{
 		if( fQvector.at(i).X() < -990. )
@@ -105,31 +104,31 @@ void Qvector::Estimate()
 	this->FillResolutionProfile();
 	if ( iNumberOfSE == 2 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
 	{
-		hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass(fEvent) )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+		hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass() )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
 		//hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
-		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
-		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
-		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
-		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
 	}
 	if ( iNumberOfSE == 3 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. && fQvector.at(2).X() > -990. )
 	{
-		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
-		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
-		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
+		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
+		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
 		
-		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
-		hCorrelation.at(4)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
-		hCorrelation.at(5)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(4)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
+		hCorrelation.at(5)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
 		
-		hCorrelation.at(6)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
-		hCorrelation.at(7)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+		hCorrelation.at(6)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(7)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
 		
-		hCorrelation.at(8)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
-		hCorrelation.at(9)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
+		hCorrelation.at(8)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
+		hCorrelation.at(9)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
 		
-		hCorrelation.at(10)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
-		hCorrelation.at(11)->Fill( fCentrality->GetCentralityClass(fEvent), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
+		hCorrelation.at(10)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
+		hCorrelation.at(11)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
 	}
 }
 
@@ -342,11 +341,11 @@ void Qvector::Estimate3SE()
 void Qvector::FillResolutionProfile()
 {
 	if( fQvector.at(0).X() > -990.0 && fQvector.at(1).X() > -990.0  )
-		hResolution.back()->Fill( fCentrality->GetCentralityClass(fEvent), cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
+		hResolution.back()->Fill( fCentrality->GetCentralityClass(), cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
 }
 
 float Qvector::GetResolution()
 {
-	auto bin = (int)hResolution.back()->FindBin( (float)fCentrality->GetCentralityClass(fEvent) );
+	auto bin = (int)hResolution.back()->FindBin( (float)fCentrality->GetCentralityClass() );
 	return hResolution.back()->GetBinContent(bin);
 }

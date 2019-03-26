@@ -1,7 +1,8 @@
 #include "EventQA.h"
 
-EventQA::EventQA(Selector* _selector, Centrality* _centrality)
+EventQA::EventQA(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality)
 {
+	fEvent = _fEvent;
 	fSelector = _selector;
 	fCentrality = _centrality;
     this->InitHistograms();
@@ -41,16 +42,16 @@ void EventQA::InitHistograms()
 	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality class;Hits TOF+RPC",nbins,0,nbins);
 }
 
-void EventQA::FillHistograms(DataTreeEvent* fEvent)
+void EventQA::FillHistograms()
 {
-	vProfile[hits_centrality]->Fill( fCentrality->GetCentralityClass(fEvent), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
+	vProfile[hits_centrality]->Fill( fCentrality->GetCentralityClass(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
     vHisto1D[tracksMDC]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
     vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
     vHisto1D[chargeFW]->Fill( fEvent->GetPSDEnergy() );
     vHisto1D[vertexZ]->Fill( fEvent->GetVertexPositionComponent(2) );
     vHisto1D[hitsTOF_uncuted]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC) );
     vHisto1D[hitsTOF_matched]->Fill( fEvent->GetNTOFHits() );
-	vHisto1D[histo_centrality]->Fill( fCentrality->GetCentralityClass(fEvent) );
+	vHisto1D[histo_centrality]->Fill( fCentrality->GetCentralityClass() );
 
     vHisto2D[tracks_hits]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
     vHisto2D[tracks_charge]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetPSDEnergy() );
@@ -66,16 +67,16 @@ void EventQA::FillHistograms(DataTreeEvent* fEvent)
     
     }
 
-    if ( fSelector->IsCorrectEvent(fEvent, HADES_constants::kPT2) ) 
+    if ( fSelector->IsCorrectEvent(HADES_constants::kPT2) ) 
     {
-		vProfile[hits_centrality_selected]->Fill( fCentrality->GetCentralityClass(fEvent), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
+		vProfile[hits_centrality_selected]->Fill( fCentrality->GetCentralityClass(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
         vHisto1D[tracksMDC_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
         vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
         vHisto1D[chargeFW_selected]->Fill( fEvent->GetPSDEnergy() );
         vHisto1D[vertexZ_selected]->Fill( fEvent->GetVertexPositionComponent(2) );
         vHisto1D[hitsTOF_uncuted_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC) );
         vHisto1D[hitsTOF_matched_selected]->Fill( fEvent->GetNTOFHits() );
-		vHisto1D[histo_centrality_selected]->Fill( fCentrality->GetCentralityClass(fEvent) );
+		vHisto1D[histo_centrality_selected]->Fill( fCentrality->GetCentralityClass() );
 
         vHisto2D[tracks_hits_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut) );
         vHisto2D[tracks_charge_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks), fEvent->GetPSDEnergy() );

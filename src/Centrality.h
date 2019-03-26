@@ -16,11 +16,12 @@ class Centrality
 {
 	private:
 	TH1F* hCentralityPercentile;
-	public:
+	DataTreeEvent* fEvent;
 	Centrality() {};
-	Centrality(TString FileName);
+	public:
+	Centrality(DataTreeEvent* _fEvent, TString FileName);
 	~Centrality() {};
-	float	GetCentralityClass(DataTreeEvent* fEvent);
-	int		GetNumClasses() { return hCentralityPercentile->GetNbinsX(); }
+	float	GetCentralityClass();
+	int		GetNumClasses();
 	void	LoadCentralityPercentile(TString FileName);
 };
