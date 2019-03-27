@@ -10,6 +10,26 @@ Qvector::Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int N
 	this->InitHistograms();
 }
 
+Qvector::~Qvector()
+{
+	for( auto histo : hMeanQx )
+		delete histo;
+	for( auto histo : hMeanQy )
+		delete histo;
+	for( auto histo : hCorrelation )
+		delete histo;
+	for( auto histo : hResolution )
+		delete histo;
+	for( auto histo : hQx )
+		delete histo;
+	for( auto histo : hQy )
+		delete histo;
+	for( auto histo : hPsiEP )
+		delete histo;
+	for( auto histo : hDeltaPsiEP )
+		delete histo;
+}
+
 void Qvector::InitHistograms()
 {
 	cout << "Initialization of Qvector histograms" << endl;
@@ -241,7 +261,7 @@ void Qvector::Estimate2SE()
 	}
 	for(unsigned int i=0; i<2; i++)
 	{
-		if( fSumCharge.at(i) < 0.1 )
+		if( fSumCharge.at(i) < 70. )
 		{
 			fQvector.at(i).Set(-999.,-999.);
 			continue;
@@ -280,61 +300,40 @@ void Qvector::SaveHistogramsToROOTFile(TString sFileName)
 
 void Qvector::Estimate3SE()
 {
-	for( auto vector : fQvector )
-		vector.Set( 0., 0. );
+	for( auto vector = begin(fQvector); vector != end(fQvector); ++vector )
+		vector->Set( 0., 0. );
 	Int_t iNPSDModules = fEvent->GetNPSDModules();
-    DataTreePSDModule* fModule;
-	vector<float> fSumCharge;
-	vector<int> fHitsInSE;
-	for( int i=0; i<iNumberOfSE; i++ )
+    array<vector<DataTreePSDModule*>, 3> SubEvent;
+	for(int i=0; i<iNPSDModules; i++)
 	{
-		fSumCharge.push_back(0.);
-		fHitsInSE.push_back(0);
+		if( fEvent->GetPSDModule(i)->GetId() > 0 && fEvent->GetPSDModule(i)->GetId() < 6 )
+			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
+		if( fEvent->GetPSDModule(i)->GetId() >= 6 && fEvent->GetPSDModule(i)->GetId() < 8 )
+			SubEvent.at(1).push_back( fEvent->GetPSDModule(i) );
+		if( fEvent->GetPSDModule(i)->GetId() >= 8 && fEvent->GetPSDModule(i)->GetId() < 11 )
+			SubEvent.at(2).push_back( fEvent->GetPSDModule(i) );
 	}
-	TVector2 fAddition;
-	for(int i=0; i<iNPSDModules;i++)
+	for( int i=0; i<SubEvent.size(); i++ )
 	{
-		fModule = fEvent->GetPSDModule(i);
-		if( fModule->GetId() <= 0 )
-			continue;
-		double charge = fModule->GetEnergy();
-		double phi = fModule->GetPhi();
-		fAddition.SetMagPhi( charge, phi );
-		if( fModule->GetId() <= 5 )
+		if( SubEvent.at(i).size() < 3 )
 		{
-			fQvector.at(0)+=fAddition;
-			fSumCharge.at(0)+=charge;
-			fHitsInSE.at(0)++;
-		}
-		if( fModule->GetId() == 6 || fModule->GetId() == 7 )
-		{
-			fQvector.at(1)+=fAddition;
-			fSumCharge.at(1)+=charge;
-			fHitsInSE.at(1)++;
-		}
-		if( fModule->GetId() >= 8 )
-		{
-			fQvector.at(2)+=fAddition;
-			fSumCharge.at(2)+=charge;
-			fHitsInSE.at(2)++;
-		}
-	}
-	for( unsigned int i=0; i<fQvector.size(); i++ )
-	{
-		if( fSumCharge.at(i) < 0.1 )
-		{
-			fQvector.at(i).Set( -999., -999. );
+			fQvector.at(i).Set(-999.,-999.);
 			continue;
 		}
-		if( fHitsInSE.at(i) < 3 )
+		float SumCharge=0;
+		for( auto module : SubEvent.at(i) )
 		{
-			fQvector.at(i).Set( -999., -999. );
-			continue;
+			double charge = module->GetEnergy();
+			double phi = module->GetPhi();
+			TVector2 add;
+			add.SetMagPhi( charge, phi );
+			fQvector.at(i)+=add;
+			SumCharge+=charge;
 		}
-		fQvector.at(i) *= ( 1. / fSumCharge.at(i) );
-		if( fQvector.at(i).Mod() >= 1 )
-			cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
-			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
+		fQvector.at(i)/=SumCharge;
+		if( fQvector.at(i).Mod() > 1. )
+		 	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
+			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << SumCharge << endl;
 	}
 }
 

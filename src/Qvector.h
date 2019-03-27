@@ -22,8 +22,8 @@ using std::endl;
 class Qvector
 {
     private:
-	Centrality* fCentrality;
     unsigned int iNumberOfSE;
+	Centrality* fCentrality;
 	DataTreeEvent* fEvent;
     vector<TVector2> fQvector;
 	vector<TProfile*> hMeanQx;
@@ -41,7 +41,7 @@ class Qvector
 	void	FillResolutionProfile();
 	public:
     Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE=2);
-    ~Qvector() {};
+    ~Qvector();
 	void		LoadCentrality(Centrality* _centrality) { fCentrality = _centrality; }
     void        FillCorrections();
 	void		SetNumberOfSE(unsigned int iNum) { iNumberOfSE = iNum; }
