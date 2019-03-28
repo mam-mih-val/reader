@@ -224,7 +224,7 @@ void Qvector::SaveHistograms(TString sPicName)
 				n++;
 			}
 			hStack.back()->Draw("NOSTACK");
-			gPad->BuildLegend(0.1,0.8,0.38,0.9);
+			gPad->BuildLegend(0.1,0.62,0.92,0.9);
 		}
 	}
 
