@@ -120,9 +120,9 @@ void Qvector::Init3SEHistograms()
 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 10
 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", nbins, 0, nbins) ); // 11
 
-	hMeanCosine.push_back( new TProfile("MeanCosine_1",";centrality class;<cos(#Psi_{a}-#Psi_{b})>",nbins,0,nbins) ); // 0
-	hMeanCosine.push_back( new TProfile("MeanCosine_2",";centrality class;<cos(#Psi_{b}-#Psi_{c})>",nbins,0,nbins) ); // 1
-	hMeanCosine.push_back( new TProfile("MeanCosine_3",";centrality class;<cos(#Psi_{a}-#Psi_{c})>",nbins,0,nbins) ); // 2
+	hScalarProduct.push_back( new TProfile("<Q_{1}^{a},Q_{1}^{b}>",";centrality class;<Q_{1}^{a},Q_{1}^{b}>",nbins,0,nbins) ); // 0
+	hScalarProduct.push_back( new TProfile("<Q_{1}^{b},Q_{1}^{c}>",";centrality class;<Q_{1}^{b},Q_{1}^{c}>",nbins,0,nbins) ); // 1
+	hScalarProduct.push_back( new TProfile("<Q_{1}^{a},Q_{1}^{c}>",";centrality class;<Q_{1}^{a},Q_{1}^{c}>",nbins,0,nbins) ); // 2
 }
 
 void Qvector::FillCorrections()
@@ -151,57 +151,63 @@ void Qvector::Estimate()
 	if( iNumberOfSE == 3 )
 		this->Estimate3SE();
 
-	//Float_t fCentrality = fEvent->GetCentrality();
 	int iCentralityBin = (int) fCentrality->GetCentralityClass();
+	this->Recenter();
 	for(unsigned int i=0;i<fQvector.size();i++)
 	{
 		if( fQvector.at(i).X() < -990. )
 			continue;
-		TVector2 fCorrVec;
-		fCorrVec.Set( hMeanQx.at(i)->GetBinContent(iCentralityBin), hMeanQy.at(i)->GetBinContent(iCentralityBin) );
-		fQvector.at(i)-=fCorrVec;
 		hQx[iNumberOfSE+i]->Fill( fQvector.at(i).X() );
 		hQy[iNumberOfSE+i]->Fill( fQvector.at(i).Y() );
 		hPsiEP[iNumberOfSE+i]->Fill( fQvector.at(i).Phi() );
 	}
-	this->FillResolutionProfile();
-	if ( iNumberOfSE == 2 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
+	if( iNumberOfSE == 3 )
 	{
-		hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass() )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
-		//hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
-		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
-		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
-		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
-		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+		this->FillScalarProduct3SE();
+		this->FillCorrelations3SE();
 	}
-	if ( iNumberOfSE == 3 && fQvector.at(1).X() > -990. && fQvector.at(2).X() > -990. )
+	if( iNumberOfSE == 2 )
 	{
-		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
-		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
-		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
-		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
+		this->FillMeanCosine2SE();
+		this->FillCorrelations2SE();
 	}
-	if ( iNumberOfSE == 3 && fQvector.at(0).X() > -990. && fQvector.at(2).X() > -990. )
-	{
-		hCorrelation.at(4)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
-		hCorrelation.at(5)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
-		hCorrelation.at(6)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
-		hCorrelation.at(7)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
-	}
-	if ( iNumberOfSE == 3 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
-	{
-		hCorrelation.at(8)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
-		hCorrelation.at(9)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
-		hCorrelation.at(10)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
-		hCorrelation.at(11)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
-	}
+
+	// if ( iNumberOfSE == 2 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
+	// {
+	// 	hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass() )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+	// 	//hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+	// 	hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+	// 	hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+	// 	hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+	// 	hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+	// }
+	// if ( iNumberOfSE == 3 && fQvector.at(1).X() > -990. && fQvector.at(2).X() > -990. )
+	// {
+	// 	hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
+	// 	hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
+	// 	hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
+	// 	hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
+	// }
+	// if ( iNumberOfSE == 3 && fQvector.at(0).X() > -990. && fQvector.at(2).X() > -990. )
+	// {
+	// 	hCorrelation.at(4)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
+	// 	hCorrelation.at(5)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
+	// 	hCorrelation.at(6)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
+	// 	hCorrelation.at(7)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
+	// }
+	// if ( iNumberOfSE == 3 && fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
+	// {
+	// 	hCorrelation.at(8)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+	// 	hCorrelation.at(9)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+	// 	hCorrelation.at(10)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+	// 	hCorrelation.at(11)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+	// }
 }
 
 void Qvector::SaveHistograms(TString sPicName)
 {
 	cout << "Drawing Qvector histograms" << endl;
 	vector<TCanvas*> cCanvas;
-	
 	vector<TLegend*> legend;
 	cCanvas.push_back( new TCanvas("canvas0","Qvectors",4000,2500) );
 	cCanvas.back()->Divide(iNumberOfSE,2,0.005,0.0001);
@@ -271,7 +277,6 @@ void Qvector::SaveHistograms(TString sPicName)
 		}
 	}
 
-	cout << "Saving Pictures as PNG" << endl;
 	cCanvas.push_back( new TCanvas("Psi","canv",4000,4000) );
 	cCanvas.back()->cd();
 	THStack* hStack1 = new THStack("Stack"," ");
@@ -283,13 +288,36 @@ void Qvector::SaveHistograms(TString sPicName)
 	hStack1->Draw("PADS");
 	cCanvas.push_back( new TCanvas("Resolution","canv",4000,3500) );
 	cCanvas.back()->cd();
-	hMeanCosine.back()->SetLineWidth(7);
-	hMeanCosine.back()->SetMarkerSize(5);
-	hMeanCosine.back()->SetLineColor(9);
-	hMeanCosine.back()->SetMarkerColor(9);
-	hMeanCosine.back()->SetMarkerStyle(20);
-	hMeanCosine.back()->Draw();
+	hStack.push_back( new THStack("ScalarProduct",";centrality class;ScalarProduct") );
+	i=1;
+	for( auto histo : hScalarProduct )
+	{
+		histo->SetLineWidth(7);
+		histo->SetMarkerSize(5);
+		histo->SetLineColor(i);
+		histo->SetMarkerColor(i);
+		histo->SetMarkerStyle(19+i);
+		hStack.back()->Add(histo);
+		i++;
+	}
+	hStack.back()->Draw("NOSTACK");
+	gPad->BuildLegend(0.62,0.8,0.9,0.9);
+	cCanvas.push_back( new TCanvas("Res","canv",4000,4000) );
+	TMultiGraph* hStack2 = new TMultiGraph("Stack2",";centrality;Resolution");
+	i=1;
+	for( auto histo : hResolution )
+	{
+		histo->SetLineColor(0);
+		histo->SetMarkerSize(6);
+		histo->SetMarkerStyle(20+i);
+		histo->SetMarkerColor(i);
+		hStack2->Add( histo );
+		i++;
+	}
+	cCanvas.back()->cd();
+	hStack2->Draw();
 	i=0;
+	cout << "Saving Pictures as PNG" << endl;
 	for( auto canvas : cCanvas )
 	{
 		canvas->SaveAs( "../histograms/"+sPicName+Form("_%i_%i_SE.png",i,iNumberOfSE) );
@@ -342,6 +370,38 @@ void Qvector::Estimate2SE()
 		if( fQvector.at(i).Mod() >= 1 )
 			cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
 			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
+	}
+}
+
+void Qvector::EstimateResolution()
+{
+	if( iNumberOfSE == 3 )
+		this->EstimateResolution3SE();
+}
+
+void Qvector::EstimateResolution3SE()
+{
+	auto nbins = fCentrality->GetNumClasses();
+	for( int i=0; i<iNumberOfSE; i++ )
+		hResolution.push_back( new TGraph(nbins) );
+	
+	for(int i=0; i<nbins;i++)
+	{
+		auto res = sqrt( hMeanCosine.at(0)->GetBinContent(i) * hMeanCosine.at(2)->GetBinContent(i) / hMeanCosine.at(1)->GetBinContent(i) );
+		cout << res << endl;
+		hResolution.at(0)->SetPoint( i, (float)i, res );
+	}
+	for(int i=0; i<nbins;i++)
+	{
+		auto res = sqrt( hMeanCosine.at(0)->GetBinContent(i) * hMeanCosine.at(1)->GetBinContent(i) / hMeanCosine.at(2)->GetBinContent(i) );
+		cout << res << endl;
+		hResolution.at(1)->SetPoint( i, (float)i, res );
+	}
+	for(int i=0; i<nbins;i++)
+	{
+		auto res = sqrt( hMeanCosine.at(1)->GetBinContent(i) * hMeanCosine.at(2)->GetBinContent(i) / hMeanCosine.at(0)->GetBinContent(i) );
+		cout << res << endl;
+		hResolution.at(2)->SetPoint( i, (float)i, res );
 	}
 }
 
@@ -414,4 +474,64 @@ float Qvector::GetResolution()
 {
 	auto bin = (int)hMeanCosine.back()->FindBin( (float)fCentrality->GetCentralityClass() );
 	return hMeanCosine.back()->GetBinContent(bin);
+}
+
+void Qvector::FillScalarProduct3SE()
+{
+	if( fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
+		hScalarProduct.at(0)->Fill( fCentrality->GetCentralityClass(), fQvector.at(0) * fQvector.at(1) );
+	if( fQvector.at(1).X() > -990. && fQvector.at(2).X() > -990. )
+		hScalarProduct.at(1)->Fill( fCentrality->GetCentralityClass(), fQvector.at(1) * fQvector.at(2) );
+	if( fQvector.at(0).X() > -990. && fQvector.at(2).X() > -990. )
+		hScalarProduct.at(2)->Fill( fCentrality->GetCentralityClass(), fQvector.at(2) * fQvector.at(0) );
+}
+
+void Qvector::FillCorrelations2SE()
+{
+	if ( fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
+	{
+		hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass() )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+		//hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
+		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+	}
+}
+
+void Qvector::FillCorrelations3SE()
+{
+	if ( fQvector.at(1).X() > -990. && fQvector.at(2).X() > -990. )
+	{
+		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).X() ) );
+		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).Y() ) );
+		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).X() * fQvector.at(2).Y() ) );
+		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(1).Y() * fQvector.at(2).X() ) );
+	}
+	if ( fQvector.at(0).X() > -990. && fQvector.at(2).X() > -990. )
+	{
+		hCorrelation.at(4)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).X() ) );
+		hCorrelation.at(5)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).Y() ) );
+		hCorrelation.at(6)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(2).Y() ) );
+		hCorrelation.at(7)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(2).X() ) );
+	}
+	if ( fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
+	{
+		hCorrelation.at(8)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
+		hCorrelation.at(9)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
+		hCorrelation.at(10)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
+		hCorrelation.at(11)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
+	}
+}
+
+void Qvector::Recenter()
+{
+	for(unsigned int i=0;i<fQvector.size();i++)
+	{
+		if( fQvector.at(i).X() < -990. )
+			continue;
+		TVector2 fCorrVec;
+		fCorrVec.Set( hMeanQx.at(i)->GetBinContent( (int)fCentrality->GetCentralityClass() ), hMeanQy.at(i)->GetBinContent( (int)fCentrality->GetCentralityClass() ) );
+		fQvector.at(i)-=fCorrVec;
+	}
 }

@@ -6,6 +6,7 @@
 #include "TGraph.h"
 #include "TPad.h"
 #include "THStack.h"
+#include "TMultiGraph.h"
 #include "TLegend.h"
 #include "TMath.h"
 #include "TFile.h"
@@ -31,6 +32,7 @@ class Qvector
 	vector<TProfile*> hMeanQy;
 	vector<TProfile*> hCorrelation;
 	vector<TProfile*> hMeanCosine;
+	vector<TProfile*> hScalarProduct;
 	vector<TH1F*> hQx;
 	vector<TH1F*> hQy;
 	vector<TH1F*> hPsiEP;
@@ -40,13 +42,21 @@ class Qvector
     Qvector() {};
 	void 	Estimate2SE();
 	void 	Estimate3SE();
+	void	FillCorrelations2SE();
+	void	FillCorrelations3SE();
+	void	FillMeanCosine2SE();
+	void	FillScalarProduct3SE();
 	void	FillResolutionProfile();
 	void	Init2SEHistograms();
 	void	Init3SEHistograms();
+	void	Recenter();
+	void	EstimateResolution3SE();
+	
 	public:
     Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE=2);
     ~Qvector();
     void        Estimate();
+	void		EstimateResolution();
     void        FillCorrections();
     Float_t     GetComponent(int i, int j=0);
     Float_t     GetPsiEP(unsigned int iSubEv=0) { return fQvector.at(iSubEv).Phi(); }
