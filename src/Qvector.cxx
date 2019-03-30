@@ -36,8 +36,8 @@ void Qvector::InitHistograms()
 	auto nbins = fCentrality->GetNumClasses();
 	for(unsigned int i=0; i<iNumberOfSE; i++)
 	{
-		hMeanQx.push_back( new TProfile( Form("MeanQxSE%i",i),";Centrality;Qx", nbins, 0, nbins ) );
-		hMeanQy.push_back( new TProfile( Form("MeanQySE%i",i),";Centrality;Qy", nbins, 0, nbins ) );
+		hMeanQx.push_back( new TProfile( Form("MeanQxSE%i",i),";Centrality;Qx", nbins, 1, nbins+1 ) );
+		hMeanQy.push_back( new TProfile( Form("MeanQySE%i",i),";Centrality;Qy", nbins, 1, nbins+1 ) );
 		hQx.push_back( new TH1F( Form("QxSE%i",i),";Qx;counts",100,-1.5,1.5) );
 		hQy.push_back( new TH1F( Form("QySE%i",i),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPSE%i",i),";PsiEP;counts",100,-3.15,3.15) );
@@ -91,10 +91,10 @@ void Qvector::InitHistograms()
 void Qvector::Init2SEHistograms()
 {
 	auto nbins = fCentrality->GetNumClasses();
-	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 0, nbins) ); // 0
-	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", nbins, 0, nbins) ); // 1
-	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", nbins, 0, nbins) ); // 2
-	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", nbins, 0, nbins) ); // 3
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 1, nbins+1) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", nbins, 1, nbins+1) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", nbins, 1, nbins+1) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", nbins, 1, nbins+1) ); // 3
 	for(int i=0; i< nbins; i++)
 	{
 		hDeltaPsiEP.push_back( new TH1F( Form("PsiA_PsiB_centr_%i",i), Form("centrality %i;#Psi_{a}-#Psi_{b};counts",i), 100,0,3.1415) );
@@ -105,24 +105,24 @@ void Qvector::Init2SEHistograms()
 void Qvector::Init3SEHistograms()
 {
 	auto nbins = fCentrality->GetNumClasses();
-	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 0
-	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", nbins, 0, nbins) ); // 1
-	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 2
-	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", nbins, 0, nbins) ); // 3
+	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 1, nbins+1) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", nbins, 1, nbins+1) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 1, nbins+1) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", nbins, 1, nbins+1) ); // 3
 
-	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 4
-	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", nbins, 0, nbins) ); // 5
-	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 6
-	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", nbins, 0, nbins) ); // 7
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 1, nbins+1) ); // 4
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", nbins, 1, nbins+1) ); // 5
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 1, nbins+1) ); // 6
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", nbins, 1, nbins+1) ); // 7
 
-	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 8
-	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", nbins, 0, nbins) ); // 9
-	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 10
-	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", nbins, 0, nbins) ); // 11
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 1, nbins+1) ); // 8
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", nbins, 1, nbins+1) ); // 9
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 1, nbins+1) ); // 10
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", nbins, 1, nbins+1) ); // 11
 
-	hScalarProduct.push_back( new TProfile("<Q_{1}^{a},Q_{1}^{b}>",";centrality class;<Q_{1}^{a},Q_{1}^{b}>",nbins,0,nbins) ); // 0
-	hScalarProduct.push_back( new TProfile("<Q_{1}^{b},Q_{1}^{c}>",";centrality class;<Q_{1}^{b},Q_{1}^{c}>",nbins,0,nbins) ); // 1
-	hScalarProduct.push_back( new TProfile("<Q_{1}^{a},Q_{1}^{c}>",";centrality class;<Q_{1}^{a},Q_{1}^{c}>",nbins,0,nbins) ); // 2
+	hScalarProduct.push_back( new TProfile("<Q_{1}^{a},Q_{1}^{b}>",";centrality class;<Q_{1}^{a},Q_{1}^{b}>",nbins,1,nbins+1) ); // 0
+	hScalarProduct.push_back( new TProfile("<Q_{1}^{b},Q_{1}^{c}>",";centrality class;<Q_{1}^{b},Q_{1}^{c}>",nbins,1,nbins+1) ); // 1
+	hScalarProduct.push_back( new TProfile("<Q_{1}^{a},Q_{1}^{c}>",";centrality class;<Q_{1}^{a},Q_{1}^{c}>",nbins,1,nbins+1) ); // 2
 }
 
 void Qvector::FillCorrections()
@@ -302,20 +302,43 @@ void Qvector::SaveHistograms(TString sPicName)
 	}
 	hStack.back()->Draw("NOSTACK");
 	gPad->BuildLegend(0.62,0.8,0.9,0.9);
-	cCanvas.push_back( new TCanvas("Res","canv",4000,4000) );
-	TMultiGraph* hStack2 = new TMultiGraph("Stack2",";centrality;Resolution");
+	cCanvas.push_back( new TCanvas("Res","canv",3000,3000) );
+	auto hStack2 = new TMultiGraph("Stack2",";centrality;Resolution");
 	i=1;
-	for( auto histo : hResolution )
+	cCanvas.back()->cd();
+	for( auto &histo : hResolution )
 	{
 		histo->SetLineColor(0);
 		histo->SetMarkerSize(6);
 		histo->SetMarkerStyle(20+i);
 		histo->SetMarkerColor(i);
-		hStack2->Add( histo );
+		hStack2->Add( histo,"P" );
 		i++;
 	}
-	cCanvas.back()->cd();
-	hStack2->Draw();
+	hStack2->Draw("A");
+	gPad->BuildLegend(0.62,0.78,0.9,0.9);
+	// cCanvas.back()->Divide(3,1);
+	
+	// hResolution.at(0)->SetLineColor(0);
+	// hResolution.at(0)->SetMarkerSize(6);
+	// hResolution.at(0)->SetMarkerStyle(20);
+	// hResolution.at(0)->SetMarkerColor(1);
+	// hResolution.at(0)->Draw();
+	
+	// cCanvas.back()->cd(2);
+	// hResolution.at(1)->SetLineColor(0);
+	// hResolution.at(1)->SetMarkerSize(6);
+	// hResolution.at(1)->SetMarkerStyle(21);
+	// hResolution.at(1)->SetMarkerColor(2);
+	// hResolution.at(1)->Draw();
+	
+	// cCanvas.back()->cd(3);
+	// hResolution.at(2)->SetLineColor(0);
+	// hResolution.at(2)->SetMarkerSize(6);
+	// hResolution.at(2)->SetMarkerStyle(22);
+	// hResolution.at(2)->SetMarkerColor(3);
+	// hResolution.at(2)->Draw();
+	
 	i=0;
 	cout << "Saving Pictures as PNG" << endl;
 	for( auto canvas : cCanvas )
@@ -332,7 +355,7 @@ void Qvector::Estimate2SE()
 	Int_t iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fModule;
 	vector<DataTreePSDModule*> vModules;
-	for(int i=0; i<iNPSDModules;i++)
+	for(unsigned int i=0; i<iNPSDModules;i++)
 	{
 		fModule = fEvent->GetPSDModule(i);
 		if( fModule->GetId() <= 0 )
@@ -383,25 +406,34 @@ void Qvector::EstimateResolution3SE()
 {
 	auto nbins = fCentrality->GetNumClasses();
 	for( int i=0; i<iNumberOfSE; i++ )
-		hResolution.push_back( new TGraph(nbins) );
+	{
+		hResolution.push_back( new TGraph(nbins-2) );
+		hResolution.back()->SetTitle(Form("R_{1}^{SE_%i}",i+1));
+	}
 	
-	for(int i=0; i<nbins;i++)
+	for(int i=0; i<nbins-2;i++)
 	{
-		auto res = sqrt( hMeanCosine.at(0)->GetBinContent(i) * hMeanCosine.at(2)->GetBinContent(i) / hMeanCosine.at(1)->GetBinContent(i) );
+		auto res = hScalarProduct.at(0)->GetBinContent(i+1) * hScalarProduct.at(2)->GetBinContent(i+1) / hScalarProduct.at(1)->GetBinContent(i+1);
 		cout << res << endl;
-		hResolution.at(0)->SetPoint( i, (float)i, res );
+		if( res != res )
+			continue;
+		hResolution.at(0)->SetPoint( i, (float)i+1, sqrt(res) );
 	}
-	for(int i=0; i<nbins;i++)
+	for(int i=0; i<nbins-2;i++)
 	{
-		auto res = sqrt( hMeanCosine.at(0)->GetBinContent(i) * hMeanCosine.at(1)->GetBinContent(i) / hMeanCosine.at(2)->GetBinContent(i) );
+		auto res = hScalarProduct.at(0)->GetBinContent(i+1) * hScalarProduct.at(1)->GetBinContent(i+1) / hScalarProduct.at(2)->GetBinContent(i+1);
 		cout << res << endl;
-		hResolution.at(1)->SetPoint( i, (float)i, res );
+		if( res != res )
+			continue;
+		hResolution.at(1)->SetPoint( i, (float)i+1, sqrt(res) );
 	}
-	for(int i=0; i<nbins;i++)
+	for(int i=0; i<nbins-2;i++)
 	{
-		auto res = sqrt( hMeanCosine.at(1)->GetBinContent(i) * hMeanCosine.at(2)->GetBinContent(i) / hMeanCosine.at(0)->GetBinContent(i) );
+		auto res = hScalarProduct.at(1)->GetBinContent(i+1) * hScalarProduct.at(2)->GetBinContent(i+1) / hScalarProduct.at(0)->GetBinContent(i+1);
 		cout << res << endl;
-		hResolution.at(2)->SetPoint( i, (float)i, res );
+		if( res != res )
+			continue;
+		hResolution.at(2)->SetPoint( i, (float)i+1, sqrt(res) );
 	}
 }
 
@@ -431,7 +463,7 @@ void Qvector::Estimate3SE()
 		vector.Set( 0., 0. );
 	Int_t iNPSDModules = fEvent->GetNPSDModules();
     array<vector<DataTreePSDModule*>, 3> SubEvent;
-	for(int i=0; i<iNPSDModules; i++)
+	for(unsigned int i=0; i<iNPSDModules; i++)
 	{
 		if( fEvent->GetPSDModule(i)->GetId() > 0 && fEvent->GetPSDModule(i)->GetId() < 6 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );

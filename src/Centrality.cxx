@@ -30,5 +30,5 @@ float Centrality::GetCentralityClass()
 
 int	Centrality::GetNumClasses() 
 { 
-	return hCentralityPercentile->GetNbinsX(); 
+	return hCentralityPercentile->GetNbinsX()-1; 
 }

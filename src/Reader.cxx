@@ -80,7 +80,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 			continue;
 		fQ->Estimate();
     }
-	//fQ->EstimateResolution();
+	fQ->EstimateResolution();
 	fQ->SaveHistogramsToROOTFile(sPicName);
 	fQ->SaveHistograms(sPicName);
 }
