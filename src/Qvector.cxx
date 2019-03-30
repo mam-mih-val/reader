@@ -18,7 +18,7 @@ Qvector::~Qvector()
 		delete histo;
 	for( auto histo : hCorrelation )
 		delete histo;
-	for( auto histo : hResolution )
+	for( auto histo : hMeanCosine )
 		delete histo;
 	for( auto histo : hQx )
 		delete histo;
@@ -48,38 +48,81 @@ void Qvector::InitHistograms()
 		hQy.push_back( new TH1F( Form("QyRecentredSE%i",i-iNumberOfSE),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPRecentredSE%i",i-iNumberOfSE),";PsiEP;counts",100,0,6.3) );
 	}
-	hResolution.push_back( new TProfile("MeanCosine",";centrality class;<cos(#Psi_{a}-#Psi_{b})>",nbins,0,nbins) ); // 0 
-	if( iNumberOfSE == 2 )
+	if ( iNumberOfSE == 2 )
 	{
-		hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 0, nbins) ); // 0
-		hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", nbins, 0, nbins) ); // 1
-		hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", nbins, 0, nbins) ); // 2
-		hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", nbins, 0, nbins) ); // 3
+		this->Init2SEHistograms();
+	}
+	if ( iNumberOfSE == 3 )
+	{
+		this->Init3SEHistograms();
+	}
+	// hMeanCosine.push_back( new TProfile("MeanCosine",";centrality class;<cos(#Psi_{a}-#Psi_{b})>",nbins,0,nbins) ); // 0 
+	// if( iNumberOfSE == 2 )
+	// {
+	// 	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 0, nbins) ); // 0
+	// 	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", nbins, 0, nbins) ); // 1
+	// 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", nbins, 0, nbins) ); // 2
+	// 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", nbins, 0, nbins) ); // 3
 
-		for(int i=0; i< nbins; i++)
-		{
-			hDeltaPsiEP.push_back( new TH1F( Form("PsiA_PsiB_centr_%i",i), Form("centrality %i;#Psi_{a}-#Psi_{b};counts",i), 100,0,3.1415) );
-		}
-	}
-	if( iNumberOfSE == 3 )
+	// 	for(int i=0; i< nbins; i++)
+	// 	{
+	// 		hDeltaPsiEP.push_back( new TH1F( Form("PsiA_PsiB_centr_%i",i), Form("centrality %i;#Psi_{a}-#Psi_{b};counts",i), 100,0,3.1415) );
+	// 	}
+	// }
+	// if( iNumberOfSE == 3 )
+	// {
+	// 	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 0
+	// 	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", nbins, 0, nbins) ); // 1
+	// 	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 2
+	// 	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", nbins, 0, nbins) ); // 3
+	
+	// 	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 4
+	// 	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", nbins, 0, nbins) ); // 5
+	// 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 6
+	// 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", nbins, 0, nbins) ); // 7
+	
+	// 	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 8
+	// 	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", nbins, 0, nbins) ); // 9
+	// 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 10
+	// 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", nbins, 0, nbins) ); // 11
+	// }
+}
+
+void Qvector::Init2SEHistograms()
+{
+	auto nbins = fCentrality->GetNumClasses();
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{1}Qx_{2}", nbins, 0, nbins) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{1}Qy_{2}", nbins, 0, nbins) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{1}Qy_{2}", nbins, 0, nbins) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{1}Qx_{2}", nbins, 0, nbins) ); // 3
+	for(int i=0; i< nbins; i++)
 	{
-		hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 0
-		hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", nbins, 0, nbins) ); // 1
-		hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 2
-		hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", nbins, 0, nbins) ); // 3
-	
-		hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 4
-		hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", nbins, 0, nbins) ); // 5
-		hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 6
-		hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", nbins, 0, nbins) ); // 7
-	
-		hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 8
-		hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", nbins, 0, nbins) ); // 9
-		hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 10
-		hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", nbins, 0, nbins) ); // 11
-		
-		
+		hDeltaPsiEP.push_back( new TH1F( Form("PsiA_PsiB_centr_%i",i), Form("centrality %i;#Psi_{a}-#Psi_{b};counts",i), 100,0,3.1415) );
 	}
+	hMeanCosine.push_back( new TProfile("MeanCosine",";centrality class;<cos(#Psi_{a}-#Psi_{b})>",nbins,0,nbins) ); // 0 
+}
+
+void Qvector::Init3SEHistograms()
+{
+	auto nbins = fCentrality->GetNumClasses();
+	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", nbins, 0, nbins) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", nbins, 0, nbins) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", nbins, 0, nbins) ); // 3
+
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 4
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", nbins, 0, nbins) ); // 5
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", nbins, 0, nbins) ); // 6
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", nbins, 0, nbins) ); // 7
+
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 8
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", nbins, 0, nbins) ); // 9
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qx_{b}", nbins, 0, nbins) ); // 10
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", nbins, 0, nbins) ); // 11
+
+	hMeanCosine.push_back( new TProfile("MeanCosine_1",";centrality class;<cos(#Psi_{a}-#Psi_{b})>",nbins,0,nbins) ); // 0
+	hMeanCosine.push_back( new TProfile("MeanCosine_2",";centrality class;<cos(#Psi_{b}-#Psi_{c})>",nbins,0,nbins) ); // 1
+	hMeanCosine.push_back( new TProfile("MeanCosine_3",";centrality class;<cos(#Psi_{a}-#Psi_{c})>",nbins,0,nbins) ); // 2
 }
 
 void Qvector::FillCorrections()
@@ -240,12 +283,12 @@ void Qvector::SaveHistograms(TString sPicName)
 	hStack1->Draw("PADS");
 	cCanvas.push_back( new TCanvas("Resolution","canv",4000,3500) );
 	cCanvas.back()->cd();
-	hResolution.back()->SetLineWidth(7);
-	hResolution.back()->SetMarkerSize(5);
-	hResolution.back()->SetLineColor(9);
-	hResolution.back()->SetMarkerColor(9);
-	hResolution.back()->SetMarkerStyle(20);
-	hResolution.back()->Draw();
+	hMeanCosine.back()->SetLineWidth(7);
+	hMeanCosine.back()->SetMarkerSize(5);
+	hMeanCosine.back()->SetLineColor(9);
+	hMeanCosine.back()->SetMarkerColor(9);
+	hMeanCosine.back()->SetMarkerStyle(20);
+	hMeanCosine.back()->Draw();
 	i=0;
 	for( auto canvas : cCanvas )
 	{
@@ -364,11 +407,11 @@ void Qvector::Estimate3SE()
 void Qvector::FillResolutionProfile()
 {
 	if( fQvector.at(0).X() > -990.0 && fQvector.at(1).X() > -990.0  )
-		hResolution.back()->Fill( fCentrality->GetCentralityClass(), 2*cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
+		hMeanCosine.back()->Fill( fCentrality->GetCentralityClass(), 2*cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
 }
 
 float Qvector::GetResolution()
 {
-	auto bin = (int)hResolution.back()->FindBin( (float)fCentrality->GetCentralityClass() );
-	return hResolution.back()->GetBinContent(bin);
+	auto bin = (int)hMeanCosine.back()->FindBin( (float)fCentrality->GetCentralityClass() );
+	return hMeanCosine.back()->GetBinContent(bin);
 }
