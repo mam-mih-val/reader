@@ -38,6 +38,8 @@ class Qvector
 	vector<TH1F*> hPsiEP;
 	vector<TH1F*> hDeltaPsiEP; 
 	vector<TGraph*> hResolution;
+	vector<TGraph*> hResolutionX;
+	vector<TGraph*> hResolutionY;
 
     Qvector() {};
 	void 	Estimate2SE();
@@ -49,8 +51,8 @@ class Qvector
 	void	FillResolutionProfile();
 	void	Init2SEHistograms();
 	void	Init3SEHistograms();
-	void	Recenter();
 	void	EstimateResolution3SE();
+	void	Recenter();
 	
 	public:
     Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE=2);
