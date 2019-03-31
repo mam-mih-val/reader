@@ -34,9 +34,11 @@ class Qvector
 	vector<TH1F*> hQx;
 	vector<TH1F*> hQy;
 	vector<TH1F*> hPsiEP;
-	vector<TH1F*> hDeltaPsiEP; 
+	vector<TH1F*> hDeltaPsiEP;
 	vector<TGraph*> hResolutionX;
 	vector<TGraph*> hResolutionY;
+	TProfile*	hMeanCosine;
+	TGraph* 	hResolutionEP;
 
     Qvector() {};
 	void 	Estimate2SE();
@@ -44,6 +46,7 @@ class Qvector
 	void	FillCorrelations2SE();
 	void	FillCorrelations3SE();
 	void	FillScalarProduct3SE();
+	void	FillMeanCosine2SE();
 	void	FillResolutionProfile();
 	void	Init2SEHistograms();
 	void	Init3SEHistograms();

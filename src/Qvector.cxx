@@ -71,6 +71,7 @@ void Qvector::Init2SEHistograms()
 	{
 		hDeltaPsiEP.push_back( new TH1F( Form("PsiA_PsiB_centr_%i",i), Form("centrality %i;#Psi_{a}-#Psi_{b};counts",i), 100,0,3.1415) );
 	}
+	hMeanCosine = new TProfile( "MeanCosine",";centrality;<cos(#Psi_1^{a}-#Psi_{1}^{b})>", nbins, 1, nbins+1 );
 }
 
 void Qvector::Init3SEHistograms()
@@ -129,7 +130,10 @@ void Qvector::Estimate()
 	if( iNumberOfSE == 3 )
 		this->FillCorrelations3SE();
 	if( iNumberOfSE == 2 )
+	{
+		this->FillMeanCosine2SE();
 		this->FillCorrelations2SE();
+	}
 }
 
 void Qvector::SaveHistograms(TString sPicName)
@@ -239,6 +243,14 @@ void Qvector::SaveHistograms(TString sPicName)
 	}
 	hStack2->Draw("A");
 	gPad->BuildLegend(0.62,0.76,0.9,0.9);
+	cCanvas.push_back( new TCanvas("MeanCosine","canv",3000,3000) );
+	cCanvas.back()->cd();
+	hMeanCosine->SetLineColor(1);
+	hMeanCosine->SetLineWidth(7);
+	hMeanCosine->SetMarkerSize(8);
+	hMeanCosine->SetMarkerStyle(20);
+	hMeanCosine->SetMarkerColor(1);
+	hMeanCosine->Draw();
 	i=0;
 	cout << "Saving Pictures as PNG" << endl;
 	for( auto canvas : cCanvas )
@@ -431,6 +443,11 @@ void Qvector::FillCorrelations2SE()
 		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );
 		hCorrelation.at(3)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).X() ) );
 	}
+}
+
+void Qvector::FillMeanCosine2SE()
+{
+	hMeanCosine->Fill( fCentrality->GetCentralityClass(), cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
 }
 
 void Qvector::FillCorrelations3SE()
