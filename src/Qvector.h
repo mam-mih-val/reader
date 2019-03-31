@@ -31,13 +31,10 @@ class Qvector
 	vector<TProfile*> hMeanQx;
 	vector<TProfile*> hMeanQy;
 	vector<TProfile*> hCorrelation;
-	vector<TProfile*> hMeanCosine;
-	vector<TProfile*> hScalarProduct;
 	vector<TH1F*> hQx;
 	vector<TH1F*> hQy;
 	vector<TH1F*> hPsiEP;
 	vector<TH1F*> hDeltaPsiEP; 
-	vector<TGraph*> hResolution;
 	vector<TGraph*> hResolutionX;
 	vector<TGraph*> hResolutionY;
 
@@ -46,11 +43,11 @@ class Qvector
 	void 	Estimate3SE();
 	void	FillCorrelations2SE();
 	void	FillCorrelations3SE();
-	void	FillMeanCosine2SE();
 	void	FillScalarProduct3SE();
 	void	FillResolutionProfile();
 	void	Init2SEHistograms();
 	void	Init3SEHistograms();
+	void	EstimateResolution2SE();
 	void	EstimateResolution3SE();
 	void	Recenter();
 	

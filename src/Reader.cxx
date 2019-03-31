@@ -62,7 +62,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector* fQ =  new Qvector(fEvent, fCentrality,3);
+	Qvector* fQ =  new Qvector(fEvent, fCentrality,2);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
@@ -79,6 +79,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 			continue;
 		fQ->Estimate();
     }
+	cout << "Estimating resolution" << endl;
 	fQ->EstimateResolution();
 	fQ->SaveHistogramsToROOTFile(sPicName);
 	fQ->SaveHistograms(sPicName);
