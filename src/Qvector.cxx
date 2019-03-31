@@ -245,12 +245,12 @@ void Qvector::SaveHistograms(TString sPicName)
 	gPad->BuildLegend(0.62,0.76,0.9,0.9);
 	cCanvas.push_back( new TCanvas("MeanCosine","canv",3000,3000) );
 	cCanvas.back()->cd();
-	hMeanCosine->SetLineColor(1);
-	hMeanCosine->SetLineWidth(7);
-	hMeanCosine->SetMarkerSize(8);
-	hMeanCosine->SetMarkerStyle(20);
-	hMeanCosine->SetMarkerColor(1);
-	hMeanCosine->Draw();
+	hResolutionEP->SetLineColor(0);
+	hResolutionEP->SetLineWidth(7);
+	hResolutionEP->SetMarkerSize(8);
+	hResolutionEP->SetMarkerStyle(20);
+	hResolutionEP->SetMarkerColor(1);
+	hResolutionEP->Draw();
 	i=0;
 	cout << "Saving Pictures as PNG" << endl;
 	for( auto canvas : cCanvas )
@@ -360,6 +360,8 @@ void Qvector::EstimateResolution2SE()
 	hResolutionY.push_back( new TGraph(nbins-2) );
 	hResolutionX.back()->SetTitle("R_{1,x}");
 	hResolutionY.back()->SetTitle("R_{1,y}");
+	hResolutionEP = new TGraph(nbins-1);
+	hResolutionEP->SetTitle(";centrality;R_{1}");
 
 	for(int i=0; i<nbins-2;i++)
 	{
@@ -369,6 +371,11 @@ void Qvector::EstimateResolution2SE()
 		cout << resY << endl;
 		hResolutionX.back()->SetPoint( i, (float) (i+1)*5, sqrt(resX) );
 		hResolutionY.back()->SetPoint( i, (float) (i+1)*5, sqrt(resY) );
+	}
+	for(int i=0; i<nbins-1;i++)
+	{
+		auto res = 2. * hMeanCosine->GetBinContent(i+1);
+		hResolutionEP->SetPoint( i, (float) (i+1)*5, sqrt(res) );
 	}
 }
 
