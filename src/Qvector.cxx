@@ -270,8 +270,8 @@ void Qvector::Estimate2SE()
 	for(unsigned int i=0; i<iNPSDModules; i++)
 	{
 		fModule = fEvent->GetPSDModule(i);
-		if( fModule->GetId() <= 0 )
-			continue;
+		// if( fModule->GetId() <= 0 )
+		// 	continue;
 		vModules.push_back(fModule);
 	}
 	random_shuffle( vModules.begin(),vModules.end() );
@@ -299,10 +299,10 @@ void Qvector::Estimate2SE()
 			fQvector.at(i).Set( -999., -999. );
 			continue;
 		}
-		fQvector.at(i) /= fSumCharge.at(i);
-		if( fQvector.at(i).Mod() >= 1 )
-			cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
-			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
+		// fQvector.at(i) /= fSumCharge.at(i);
+		// if( fQvector.at(i).Mod() >= 1 )
+		// 	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
+		// 	" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
 	}
 }
 
