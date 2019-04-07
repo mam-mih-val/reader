@@ -28,6 +28,7 @@ class Qvector
 	Centrality* fCentrality;
 	DataTreeEvent* fEvent;
     vector<TVector2> fQvector;
+	vector<TVector2> fResolution;
 	vector<TProfile*> hMeanQx;
 	vector<TProfile*> hMeanQy;
 	vector<TProfile*> hCorrelation;
@@ -41,6 +42,7 @@ class Qvector
 	TGraph* 	hResolutionEP;
 
     Qvector() {};
+	void	ComputeResolution3SE();
 	void 	Estimate2SE();
 	void 	Estimate3SE();
 	void	FillCorrelations2SE();
@@ -57,13 +59,19 @@ class Qvector
 	public:
     Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int NumSE=2);
     ~Qvector();
+	TVector2	At(int se=0){ return fQvector.at(se); }
     void        Estimate();
+	void		Compute(); // One computes Qvector without filling any histograms
+	void		ComputeResolution(); 
 	void		EstimateResolution();
     void        FillCorrections();
     Float_t     GetComponent(int i, int j=0);
+	float		X(int se=0) { return fQvector.at(se).X(); }
+	float		Y(int se=0) { return fQvector.at(se).Y(); }
+	float		Psi(int se=0) { return fQvector.at(se).Phi(); }
     Float_t     GetPsiEP(unsigned int iSubEv=0) { return fQvector.at(iSubEv).Phi(); }
 	TVector2	GetQvector(unsigned int iSubEv=0) { return fQvector.at(iSubEv); }
-	float		GetResolution();
+	TVector2	Resolution(int se=0) { return fResolution.at(se); }
 	void		InitHistograms();
 	void		LoadCentrality(Centrality* _centrality) { fCentrality = _centrality; }
 	void		SaveHistograms(TString sPicName);

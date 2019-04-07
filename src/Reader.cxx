@@ -84,3 +84,38 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 	fQ->SaveHistogramsToROOTFile(sPicName);
 	fQ->SaveHistograms(sPicName);
 }
+
+void Reader::BuildFlowHistograms(TString sPicName)
+{
+	Long64_t lNEvents = fChain->GetEntries();
+    Selector* fSelector = new Selector(fEvent);
+	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
+	Qvector* fQ =  new Qvector(fEvent, fCentrality,3);
+	cout << "Filling correction histograms" << endl;
+	for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry(i);
+		if( !fSelector->IsCorrectEvent() )
+			continue;
+		fQ->FillCorrections();
+    }
+	cout << "Estimating Q-vecor correlations" << endl;
+	for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry(i);
+		if( !fSelector->IsCorrectEvent() )
+			continue;
+		fQ->Estimate();
+    }
+	// fQ->EstimateResolution();
+	// fQ->SaveHistograms(sPicName);
+	cout << "Estimating resolution" << endl;
+	auto flow = new Flow(fEvent, fCentrality, fQ, fSelector, 14, 3);
+	cout << "Estimating flow" << endl;
+	for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry(i);
+		flow->Estimate();
+    }
+	flow->SavePictures(sPicName);
+}

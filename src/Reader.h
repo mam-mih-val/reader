@@ -15,6 +15,7 @@
 #include "EventQA.h"
 #include "TrackQA.h"
 #include "Centrality.h"
+#include "Flow.h"
 
 #include "HADES_constants.h"
 
@@ -74,5 +75,6 @@ class Reader
     void            BuildQAHistograms(TString sPicName);
     void            InitFlowHistos();
 	void			BuildQvectorHistograms(TString sPicName);
+	void			BuildFlowHistograms(TString sPicName);
     void            SaveFlowStatistics();
 };

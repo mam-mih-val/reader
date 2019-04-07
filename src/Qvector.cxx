@@ -7,6 +7,8 @@ Qvector::Qvector(DataTreeEvent* _fEvent, Centrality* _centrality, unsigned int N
 	iNumberOfSE = NumSE;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
+	for( unsigned int i=0;i<iNumberOfSE;i++ )
+		fResolution.push_back( TVector2(0.,0.) );
 	this->InitHistograms();
 }
 
@@ -30,6 +32,34 @@ Qvector::~Qvector()
 		delete histo;
 	for( auto histo : hResolutionY )
 		delete histo;
+}
+
+void Qvector::Compute()
+{
+	if(iNumberOfSE == 3)
+		this->Estimate3SE();
+	this->Recenter();
+	this->ComputeResolution();
+}
+
+void Qvector::ComputeResolution()
+{
+	if(iNumberOfSE == 3)
+		this->ComputeResolution3SE();
+}
+
+void Qvector::ComputeResolution3SE()
+{
+	auto cbin = fCentrality->GetCentralityClass();
+	auto resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(8)->GetBinContent(cbin) / hCorrelation.at(4)->GetBinContent(cbin);
+	auto resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(9)->GetBinContent(cbin) / hCorrelation.at(5)->GetBinContent(cbin);
+	fResolution.at(0).Set( sqrt(resX), sqrt(resY) );
+	resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(8)->GetBinContent(cbin);
+	resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(9)->GetBinContent(cbin);
+	fResolution.at(1).Set( sqrt(resX), sqrt(resY) );
+	resX = hCorrelation.at(8)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(0)->GetBinContent(cbin);
+	resY = hCorrelation.at(9)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(1)->GetBinContent(cbin);
+	fResolution.at(2).Set( sqrt(resX), sqrt(resY) );
 }
 
 void Qvector::InitHistograms()
