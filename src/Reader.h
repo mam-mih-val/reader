@@ -12,10 +12,12 @@
 
 #include "Selector.h"
 #include "Qvector.h"
+#include "Qvector3SE.h"
 #include "EventQA.h"
 #include "TrackQA.h"
 #include "Centrality.h"
 #include "Flow.h"
+#include "Flow3SE.h"
 
 #include "HADES_constants.h"
 

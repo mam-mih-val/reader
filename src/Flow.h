@@ -11,7 +11,7 @@
 #include "HADES_constants.h"
 #include "Centrality.h"
 #include "Selector.h"
-#include "Qvector.h"
+#include "Qvector3SE.h"
 
 #define  DATATREE_SHINE
 #include "DataTreeEvent.h"
@@ -22,27 +22,19 @@ using std::endl;
 
 class Flow
 {
-	private:
+	protected:
 	int fNumberOfSE;
 	int fPid;
-	vector<TVector2> fFlow;
-	Centrality* fCentrality;
+	vector<TVector2> fUvector;
 	DataTreeEvent* fEvent;
-	TProfile* hRapidity;
-    Qvector* fQvector;
+	Centrality* fCentrality;
 	Selector* fSelector;
-	vector<TProfile3D*> hFlowX;
-	vector<TProfile3D*> hFlowY;
-	
-	Flow();
-	void _Estimae3SE(int trackIdx);
-	
+
+	Flow() {};
 	public:
-	Flow(DataTreeEvent* _event, Centrality* _centrality, Qvector* _Qvector, Selector* _selector, int _pid, int numberOfSE=3);
-	~Flow();
-	void 		Estimate();
-	void		InitializeHistograms();
-	void		Estimae();
-	void		SavePictures(TString sFileName);
-	void		SaveHistogramsToRootFile(TString sFileName);
+	~Flow() {};
+	virtual void 		Estimate() {};
+	virtual void		InitializeHistograms() {};
+	virtual void		SavePictures(TString sFileName) {};
+	virtual void		SaveHistogramsToRootFile(TString sFileName) {};
 };
