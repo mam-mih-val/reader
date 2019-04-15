@@ -31,12 +31,13 @@ void Qvector::SaveHistogramsToROOTFile(TString sFileName)
 
 void Qvector::Recenter()
 {
+	int bin = hMeanQx.at(0)->FindBin( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) );
 	for(unsigned int i=0;i<fQvector.size();i++)
 	{
 		if( fQvector.at(i).X() < -990. )
 			continue;
 		TVector2 fCorrVec;
-		fCorrVec.Set( hMeanQx.at(i)->GetBinContent( (int)fCentrality->GetCentralityClass() ), hMeanQy.at(i)->GetBinContent( (int)fCentrality->GetCentralityClass() ) );
+		fCorrVec.Set( hMeanQx.at(i)->GetBinContent(bin), hMeanQy.at(i)->GetBinContent(bin) );
 		fQvector.at(i)-=fCorrVec;
 	}
 }

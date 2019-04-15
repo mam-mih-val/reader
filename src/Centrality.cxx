@@ -23,7 +23,7 @@ void Centrality::LoadCentralityPercentile(TString FileName)
 
 float Centrality::GetCentralityClass()
 {
-	auto TOFRPChits = fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_cut) + fEvent->GetCentralityEstimator(HADES_constants::kNhitsRPC_cut);
+	auto TOFRPChits = fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut);
 	auto bin = hCentralityPercentile->FindBin(TOFRPChits);
 	return hCentralityPercentile->GetBinContent(bin);
 }
