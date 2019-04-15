@@ -47,19 +47,19 @@ void Flow3SE::InitializeHistograms()
 	auto nbins = 20;
 	for( int i=0; i<nbins; i++ )
 	{
-		xRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_X_SE1_centrality_%i", i ), ";rapidity, y; v1_{x}", 12, -0.6, 0.6) );
-		xRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_X_SE2_centrality_%i", i ), ";rapidity, y; v1_{x}", 12, -0.6, 0.6) );
-		xRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_X_SE3_centrality_%i", i ), ";rapidity, y; v1_{x}", 12, -0.6, 0.6) );
-		yRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE1_centrality_%i", i ), ";rapidity, y; v1_{y}", 12, -0.6, 0.6) );
-		yRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE2_centrality_%i", i ), ";rapidity, y; v1_{y}", 12, -0.6, 0.6) );
-		yRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE3_centrality_%i", i ), ";rapidity, y; v1_{y}", 12, -0.6, 0.6) );
+		xRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_X_SE1_centrality_%i", i ), ";rapidity, y; v1_{x}", 6, -0.6, 0.6) );
+		xRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_X_SE2_centrality_%i", i ), ";rapidity, y; v1_{x}", 6, -0.6, 0.6) );
+		xRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_X_SE3_centrality_%i", i ), ";rapidity, y; v1_{x}", 6, -0.6, 0.6) );
+		yRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE1_centrality_%i", i ), ";rapidity, y; v1_{y}", 6, -0.6, 0.6) );
+		yRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE2_centrality_%i", i ), ";rapidity, y; v1_{y}", 6, -0.6, 0.6) );
+		yRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE3_centrality_%i", i ), ";rapidity, y; v1_{y}", 6, -0.6, 0.6) );
 		
-		xPt.at(0).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE1_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 14, 0., 1.4) );
-		xPt.at(1).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE2_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 14, 0., 1.4) );
-		xPt.at(2).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE3_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 14, 0., 1.4) );
-		yPt.at(0).push_back( new TProfile( Form( "v1_vs_pt_on_Y_SE1_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{y}", 14, 0., 1.4) );
-		yPt.at(1).push_back( new TProfile( Form( "v1_vs_pt_on_Y_SE2_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{y}", 14, 0., 1.4) );
-		yPt.at(2).push_back( new TProfile( Form( "v1_vs_pt_on_Y_SE3_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{y}", 14, 0., 1.4) );
+		xPt.at(0).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE1_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 7, 0., 1.4) );
+		xPt.at(1).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE2_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 7, 0., 1.4) );
+		xPt.at(2).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE3_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 7, 0., 1.4) );
+		yPt.at(0).push_back( new TProfile( Form( "v1_vs_pt_on_Y_SE1_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{y}", 7, 0., 1.4) );
+		yPt.at(1).push_back( new TProfile( Form( "v1_vs_pt_on_Y_SE2_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{y}", 7, 0., 1.4) );
+		yPt.at(2).push_back( new TProfile( Form( "v1_vs_pt_on_Y_SE3_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{y}", 7, 0., 1.4) );
 	}
 }
 
@@ -116,10 +116,10 @@ void Flow3SE::SavePictures(TString sFileName)
 	gStyle->SetErrorX(0);
 	for(int i=0; i<4; i++)
 	{
-		hRapidityOnX.push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i",i), ";rapidity, y_{cm};v{1}", 12, -0.6, 0.6 ) );
-		hRapidityOnY.push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i",i), ";rapidity, y_{cm};v{1}", 12, -0.6, 0.6 ) );
-		hPtOnX.push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 14, 0., 1.4 ) );
-		hPtOnY.push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 14, 0., 1.4 ) );
+		hRapidityOnX.push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i",i), ";rapidity, y_{cm};v{1}", 6, -0.6, 0.6 ) );
+		hRapidityOnY.push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i",i), ";rapidity, y_{cm};v{1}", 6, -0.6, 0.6 ) );
+		hPtOnX.push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+		hPtOnY.push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
 	}
 	for(int i=0; i<4; i++)
 	{
@@ -169,15 +169,15 @@ void Flow3SE::SavePictures(TString sFileName)
 		hPtOnY.at(i)->SetMarkerSize(3);
 		hPtOnY.at(i)->SetLineWidth(4);
 		
-		stack.at(0)->Add( hRapidityOnX.at(i), "X0" );
-		stack.at(1)->Add( hRapidityOnY.at(i), "X0" );
-		stack.at(2)->Add( hPtOnX.at(i), "X0" );
-		stack.at(3)->Add( hPtOnY.at(i), "X0" );
+		stack.at(0)->Add( hRapidityOnX.at(i) );
+		stack.at(1)->Add( hRapidityOnY.at(i) );
+		stack.at(2)->Add( hPtOnX.at(i) );
+		stack.at(3)->Add( hPtOnY.at(i) );
 	}
-	canvas.push_back( new TCanvas( "canv", "", 2000, 3000 ) );
+	canvas.push_back( new TCanvas( "canv", "", 4000, 1500 ) );
 	// canvas.back()->cd();
 	// xRapidity.at(0).at(4)->Draw();
-	canvas.back()->Divide(2,2);
+	canvas.back()->Divide(4,1);
 	for(int i=0;i<4;i++)
 	{
 		canvas.back()->cd(i+1);
