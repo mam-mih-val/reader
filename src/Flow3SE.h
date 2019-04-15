@@ -4,6 +4,7 @@
 #include "TCanvas.h"
 #include "TPad.h"
 #include "THStack.h"
+#include "TStyle.h"
 #include "TMath.h"
 #include "TFile.h"
 #include "TLorentzVector.h"

@@ -284,7 +284,7 @@ void Qvector3SE::SavePictures(TString sFileName)
 
 void Qvector3SE::EstimateResolution()
 {
-	auto cbin = fCentrality->GetCentralityClass();
+	auto cbin = hCorrelation.at(0)->FindBin( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) );
 	auto resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(8)->GetBinContent(cbin) / hCorrelation.at(4)->GetBinContent(cbin);
 	auto resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(9)->GetBinContent(cbin) / hCorrelation.at(5)->GetBinContent(cbin);
 	fResolution.at(0).Set( sqrt(resX), sqrt(resY) );

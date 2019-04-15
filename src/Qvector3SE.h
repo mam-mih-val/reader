@@ -6,6 +6,7 @@
 #include "TGraph.h"
 #include "TPad.h"
 #include "THStack.h"
+#include "TStyle.h"
 #include "TMultiGraph.h"
 #include "TLegend.h"
 #include "TMath.h"
