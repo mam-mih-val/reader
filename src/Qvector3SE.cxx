@@ -74,29 +74,31 @@ void Qvector3SE::Estimate()
 	{
 		if( !fEvent->GetPSDModule(i)->HasPassedCuts() )
 			continue;
+		if( fEvent->GetPSDModule(i)->GetId() < 0 )
+			continue;
 		if( fEvent->GetPSDModule(i)->GetRing() >= 0 && fEvent->GetPSDModule(i)->GetRing() < 5 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
-		if( fEvent->GetPSDModule(i)->GetRing() >4 && fEvent->GetPSDModule(i)->GetRing() < 7 )
+		if( fEvent->GetPSDModule(i)->GetRing() == 5 || fEvent->GetPSDModule(i)->GetRing() == 6 )
 			SubEvent.at(1).push_back( fEvent->GetPSDModule(i) );
 		if( fEvent->GetPSDModule(i)->GetRing() >= 7 && fEvent->GetPSDModule(i)->GetRing() <= 9 )
 			SubEvent.at(2).push_back( fEvent->GetPSDModule(i) );
 	}
 	for( int i=0; i<SubEvent.size(); i++ )
 	{
-		if( SubEvent.at(i).size() < 3 )
-		{
-			fQvector.at(i).Set(-999.,-999.);
-			continue;
-		}
 		float SumCharge=0;
 		for( auto &module : SubEvent.at(i) )
 		{
-			double charge = module->GetEnergy();
+			float charge = module->GetChargeZ();
 			double phi = module->GetPhi();
 			TVector2 add;
 			add.SetMagPhi( charge, phi );
 			fQvector.at(i)+=add;
 			SumCharge+=charge;
+		}
+		if( SumCharge == 0 )
+		{
+			fQvector.at(i).Set( -999., -999. );
+			continue;
 		}
 		fQvector.at(i)/=SumCharge;
 		if( fQvector.at(i).Mod() > 1. )
@@ -196,6 +198,7 @@ void Qvector3SE::ComputeResolution()
 
 void Qvector3SE::SavePictures(TString sFileName)
 {
+	gStyle->SetErrorX(0);
 	cout << "Drawing Qvector histograms" << endl;
 	if( hResolutionX.size() == 0 )
 		this->ComputeResolution();

@@ -97,6 +97,8 @@ void Reader::BuildFlowHistograms(TString sPicName)
         fChain->GetEntry(i);
 		if( !fSelector->IsCorrectEvent() )
 			continue;
+		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 40. )
+			continue;
 		fQ->ComputeCorrections();
     }
 	cout << "Estimating Q-vecor correlations" << endl;
