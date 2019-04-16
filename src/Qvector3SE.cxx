@@ -85,6 +85,11 @@ void Qvector3SE::Estimate()
 	}
 	for( int i=0; i<SubEvent.size(); i++ )
 	{
+		if( SubEvent.at(i).size() < 3 )
+		{
+			fQvector.at(i).Set( -999., -999. );
+			continue;
+		}
 		float SumCharge=0;
 		for( auto &module : SubEvent.at(i) )
 		{
@@ -94,11 +99,6 @@ void Qvector3SE::Estimate()
 			add.SetMagPhi( charge, phi );
 			fQvector.at(i)+=add;
 			SumCharge+=charge;
-		}
-		if( SumCharge == 0 )
-		{
-			fQvector.at(i).Set( -999., -999. );
-			continue;
 		}
 		fQvector.at(i)/=SumCharge;
 		if( fQvector.at(i).Mod() > 1. )
@@ -190,7 +190,7 @@ void Qvector3SE::ComputeResolution()
 		hResolutionX.at(0)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
 		hResolutionY.at(0)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
 		hResolutionX.at(0)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
-		hResolutionY.at(0)->SetPointError( i, 0.0, ErrX*sqrt(resY) );
+		hResolutionY.at(0)->SetPointError( i, 0.0, ErrY*sqrt(resY) );
 	}
 	for(int i=0; i<nbins;i++)
 	{
@@ -215,7 +215,7 @@ void Qvector3SE::ComputeResolution()
 		hResolutionX.at(1)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
 		hResolutionY.at(1)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
 		hResolutionX.at(1)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
-		hResolutionY.at(1)->SetPointError( i, 0.0, ErrX*sqrt(resY) );
+		hResolutionY.at(1)->SetPointError( i, 0.0, ErrY*sqrt(resY) );
 	}
 	for(int i=0; i<nbins;i++)
 	{
@@ -240,7 +240,7 @@ void Qvector3SE::ComputeResolution()
 		hResolutionX.at(2)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
 		hResolutionY.at(2)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
 		hResolutionX.at(2)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
-		hResolutionY.at(2)->SetPointError( i, 0.0, ErrX*sqrt(resY) );
+		hResolutionY.at(2)->SetPointError( i, 0.0, ErrY*sqrt(resY) );
 	}
 }
 
