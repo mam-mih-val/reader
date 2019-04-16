@@ -161,38 +161,86 @@ void Qvector3SE::ComputeResolution()
 	auto nbins = 8;
 	for( int i=0; i<iNumberOfSE; i++ )
 	{
-		hResolutionX.push_back( new TGraph(nbins) );
-		hResolutionY.push_back( new TGraph(nbins) );
+		hResolutionX.push_back( new TGraphErrors(nbins) );
+		hResolutionY.push_back( new TGraphErrors(nbins) );
 		hResolutionX.back()->SetTitle(Form("R_{1,x}^{se%i}",i+1));
 		hResolutionY.back()->SetTitle(Form("R_{1,y}^{se%i}",i+1));
 	}
 	
 	for(int i=0; i<nbins;i++)
 	{
-		auto resX = hCorrelation.at(0)->GetBinContent(i+1) * hCorrelation.at(8)->GetBinContent(i+1) / hCorrelation.at(4)->GetBinContent(i+1);
-		auto resY = hCorrelation.at(1)->GetBinContent(i+1) * hCorrelation.at(9)->GetBinContent(i+1) / hCorrelation.at(5)->GetBinContent(i+1);
-		// cout << resX << endl;
-		// cout << resY << endl;
-		hResolutionX.at(0)->SetPoint( i, (float) (i+1)*5, sqrt(resX) );
-		hResolutionY.at(0)->SetPoint( i, (float) (i+1)*5, sqrt(resY) );
+		auto corrX0 = hCorrelation.at(0)->GetBinContent(i+1);
+		auto ErrX0 = hCorrelation.at(0)->GetBinError(i+1);
+		auto corrX1 = hCorrelation.at(4)->GetBinContent(i+1);
+		auto ErrX1 = hCorrelation.at(4)->GetBinError(i+1);
+		auto corrX2 = hCorrelation.at(8)->GetBinContent(i+1);
+		auto ErrX2 = hCorrelation.at(8)->GetBinError(i+1);
+		auto ErrX = sqrt( (ErrX0*ErrX0)/(corrX0*corrX0) + (ErrX1*ErrX0)/(corrX1*corrX1) + (ErrX2*ErrX2)/(corrX2*corrX2) );
+
+		auto corrY0 = hCorrelation.at(1)->GetBinContent(i+1);
+		auto ErrY0 = hCorrelation.at(1)->GetBinError(i+1);
+		auto corrY1 = hCorrelation.at(5)->GetBinContent(i+1);
+		auto ErrY1 = hCorrelation.at(5)->GetBinError(i+1);
+		auto corrY2 = hCorrelation.at(9)->GetBinContent(i+1);
+		auto ErrY2 = hCorrelation.at(9)->GetBinError(i+1);
+		auto ErrY = sqrt( (ErrY0*ErrY0)/(corrY0*corrY0) + (ErrY1*ErrY0)/(corrY1*corrY1) + (ErrY2*ErrY2)/(corrY2*corrY2) );
+
+		auto resX = hCorrelation.at(0)->GetBinContent(i+1) * hCorrelation.at(8)->GetBinContent(i+1) / hCorrelation.at(4)->GetBinContent(i+1) / 2;
+		auto resY = hCorrelation.at(1)->GetBinContent(i+1) * hCorrelation.at(9)->GetBinContent(i+1) / hCorrelation.at(5)->GetBinContent(i+1) / 2;
+		hResolutionX.at(0)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
+		hResolutionY.at(0)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
+		hResolutionX.at(0)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
+		hResolutionY.at(0)->SetPointError( i, 0.0, ErrX*sqrt(resY) );
 	}
 	for(int i=0; i<nbins;i++)
 	{
-		auto resX = hCorrelation.at(0)->GetBinContent(i+1) * hCorrelation.at(4)->GetBinContent(i+1) / hCorrelation.at(8)->GetBinContent(i+1);
-		auto resY = hCorrelation.at(1)->GetBinContent(i+1) * hCorrelation.at(5)->GetBinContent(i+1) / hCorrelation.at(9)->GetBinContent(i+1);
-		// cout << resX << endl;
-		// cout << resY << endl;
-		hResolutionX.at(1)->SetPoint( i, (float) (i+1)*5, sqrt(resX) );
-		hResolutionY.at(1)->SetPoint( i, (float) (i+1)*5, sqrt(resY) );
+		auto corrX0 = hCorrelation.at(0)->GetBinContent(i+1);
+		auto ErrX0 = hCorrelation.at(0)->GetBinError(i+1);
+		auto corrX1 = hCorrelation.at(4)->GetBinContent(i+1);
+		auto ErrX1 = hCorrelation.at(4)->GetBinError(i+1);
+		auto corrX2 = hCorrelation.at(8)->GetBinContent(i+1);
+		auto ErrX2 = hCorrelation.at(8)->GetBinError(i+1);
+		auto ErrX = sqrt( (ErrX0*ErrX0)/(corrX0*corrX0) + (ErrX1*ErrX0)/(corrX1*corrX1) + (ErrX2*ErrX2)/(corrX2*corrX2) );
+
+		auto corrY0 = hCorrelation.at(1)->GetBinContent(i+1);
+		auto ErrY0 = hCorrelation.at(1)->GetBinError(i+1);
+		auto corrY1 = hCorrelation.at(5)->GetBinContent(i+1);
+		auto ErrY1 = hCorrelation.at(5)->GetBinError(i+1);
+		auto corrY2 = hCorrelation.at(9)->GetBinContent(i+1);
+		auto ErrY2 = hCorrelation.at(9)->GetBinError(i+1);
+		auto ErrY = sqrt( (ErrY0*ErrY0)/(corrY0*corrY0) + (ErrY1*ErrY0)/(corrY1*corrY1) + (ErrY2*ErrY2)/(corrY2*corrY2) );
+
+		auto resX = hCorrelation.at(0)->GetBinContent(i+1) * hCorrelation.at(4)->GetBinContent(i+1) / hCorrelation.at(8)->GetBinContent(i+1) / 2;
+		auto resY = hCorrelation.at(1)->GetBinContent(i+1) * hCorrelation.at(5)->GetBinContent(i+1) / hCorrelation.at(9)->GetBinContent(i+1) / 2;
+		hResolutionX.at(1)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
+		hResolutionY.at(1)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
+		hResolutionX.at(1)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
+		hResolutionY.at(1)->SetPointError( i, 0.0, ErrX*sqrt(resY) );
 	}
 	for(int i=0; i<nbins;i++)
 	{
-		auto resX = hCorrelation.at(8)->GetBinContent(i+1) * hCorrelation.at(4)->GetBinContent(i+1) / hCorrelation.at(0)->GetBinContent(i+1);
-		auto resY = hCorrelation.at(9)->GetBinContent(i+1) * hCorrelation.at(5)->GetBinContent(i+1) / hCorrelation.at(1)->GetBinContent(i+1);
-		// cout << resX << endl;
-		// cout << resY << endl;
-		hResolutionX.at(2)->SetPoint( i, (float) (i+1)*5, sqrt(resX) );
-		hResolutionY.at(2)->SetPoint( i, (float) (i+1)*5, sqrt(resY) );
+		auto corrX0 = hCorrelation.at(0)->GetBinContent(i+1);
+		auto ErrX0 = hCorrelation.at(0)->GetBinError(i+1);
+		auto corrX1 = hCorrelation.at(4)->GetBinContent(i+1);
+		auto ErrX1 = hCorrelation.at(4)->GetBinError(i+1);
+		auto corrX2 = hCorrelation.at(8)->GetBinContent(i+1);
+		auto ErrX2 = hCorrelation.at(8)->GetBinError(i+1);
+		auto ErrX = sqrt( (ErrX0*ErrX0)/(corrX0*corrX0) + (ErrX1*ErrX0)/(corrX1*corrX1) + (ErrX2*ErrX2)/(corrX2*corrX2) );
+
+		auto corrY0 = hCorrelation.at(1)->GetBinContent(i+1);
+		auto ErrY0 = hCorrelation.at(1)->GetBinError(i+1);
+		auto corrY1 = hCorrelation.at(5)->GetBinContent(i+1);
+		auto ErrY1 = hCorrelation.at(5)->GetBinError(i+1);
+		auto corrY2 = hCorrelation.at(9)->GetBinContent(i+1);
+		auto ErrY2 = hCorrelation.at(9)->GetBinError(i+1);
+		auto ErrY = sqrt( (ErrY0*ErrY0)/(corrY0*corrY0) + (ErrY1*ErrY0)/(corrY1*corrY1) + (ErrY2*ErrY2)/(corrY2*corrY2) );
+
+		auto resX = hCorrelation.at(8)->GetBinContent(i+1) * hCorrelation.at(4)->GetBinContent(i+1) / hCorrelation.at(0)->GetBinContent(i+1) / 2;
+		auto resY = hCorrelation.at(9)->GetBinContent(i+1) * hCorrelation.at(5)->GetBinContent(i+1) / hCorrelation.at(1)->GetBinContent(i+1) / 2;
+		hResolutionX.at(2)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
+		hResolutionY.at(2)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
+		hResolutionX.at(2)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
+		hResolutionY.at(2)->SetPointError( i, 0.0, ErrX*sqrt(resY) );
 	}
 }
 
@@ -256,7 +304,8 @@ void Qvector3SE::SavePictures(TString sFileName)
 	cCanvas.back()->cd();
 	for( auto &histo : hResolutionX )
 	{
-		histo->SetLineColor(0);
+		histo->SetLineColor(i);
+		histo->SetLineWidth(7);
 		histo->SetMarkerSize(6);
 		histo->SetMarkerStyle(19+i);
 		histo->SetMarkerColor(i);
@@ -266,7 +315,7 @@ void Qvector3SE::SavePictures(TString sFileName)
 	i=1;
 	for( auto &histo : hResolutionY )
 	{
-		histo->SetLineColor(0);
+		histo->SetLineColor(i);
 		histo->SetLineWidth(7);
 		histo->SetMarkerSize(8);
 		histo->SetMarkerStyle(23+i);
@@ -288,13 +337,13 @@ void Qvector3SE::SavePictures(TString sFileName)
 void Qvector3SE::EstimateResolution()
 {
 	auto cbin = hCorrelation.at(0)->FindBin( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) );
-	auto resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(8)->GetBinContent(cbin) / hCorrelation.at(4)->GetBinContent(cbin);
-	auto resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(9)->GetBinContent(cbin) / hCorrelation.at(5)->GetBinContent(cbin);
+	auto resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(8)->GetBinContent(cbin) / hCorrelation.at(4)->GetBinContent(cbin)/2;
+	auto resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(9)->GetBinContent(cbin) / hCorrelation.at(5)->GetBinContent(cbin)/2;
 	fResolution.at(0).Set( sqrt(resX), sqrt(resY) );
-	resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(8)->GetBinContent(cbin);
-	resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(9)->GetBinContent(cbin);
+	resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(8)->GetBinContent(cbin)/2;
+	resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(9)->GetBinContent(cbin)/2;
 	fResolution.at(1).Set( sqrt(resX), sqrt(resY) );
-	resX = hCorrelation.at(8)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(0)->GetBinContent(cbin);
-	resY = hCorrelation.at(9)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(1)->GetBinContent(cbin);
+	resX = hCorrelation.at(8)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(0)->GetBinContent(cbin)/2;
+	resY = hCorrelation.at(9)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(1)->GetBinContent(cbin)/2;
 	fResolution.at(2).Set( sqrt(resX), sqrt(resY) );
 }

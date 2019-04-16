@@ -3,7 +3,7 @@
 #include "TH1F.h"
 #include "TProfile.h"
 #include "TCanvas.h"
-#include "TGraph.h"
+#include "TGraphErrors.h"
 #include "TPad.h"
 #include "THStack.h"
 #include "TStyle.h"
@@ -27,8 +27,8 @@ class Qvector3SE : public Qvector
 {
     private:
 	vector<TVector2> fResolution;
-	vector<TGraph*> hResolutionX;
-	vector<TGraph*> hResolutionY;
+	vector<TGraphErrors*> hResolutionX;
+	vector<TGraphErrors*> hResolutionY;
 	void		EstimateResolution();
 
 	public:
