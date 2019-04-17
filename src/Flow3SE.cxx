@@ -117,9 +117,13 @@ void Flow3SE::SavePictures(TString sFileName)
 	for(int i=0; i<4; i++)
 	{
 		hRapidityOnX.push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i",i), ";rapidity, y_{cm};v{1}", 6, -0.6, 0.6 ) );
+		hRapidityOnX.back()->Sumw2();
 		hRapidityOnY.push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i",i), ";rapidity, y_{cm};v{1}", 6, -0.6, 0.6 ) );
+		hRapidityOnY.back()->Sumw2();
 		hPtOnX.push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+		hPtOnX.back()->Sumw2();
 		hPtOnY.push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+		hPtOnY.back()->Sumw2();		
 	}
 	for(int i=0; i<4; i++)
 	{
