@@ -44,7 +44,7 @@ void Reader::BuildQAHistograms(TString sPicName)
 	// fTrackQA[deuteron] =  	new TrackQA(fEvent,fSelector,45);
 	// fTrackQA[helium3] = 	new TrackQA(fEvent,fSelector,49);
 	// fTrackQA[helium4] = 	new TrackQA(fEvent,fSelector,47);
-    // Long64_t lNEvents = fChain->GetEntries();
+    Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
