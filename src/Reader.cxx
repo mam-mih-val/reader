@@ -47,14 +47,16 @@ void Reader::BuildQAHistograms(TString sPicName)
     Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
+		if( !fEvent->GetTrigger(HADES_constants::kPT2)->GetIsFired() )
+			continue;
         fChain->GetEntry(i);
         fEventQA->FillHistograms();
-		for(int j=0; j<NumOfParticles;j++) 
-			fTrackQA[j]->FillHistograms();
+		// for(int j=0; j<NumOfParticles;j++) 
+		// 	fTrackQA[j]->FillHistograms();
     }
     fEventQA->SaveHistograms(sPicName);
-	for(int j=0; j<NumOfParticles;j++) 
-		fTrackQA[j]->SaveHistograms(sPicName);
+	// for(int j=0; j<NumOfParticles;j++) 
+	// 	fTrackQA[j]->SaveHistograms(sPicName);
 }
 
 void Reader::BuildQvectorHistograms(TString sPicName)
