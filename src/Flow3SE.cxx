@@ -47,12 +47,12 @@ void Flow3SE::InitializeHistograms()
 	auto nbins = 20;
 	for( int i=0; i<nbins; i++ )
 	{
-		xRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_X_SE1_centrality_%i", i ), ";rapidity, y; v1_{x}", 6, -0.6, 0.6) );
-		xRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_X_SE2_centrality_%i", i ), ";rapidity, y; v1_{x}", 6, -0.6, 0.6) );
-		xRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_X_SE3_centrality_%i", i ), ";rapidity, y; v1_{x}", 6, -0.6, 0.6) );
-		yRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE1_centrality_%i", i ), ";rapidity, y; v1_{y}", 6, -0.6, 0.6) );
-		yRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE2_centrality_%i", i ), ";rapidity, y; v1_{y}", 6, -0.6, 0.6) );
-		yRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE3_centrality_%i", i ), ";rapidity, y; v1_{y}", 6, -0.6, 0.6) );
+		xRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_X_SE1_centrality_%i", i ), ";rapidity, y; v1_{x}", 14, -0.7, 0.7) );
+		xRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_X_SE2_centrality_%i", i ), ";rapidity, y; v1_{x}", 14, -0.7, 0.7) );
+		xRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_X_SE3_centrality_%i", i ), ";rapidity, y; v1_{x}", 14, -0.7, 0.7) );
+		yRapidity.at(0).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE1_centrality_%i", i ), ";rapidity, y; v1_{y}", 14, -0.7, 0.7) );
+		yRapidity.at(1).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE2_centrality_%i", i ), ";rapidity, y; v1_{y}", 14, -0.7, 0.7) );
+		yRapidity.at(2).push_back( new TProfile( Form( "v1_vs_y_on_Y_SE3_centrality_%i", i ), ";rapidity, y; v1_{y}", 14, -0.7, 0.7) );
 		
 		xPt.at(0).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE1_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 7, 0., 1.4) );
 		xPt.at(1).push_back( new TProfile( Form( "v1_vs_pt_on_X_SE2_centrality_%i", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 7, 0., 1.4) );
@@ -116,9 +116,9 @@ void Flow3SE::SavePictures(TString sFileName)
 	gStyle->SetErrorX(0);
 	for(int i=0; i<4; i++)
 	{
-		hRapidityOnX.push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i",i), ";rapidity, y_{cm};v{1}", 6, -0.6, 0.6 ) );
+		hRapidityOnX.push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i",i), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
 		hRapidityOnX.back()->Sumw2();
-		hRapidityOnY.push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i",i), ";rapidity, y_{cm};v{1}", 6, -0.6, 0.6 ) );
+		hRapidityOnY.push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i",i), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
 		hRapidityOnY.back()->Sumw2();
 		hPtOnX.push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
 		hPtOnX.back()->Sumw2();
