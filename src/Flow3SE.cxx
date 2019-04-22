@@ -108,45 +108,44 @@ void Flow3SE::Estimate()
 void Flow3SE::SavePictures(TString sFileName)
 {
 	vector<TCanvas*> canvas;
-	vector<THStack*> stack;
-	vector<TProfile*> hRapidityOnX;
-	vector<TProfile*> hRapidityOnY;
-	vector<TProfile*> hPtOnX;
-	vector<TProfile*> hPtOnY;
+	array< vector<THStack*>, 4> stack;
+	array< vector<TProfile*>, 3> hRapidityOnX;
+	array< vector<TProfile*>, 3> hRapidityOnY;
+	array< vector<TProfile*>, 3> hPtOnX;
+	array< vector<TProfile*>, 3> hPtOnY;
 	gStyle->SetErrorX(0);
-	for(int i=0; i<4; i++)
+	for( int se=0; se < 3; i++)
 	{
-		hRapidityOnX.push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i",i), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
-		hRapidityOnX.back()->Sumw2();
-		hRapidityOnY.push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i",i), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
-		hRapidityOnY.back()->Sumw2();
-		hPtOnX.push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
-		hPtOnX.back()->Sumw2();
-		hPtOnY.push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i",i), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
-		hPtOnY.back()->Sumw2();		
-	}
-	for(int i=0; i<4; i++)
-	{
-		for(int j=i*2; j<(i+1)*2; j++)
+		for(int i=0; i<4; i++)
 		{
-			for(int k=0; k<3; k++)
+			hRapidityOnX.at(se).push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i_SE%i", i, se), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
+			hRapidityOnX.at(se).back()->Sumw2();
+			hRapidityOnY.at(se).push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i_SE%i", i, se), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
+			hRapidityOnY.at(se).back()->Sumw2();
+			hPtOnX.at(se).push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i_SE%i", i, se), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+			hPtOnX.at(se).back()->Sumw2();
+			hPtOnY.at(se).push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i_SE%i", i, se), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+			hPtOnY.at(se).back()->Sumw2();		
+		}
+	}
+	for( int se=0; se<3; se++ )
+	{
+		for( int i=0; i<4; i++ )
+		{
+			for( int j=i*2; j<(i+1)*2; j++ )
 			{
-				float wRapX = xRapidity.at(k).at(j)->GetEntries();
-				float wRapY = yRapidity.at(k).at(j)->GetEntries();
-				float wPtX = xPt.at(k).at(j)->GetEntries();
-				float wPtY = yPt.at(k).at(j)->GetEntries();
-				hRapidityOnX.at(i)->Add( xRapidity.at(k).at(j), wRapX );
-				hRapidityOnY.at(i)->Add( yRapidity.at(k).at(j), wRapY );
-				hPtOnX.at(i)->Add( xPt.at(k).at(j), wPtX );
-				hPtOnY.at(i)->Add( yPt.at(k).at(j), wPtY );
+				float wRapX = xRapidity.at(se).at(j)->GetEntries();
+				float wRapY = yRapidity.at(se).at(j)->GetEntries();
+				float wPtX = xPt.at(se).at(j)->GetEntries();
+				float wPtY = yPt.at(se).at(j)->GetEntries();
+				hRapidityOnX.at(se).at(i)->Add( xRapidity.at(k).at(j), wRapX );
+				hRapidityOnY.at(se).at(i)->Add( yRapidity.at(k).at(j), wRapY );
+				hPtOnX.at(se).at(i)->Add( xPt.at(k).at(j), wPtX );
+				hPtOnY.at(se).at(i)->Add( yPt.at(k).at(j), wPtY );
 			}
 		}
 	}
-	stack.push_back( new THStack( "X_y", ";y_{cm};v_{1}^{x}" ) ); // 0
-	stack.push_back( new THStack( "Y_y", ";y_{cm};v_{1}^{y}" ) ); // 1
-	stack.push_back( new THStack( "X_pt", ";pt, [#frac{GeV}{c}];v_{1}^{x}" ) ); // 2
-	stack.push_back( new THStack( "Y_pt", ";pt, [#frac{GeV}{c}];v_{1}^{y}" ) ); // 3
-
+	stack.at(i).push_back( new THStack( "" ) )
 	for(int i=0; i<4; i++)
 	{
 		hRapidityOnX.at(i)->SetLineColor(i+1);
