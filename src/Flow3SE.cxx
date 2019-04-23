@@ -147,10 +147,10 @@ void Flow3SE::SavePictures(TString sFileName)
 	}
 	for(int i=0; i<4; i++)
 	{
-		stack.at(0).push_back( new THStack( Form("v_{1}^{x} vs y_{cm}, cent=%i",i ), ";v_{1}^{x};y_{cm}" ) );
-		stack.at(1).push_back( new THStack( Form("v_{1}^{y} vs y_{cm}, cent=%i",i ), ";v_{1}^{y};y_{cm}" ) );
-		stack.at(2).push_back( new THStack( Form("v_{1}^{x} vs pt, cent=%i",i ), ";v_{1}^{x};pt, [#frac{GeV}{c}]" ) );
-		stack.at(3).push_back( new THStack( Form("v_{1}^{y} vs pt, cent=%i",i ), ";v_{1}^{y};pt, [#frac{GeV}{c}]" ) );
+		stack.at(0).push_back( new THStack( Form("v_{1}^{x} vs y_{cm}, cent=%i",i ), ";y_{cm};v_{1}^{x}" ) );
+		stack.at(1).push_back( new THStack( Form("v_{1}^{y} vs y_{cm}, cent=%i",i ), ";y_{cm};v_{1}^{y}" ) );
+		stack.at(2).push_back( new THStack( Form("v_{1}^{x} vs pt, cent=%i",i ), ";pt, [#frac{GeV}{c}];v_{1}^{x}" ) );
+		stack.at(3).push_back( new THStack( Form("v_{1}^{y} vs pt, cent=%i",i ), ";pt, [#frac{GeV}{c}];v_{1}^{y}" ) );
 		for( int se=0; se<3; se++ )
 		{	
 			stack.at(0).back()->Add( hRapidityOnX.at(se).at(i) );
@@ -163,27 +163,27 @@ void Flow3SE::SavePictures(TString sFileName)
 	{
 		for(int se=0; se<3; se++)
 		{
-			hRapidityOnX.at(se).at(i)->SetLineColor(i+1);
-			hRapidityOnX.at(se).at(i)->SetMarkerColor(i+1);
-			hRapidityOnX.at(se).at(i)->SetMarkerStyle(20+i);
+			hRapidityOnX.at(se).at(i)->SetLineColor(se+1);
+			hRapidityOnX.at(se).at(i)->SetMarkerColor(se+1);
+			hRapidityOnX.at(se).at(i)->SetMarkerStyle(20+se);
 			hRapidityOnX.at(se).at(i)->SetMarkerSize(2);
 			hRapidityOnX.at(se).at(i)->SetLineWidth(2);
 
-			hRapidityOnY.at(se).at(i)->SetLineColor(i+1);
-			hRapidityOnY.at(se).at(i)->SetMarkerColor(i+1);
-			hRapidityOnY.at(se).at(i)->SetMarkerStyle(20+i);
+			hRapidityOnY.at(se).at(i)->SetLineColor(se+1);
+			hRapidityOnY.at(se).at(i)->SetMarkerColor(se+1);
+			hRapidityOnY.at(se).at(i)->SetMarkerStyle(20+se);
 			hRapidityOnY.at(se).at(i)->SetMarkerSize(2);
 			hRapidityOnY.at(se).at(i)->SetLineWidth(2);
 			
-			hPtOnX.at(se).at(i)->SetLineColor(i+1);
-			hPtOnX.at(se).at(i)->SetMarkerColor(i+1);
-			hPtOnX.at(se).at(i)->SetMarkerStyle(20+i);
+			hPtOnX.at(se).at(i)->SetLineColor(se+1);
+			hPtOnX.at(se).at(i)->SetMarkerColor(se+1);
+			hPtOnX.at(se).at(i)->SetMarkerStyle(20+se);
 			hPtOnX.at(se).at(i)->SetMarkerSize(2);
 			hPtOnX.at(se).at(i)->SetLineWidth(2);
 			
-			hPtOnY.at(se).at(i)->SetLineColor(i+1);
-			hPtOnY.at(se).at(i)->SetMarkerColor(i+1);
-			hPtOnY.at(se).at(i)->SetMarkerStyle(20+i);
+			hPtOnY.at(se).at(i)->SetLineColor(se+1);
+			hPtOnY.at(se).at(i)->SetMarkerColor(se+1);
+			hPtOnY.at(se).at(i)->SetMarkerStyle(20+se);
 			hPtOnY.at(se).at(i)->SetMarkerSize(2);
 			hPtOnY.at(se).at(i)->SetLineWidth(2);
 		}
@@ -194,7 +194,7 @@ void Flow3SE::SavePictures(TString sFileName)
 	canvas.push_back( new TCanvas( "canv4", "", 2000, 750 ) );
 	for( int i=0; i<4; i++ )
 	{
-		canvas.at(i)->Divide(4,1);
+		canvas.at(i)->Divide(4,1,0.01,0.01);
 		for(int j=0; j<4; j++)
 		{
 			canvas.at(i)->cd(j+1);
