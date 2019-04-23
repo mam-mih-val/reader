@@ -148,10 +148,10 @@ void Flow3SE::SavePictures(TString sFileName)
 	}
 	for(int i=0; i<4; i++)
 	{
-		stack.at(0).push_back( new THStack( Form("v_{1}^{x} vs y_{cm}, cent=%i",i ), ";y_{cm};v_{1}^{x}" ) );
-		stack.at(1).push_back( new THStack( Form("v_{1}^{y} vs y_{cm}, cent=%i",i ), ";y_{cm};v_{1}^{y}" ) );
-		stack.at(2).push_back( new THStack( Form("v_{1}^{x} vs pt, cent=%i",i ), ";pt, [#frac{GeV}{c}];v_{1}^{x}" ) );
-		stack.at(3).push_back( new THStack( Form("v_{1}^{y} vs pt, cent=%i",i ), ";pt, [#frac{GeV}{c}];v_{1}^{y}" ) );
+		stack.at(0).push_back( new THStack( Form("v_{1}^{x} vs y_{cm}, cent=%i",i ), Form("%i-%i centrality;y_{cm};v_{1}^{x}",i*10,(i+1)*10) ) );
+		stack.at(1).push_back( new THStack( Form("v_{1}^{y} vs y_{cm}, cent=%i",i ), Form("%i-%i centrality;y_{cm};v_{1}^{y}",i*10,(i+1)*10) ) );
+		stack.at(2).push_back( new THStack( Form("v_{1}^{x} vs pt, cent=%i",i ), Form("%i-%i centrality;pt, [#frac{GeV}{c}];v_{1}^{x}", i*10, (i+1)*10) ) );
+		stack.at(3).push_back( new THStack( Form("v_{1}^{y} vs pt, cent=%i",i ), Form("%i-%i centrality;pt, [#frac{GeV}{c}];v_{1}^{y}", i*10, (i+1)*10) ) );
 		for( int se=0; se<3; se++ )
 		{	
 			stack.at(0).back()->Add( hRapidityOnX.at(se).at(i) );
@@ -209,4 +209,3 @@ void Flow3SE::SavePictures(TString sFileName)
 		canvas.at(i)->SaveAs( "../histograms/"+sFileName+Form("%i",i)+".png" );
 	}
 }
-

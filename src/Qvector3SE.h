@@ -29,6 +29,7 @@ class Qvector3SE : public Qvector
 	vector<TVector2> fResolution;
 	vector<TGraphErrors*> hResolutionX;
 	vector<TGraphErrors*> hResolutionY;
+	vector<TProfile*> hCorrMult;
 	void		EstimateResolution();
 
 	public:

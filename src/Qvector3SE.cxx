@@ -62,6 +62,13 @@ void Qvector3SE::InitializeHistograms()
 	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", 8, 0, 40) ); // 9
 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", 8, 0, 40) ); // 10
 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", 8, 0, 40) ); // 11
+
+	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{b} vs mult", ";tracks;Qx_{a}Qx_{b}", 150,0,150 ) ); // 0
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{b} vs mult", ";tracks;Qy_{a}Qy_{b}", 150,0,150 ) ); // 1
+	hCorrMult.push_back( new TProfile( "Qx_{b}Qx_{c} vs mult", ";tracks;Qx_{b}Qx_{c}", 150,0,150 ) ); // 2
+	hCorrMult.push_back( new TProfile( "Qy_{b}Qy_{c} vs mult", ";tracks;Qy_{b}Qy_{c}", 150,0,150 ) ); // 3
+	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{c} vs mult", ";tracks;Qx_{a}Qx_{c}", 150,0,150 ) ); // 4
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 150,0,150 ) ); // 5	
 }
 
 void Qvector3SE::Estimate()
@@ -153,6 +160,9 @@ void Qvector3SE::ComputeCorrelations()
 		hCorrelation.at(i*bias+1)->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), ( fQvector.at(i).Y() * fQvector1.at(i).Y() ) );
 		hCorrelation.at(i*bias+2)->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), ( fQvector.at(i).X() * fQvector1.at(i).Y() ) );
 		hCorrelation.at(i*bias+3)->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), ( fQvector.at(i).Y() * fQvector1.at(i).X() ) );
+
+		hCorrMult.at(2*i)->Fill( fEvent->GetNVertexTracks(), ( fQvector.at(i).X() * fQvector1.at(i).X() ) );
+		hCorrMult.at(2*i+1)->Fill( fEvent->GetNVertexTracks(), ( fQvector.at(i).Y() * fQvector1.at(i).Y() ) );
 	}
 }
 
@@ -325,6 +335,22 @@ void Qvector3SE::SavePictures(TString sFileName)
 	}
 	hStack2->Draw("A");
 	gPad->BuildLegend(0.62,0.76,0.9,0.9);
+	cCanvas.push_back( new TCanvas("Correlation vs Multiplicity","canv",3000,3000) );
+	hStack.push_back( new THStack( "Correlation vs Multiplicity", ";Tracks;Correlations") );
+	cCanvas.back()->cd();
+	i=0;
+	for( auto histo : hCorrMult )
+	{
+		histo->SetLineWidth(5);
+		histo->SetMarkerSize(2);
+		histo->SetLineColor(i);
+		histo->SetMarkerColor(i);
+		histo->SetMarkerStyle(20+i);
+		hStack.back()->Add( histo );
+		i++;
+
+	}
+	hStack.back()->Draw();
 	i=0;
 	cout << "Saving Pictures as PNG" << endl;
 	for( auto canvas : cCanvas )
