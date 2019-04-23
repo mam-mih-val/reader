@@ -20,6 +20,7 @@
 #include "DataTreeEvent.h"
 
 using std::vector;
+using std::array;
 using std::cout;
 using std::endl;
 
