@@ -204,7 +204,7 @@ void Flow3SE::SavePictures(TString sFileName)
 		{
 			canvas.at(i)->cd(j+1);
 			stack.at(i).at(j)->Draw();
-			legend->Draw();
+			legend.back()->Draw();
 		}
 		canvas.at(i)->SaveAs( "../histograms/"+sFileName+Form("%i",i)+".png" );
 	}
