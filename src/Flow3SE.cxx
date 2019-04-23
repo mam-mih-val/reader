@@ -108,13 +108,13 @@ void Flow3SE::Estimate()
 void Flow3SE::SavePictures(TString sFileName)
 {
 	vector<TCanvas*> canvas;
-	array< vector<THStack*>, 4> stack;
+	array< vector<THStack*>, 4> stack; // 1, 2 - V vs y; 3, 4 - V vs Pt
 	array< vector<TProfile*>, 3> hRapidityOnX;
 	array< vector<TProfile*>, 3> hRapidityOnY;
 	array< vector<TProfile*>, 3> hPtOnX;
 	array< vector<TProfile*>, 3> hPtOnY;
 	gStyle->SetErrorX(0);
-	for( int se=0; se < 3; i++)
+	for( int se=0; se < 3; se++)
 	{
 		for(int i=0; i<4; i++)
 		{
@@ -138,55 +138,70 @@ void Flow3SE::SavePictures(TString sFileName)
 				float wRapY = yRapidity.at(se).at(j)->GetEntries();
 				float wPtX = xPt.at(se).at(j)->GetEntries();
 				float wPtY = yPt.at(se).at(j)->GetEntries();
-				hRapidityOnX.at(se).at(i)->Add( xRapidity.at(k).at(j), wRapX );
-				hRapidityOnY.at(se).at(i)->Add( yRapidity.at(k).at(j), wRapY );
-				hPtOnX.at(se).at(i)->Add( xPt.at(k).at(j), wPtX );
-				hPtOnY.at(se).at(i)->Add( yPt.at(k).at(j), wPtY );
+				hRapidityOnX.at(se).at(i)->Add( xRapidity.at(se).at(j), wRapX );
+				hRapidityOnY.at(se).at(i)->Add( yRapidity.at(se).at(j), wRapY );
+				hPtOnX.at(se).at(i)->Add( xPt.at(se).at(j), wPtX );
+				hPtOnY.at(se).at(i)->Add( yPt.at(se).at(j), wPtY );
 			}
 		}
 	}
-	stack.at(i).push_back( new THStack( "" ) )
 	for(int i=0; i<4; i++)
 	{
-		hRapidityOnX.at(i)->SetLineColor(i+1);
-		hRapidityOnX.at(i)->SetMarkerColor(i+1);
-		hRapidityOnX.at(i)->SetMarkerStyle(20+i);
-		hRapidityOnX.at(i)->SetMarkerSize(3);
-		hRapidityOnX.at(i)->SetLineWidth(4);
-
-		hRapidityOnY.at(i)->SetLineColor(i+1);
-		hRapidityOnY.at(i)->SetMarkerColor(i+1);
-		hRapidityOnY.at(i)->SetMarkerStyle(20+i);
-		hRapidityOnY.at(i)->SetMarkerSize(3);
-		hRapidityOnY.at(i)->SetLineWidth(4);
-		
-		hPtOnX.at(i)->SetLineColor(i+1);
-		hPtOnX.at(i)->SetMarkerColor(i+1);
-		hPtOnX.at(i)->SetMarkerStyle(20+i);
-		hPtOnX.at(i)->SetMarkerSize(3);
-		hPtOnX.at(i)->SetLineWidth(4);
-		
-		hPtOnY.at(i)->SetLineColor(i+1);
-		hPtOnY.at(i)->SetMarkerColor(i+1);
-		hPtOnY.at(i)->SetMarkerStyle(20+i);
-		hPtOnY.at(i)->SetMarkerSize(3);
-		hPtOnY.at(i)->SetLineWidth(4);
-		
-		stack.at(0)->Add( hRapidityOnX.at(i) );
-		stack.at(1)->Add( hRapidityOnY.at(i) );
-		stack.at(2)->Add( hPtOnX.at(i) );
-		stack.at(3)->Add( hPtOnY.at(i) );
+		stack.at(0).push_back( new THStack( Form("v_{1}^{x} vs y_{cm}, cent=%i",i ), ";v_{1}^{x};y_{cm}" ) );
+		stack.at(1).push_back( new THStack( Form("v_{1}^{y} vs y_{cm}, cent=%i",i ), ";v_{1}^{y};y_{cm}" ) );
+		stack.at(2).push_back( new THStack( Form("v_{1}^{x} vs pt, cent=%i",i ), ";v_{1}^{x};pt, [#frac{GeV}{c}]" ) );
+		stack.at(3).push_back( new THStack( Form("v_{1}^{y} vs pt, cent=%i",i ), ";v_{1}^{y};pt, [#frac{GeV}{c}]" ) );
+		for( int se=0; se<3; se++ )
+		{	
+			stack.at(0).back()->Add( hRapidityOnX.at(se).at(i) );
+			stack.at(1).back()->Add( hRapidityOnY.at(se).at(i) );
+			stack.at(2).back()->Add( hPtOnX.at(se).at(i) );
+			stack.at(3).back()->Add( hPtOnY.at(se).at(i) );
+		}
 	}
-	canvas.push_back( new TCanvas( "canv", "", 4000, 1500 ) );
-	// canvas.back()->cd();
-	// xRapidity.at(0).at(4)->Draw();
-	canvas.back()->Divide(4,1);
-	for(int i=0;i<4;i++)
+	for(int i=0; i<4; i++)
 	{
-		canvas.back()->cd(i+1);
-		stack.at(i)->Draw("NOSTACK");
-		gPad->BuildLegend(0.1,0.75,0.38,0.9);
+		for(int se=0; se<3; se++)
+		{
+			hRapidityOnX.at(se).at(i)->SetLineColor(i+1);
+			hRapidityOnX.at(se).at(i)->SetMarkerColor(i+1);
+			hRapidityOnX.at(se).at(i)->SetMarkerStyle(20+i);
+			hRapidityOnX.at(se).at(i)->SetMarkerSize(2);
+			hRapidityOnX.at(se).at(i)->SetLineWidth(2);
+
+			hRapidityOnY.at(se).at(i)->SetLineColor(i+1);
+			hRapidityOnY.at(se).at(i)->SetMarkerColor(i+1);
+			hRapidityOnY.at(se).at(i)->SetMarkerStyle(20+i);
+			hRapidityOnY.at(se).at(i)->SetMarkerSize(2);
+			hRapidityOnY.at(se).at(i)->SetLineWidth(2);
+			
+			hPtOnX.at(se).at(i)->SetLineColor(i+1);
+			hPtOnX.at(se).at(i)->SetMarkerColor(i+1);
+			hPtOnX.at(se).at(i)->SetMarkerStyle(20+i);
+			hPtOnX.at(se).at(i)->SetMarkerSize(2);
+			hPtOnX.at(se).at(i)->SetLineWidth(2);
+			
+			hPtOnY.at(se).at(i)->SetLineColor(i+1);
+			hPtOnY.at(se).at(i)->SetMarkerColor(i+1);
+			hPtOnY.at(se).at(i)->SetMarkerStyle(20+i);
+			hPtOnY.at(se).at(i)->SetMarkerSize(2);
+			hPtOnY.at(se).at(i)->SetLineWidth(2);
+		}
 	}
-	canvas.back()->SaveAs( "../histograms/"+sFileName+".png" );
+	canvas.push_back( new TCanvas( "canv1", "", 2000, 750 ) );
+	canvas.push_back( new TCanvas( "canv2", "", 2000, 750 ) );
+	canvas.push_back( new TCanvas( "canv3", "", 2000, 750 ) );
+	canvas.push_back( new TCanvas( "canv4", "", 2000, 750 ) );
+	for( int i=0; i<4; i++ )
+	{
+		canvas.at(i)->Divide(4,1);
+		for(int j=0; j<4; j++)
+		{
+			canvas.at(i)->cd(j+1);
+			stack.at(i).at(j)->Draw();
+		}
+		gPad->BuildLegend(0.1,0.75,0.38,0.9);
+		canvas.at(i)->SaveAs( "../histograms/"+sFileName+Form("%i",i)+".png" );
+	}
 }
 
