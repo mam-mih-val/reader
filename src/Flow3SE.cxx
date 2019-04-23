@@ -108,6 +108,7 @@ void Flow3SE::Estimate()
 void Flow3SE::SavePictures(TString sFileName)
 {
 	vector<TCanvas*> canvas;
+	vector<TLegend*> legend;
 	array< vector<THStack*>, 4> stack; // 1, 2 - V vs y; 3, 4 - V vs Pt
 	array< vector<TProfile*>, 3> hRapidityOnX;
 	array< vector<TProfile*>, 3> hRapidityOnY;
@@ -188,19 +189,23 @@ void Flow3SE::SavePictures(TString sFileName)
 			hPtOnY.at(se).at(i)->SetLineWidth(2);
 		}
 	}
+	legend.push_back( new TLegend(0.1,0.8,0.38,0.9) );
+	legend.back()->AddEntry(hRapidityOnX.at(0).at(0), "SE 1");
+	legend.back()->AddEntry(hRapidityOnX.at(1).at(0), "SE 2");
+	legend.back()->AddEntry(hRapidityOnX.at(2).at(0), "SE 3");
 	canvas.push_back( new TCanvas( "canv1", "", 2000, 750 ) );
 	canvas.push_back( new TCanvas( "canv2", "", 2000, 750 ) );
 	canvas.push_back( new TCanvas( "canv3", "", 2000, 750 ) );
 	canvas.push_back( new TCanvas( "canv4", "", 2000, 750 ) );
 	for( int i=0; i<4; i++ )
 	{
-		canvas.at(i)->Divide(4,1,0.01,0.01);
+		canvas.at(i)->Divide(4,1,0.01,0.1);
 		for(int j=0; j<4; j++)
 		{
 			canvas.at(i)->cd(j+1);
 			stack.at(i).at(j)->Draw();
+			legend->Draw();
 		}
-		gPad->BuildLegend(0.1,0.75,0.38,0.9);
 		canvas.at(i)->SaveAs( "../histograms/"+sFileName+Form("%i",i)+".png" );
 	}
 }
