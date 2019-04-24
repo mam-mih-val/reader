@@ -39,5 +39,5 @@ class Flow3SE : public Flow
 	void 		Estimate();
 	void		InitializeHistograms();
 	void		SavePictures(TString sFileName);
-	void		SaveHistogramsToRootFile(TString sFileName) {};
+	void		SaveHistogramsToRootFile(TString sFileName);
 };

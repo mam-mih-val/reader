@@ -44,4 +44,5 @@ class Qvector3SE : public Qvector
 	void		InitializeHistograms();
 	TVector2	Resolution(int se=0) { return fResolution.at(se); }
 	void		SavePictures(TString sFileName);
+	void		SaveHistogramsToROOTFile(TString sFileName);
 };

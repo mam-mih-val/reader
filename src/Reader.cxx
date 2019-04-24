@@ -4,9 +4,10 @@ const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
 
 Reader::Reader(TString cFileName)
 {
+	cout << "Reade initialization" << endl;
     fChain = new TChain("DataTree");
     fChain->Add(cFileName);
-    cout << fChain->GetEntries() << "events" << endl;
+    cout << fChain->GetEntries() << " events found" << endl;
 	fEvent = nullptr;
     fChain->SetBranchAddress("DTEvent", &fEvent);
 }
@@ -83,8 +84,8 @@ void Reader::BuildQvectorHistograms(TString sPicName)
     }
 	cout << "Estimating resolution" << endl;
 	fQ->ComputeResolution();
-	//fQ->SaveHistogramsToROOTFile(sPicName);
-	fQ->SavePictures(sPicName);
+	fQ->SaveHistogramsToROOTFile(sPicName);
+	//fQ->SavePictures(sPicName);
 }
 
 void Reader::BuildFlowHistograms(TString sPicName)
@@ -113,8 +114,8 @@ void Reader::BuildFlowHistograms(TString sPicName)
     }
 	// fQ->ComputeResolution();
 	// fQ->SavePictures(sPicName);
-	cout << "Estimating flow" << endl;
 	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, 14);
+	cout << "Estimating flow" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
 		fChain->GetEntry(i);
@@ -122,5 +123,6 @@ void Reader::BuildFlowHistograms(TString sPicName)
 			continue;
 		flow->Estimate();
     }
-	flow->SavePictures(sPicName);
+	// flow->SavePictures(sPicName);
+	flow->SaveHistogramsToRootFile(sPicName);
 }

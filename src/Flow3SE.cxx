@@ -209,3 +209,66 @@ void Flow3SE::SavePictures(TString sFileName)
 		canvas.at(i)->SaveAs( "../histograms/"+sFileName+Form("%i",i)+".png" );
 	}
 }
+
+void Flow3SE::SaveHistogramsToRootFile(TString sFileName)
+{
+	cout << "Saving pictures to ROOT file" << endl;
+	auto file = new TFile( sFileName+".root", "recreate" );
+	array< vector<TProfile*>, 3> hRapidityOnX;
+	array< vector<TProfile*>, 3> hRapidityOnY;
+	array< vector<TProfile*>, 3> hPtOnX;
+	array< vector<TProfile*>, 3> hPtOnY;
+	for( int se=0; se < 3; se++)
+	{
+		for(int i=0; i<4; i++)
+		{
+			hRapidityOnX.at(se).push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i_SE%i", i, se), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
+			hRapidityOnX.at(se).back()->Sumw2();
+			hRapidityOnY.at(se).push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i_SE%i", i, se), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
+			hRapidityOnY.at(se).back()->Sumw2();
+			hPtOnX.at(se).push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i_SE%i", i, se), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+			hPtOnX.at(se).back()->Sumw2();
+			hPtOnY.at(se).push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i_SE%i", i, se), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
+			hPtOnY.at(se).back()->Sumw2();		
+		}
+	}
+	for( int se=0; se<3; se++ )
+	{
+		for( int i=0; i<4; i++ )
+		{
+			for( int j=i*2; j<(i+1)*2; j++ )
+			{
+				float wRapX = xRapidity.at(se).at(j)->GetEntries();
+				float wRapY = yRapidity.at(se).at(j)->GetEntries();
+				float wPtX = xPt.at(se).at(j)->GetEntries();
+				float wPtY = yPt.at(se).at(j)->GetEntries();
+				hRapidityOnX.at(se).at(i)->Add( xRapidity.at(se).at(j), wRapX );
+				hRapidityOnY.at(se).at(i)->Add( yRapidity.at(se).at(j), wRapY );
+				hPtOnX.at(se).at(i)->Add( xPt.at(se).at(j), wPtX );
+				hPtOnY.at(se).at(i)->Add( yPt.at(se).at(j), wPtY );
+			}
+		}
+	}
+	file->cd();
+	for( auto &vec : hRapidityOnX )
+	{
+		for( auto histo : vec )
+			histo->Write();
+	}
+	for( auto &vec : hRapidityOnY )
+	{
+		for( auto histo : vec )
+			histo->Write();
+	}
+	for( auto &vec : hPtOnX )
+	{
+		for( auto histo : vec )
+			histo->Write();
+	}
+	for( auto &vec : hPtOnY )
+	{
+		for( auto histo : vec )
+			histo->Write();
+	}
+	file->Close();
+}

@@ -373,3 +373,30 @@ void Qvector3SE::EstimateResolution()
 	resY = hCorrelation.at(9)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(1)->GetBinContent(cbin)/2;
 	fResolution.at(2).Set( sqrt(resX), sqrt(resY) );
 }
+
+void Qvector3SE::SaveHistogramsToROOTFile(TString sFileName)
+{
+	cout << "Saving histograms to ROOT file" << endl;
+	auto file = new TFile( sFileName+"_Qvector.root", "recreate" );
+
+	for( auto histo : hMeanQx )
+		histo->Write();
+	for( auto histo : hMeanQy )
+		histo->Write();
+	for( auto histo : hQx )
+		histo->Write();
+	for( auto histo : hQy )
+		histo->Write();
+	for( auto histo : hPsiEP )
+		histo->Write();
+	for( auto histo : hCorrelation )
+		histo->Write();
+	for( auto histo : hCorrMult )
+		histo->Write();
+	for( auto histo : hResolutionX )
+		histo->Write();
+	for( auto histo : hResolutionY )
+		histo->Write();
+	file->Close();
+	cout << "Histograms saved as "+sFileName+"_Qvector.root" << endl;
+}

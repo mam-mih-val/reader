@@ -53,5 +53,5 @@ class Qvector
 			float		Psi(int se=0) { return fQvector.at(se).Phi(); }
 	virtual void		InitializeHistograms() {};
 	virtual void		SavePictures(TString sFileName) {};
-			void		SaveHistogramsToROOTFile(TString sFileName);
+	virtual void		SaveHistogramsToROOTFile(TString sFileName);
 };
