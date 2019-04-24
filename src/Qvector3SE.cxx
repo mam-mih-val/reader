@@ -63,12 +63,12 @@ void Qvector3SE::InitializeHistograms()
 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", 8, 0, 40) ); // 10
 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", 8, 0, 40) ); // 11
 
-	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{b} vs mult", ";tracks;Qx_{a}Qx_{b}", 150,0,150 ) ); // 0
-	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{b} vs mult", ";tracks;Qy_{a}Qy_{b}", 150,0,150 ) ); // 1
-	hCorrMult.push_back( new TProfile( "Qx_{b}Qx_{c} vs mult", ";tracks;Qx_{b}Qx_{c}", 150,0,150 ) ); // 2
-	hCorrMult.push_back( new TProfile( "Qy_{b}Qy_{c} vs mult", ";tracks;Qy_{b}Qy_{c}", 150,0,150 ) ); // 3
-	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{c} vs mult", ";tracks;Qx_{a}Qx_{c}", 150,0,150 ) ); // 4
-	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 150,0,150 ) ); // 5	
+	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{b} vs mult", ";tracks;Qx_{a}Qx_{b}", 15,0,150 ) ); // 0
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{b} vs mult", ";tracks;Qy_{a}Qy_{b}", 15,0,150 ) ); // 1
+	hCorrMult.push_back( new TProfile( "Qx_{b}Qx_{c} vs mult", ";tracks;Qx_{b}Qx_{c}", 15,0,150 ) ); // 2
+	hCorrMult.push_back( new TProfile( "Qy_{b}Qy_{c} vs mult", ";tracks;Qy_{b}Qy_{c}", 15,0,150 ) ); // 3
+	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{c} vs mult", ";tracks;Qx_{a}Qx_{c}", 15,0,150 ) ); // 4
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 15,0,150 ) ); // 5	
 }
 
 void Qvector3SE::Estimate()
