@@ -76,7 +76,7 @@ class Reader
     void            GetFlow(int iNumHarm=1);
     void            BuildQAHistograms(TString sPicName);
     void            InitFlowHistos();
-	void			BuildQvectorHistograms(TString sPicName);
-	void			BuildFlowHistograms(TString sPicName);
+	void			BuildQvector3SeHistograms(TString sPicName);
+	void			BuildFlow3SeHistograms(TString sPicName);
     void            SaveFlowStatistics();
 };

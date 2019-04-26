@@ -11,7 +11,9 @@ Reader::Reader(TString cFileName)
 	fEvent = nullptr;
     fChain->SetBranchAddress("DTEvent", &fEvent);
 }
-
+    cout << argc << endl;
+    cout << argv[0] << endl;
+    cout << argv[1] << endl;
 Reader::~Reader()
 {
     delete fChain;
@@ -60,7 +62,7 @@ void Reader::BuildQAHistograms(TString sPicName)
 		fTrackQA[j]->SaveHistograms(sPicName);
 }
 
-void Reader::BuildQvectorHistograms(TString sPicName)
+void Reader::BuildQvector3SeHistograms(TString sPicName)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
@@ -88,7 +90,7 @@ void Reader::BuildQvectorHistograms(TString sPicName)
 	//fQ->SavePictures(sPicName);
 }
 
-void Reader::BuildFlowHistograms(TString sPicName)
+void Reader::BuildFlow3SeHistograms(TString sPicName)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
