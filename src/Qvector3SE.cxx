@@ -40,7 +40,7 @@ void Qvector3SE::InitializeHistograms()
 		hMeanQy.push_back( new TProfile( Form("MeanQySE%i",i),";Centrality;Qy", 8, 0, 40 ) );
 		hQx.push_back( new TH1F( Form("QxSE%i",i),";Qx;counts",100,-1.5,1.5) );
 		hQy.push_back( new TH1F( Form("QySE%i",i),";Qy;counts",100,-1.5,1.5) );
-		hPsiEP.push_back( new TH1F( Form("PsiEPSE%i",i),";PsiEP;counts",100,-3.15,3.15) );
+		hPsiEP.push_back( new TH1F( Form("PsiEPSE%i",i),";PsiEP;counts",100, 0, 6.3) );
 	}
 	for(unsigned int i=iNumberOfSE; i<2*iNumberOfSE; i++)
 	{
@@ -63,12 +63,12 @@ void Qvector3SE::InitializeHistograms()
 	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", 8, 0, 40) ); // 10
 	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", 8, 0, 40) ); // 11
 
-	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{b} vs mult", ";tracks;Qx_{a}Qx_{b}", 15,0,150 ) ); // 0
-	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{b} vs mult", ";tracks;Qy_{a}Qy_{b}", 15,0,150 ) ); // 1
-	hCorrMult.push_back( new TProfile( "Qx_{b}Qx_{c} vs mult", ";tracks;Qx_{b}Qx_{c}", 15,0,150 ) ); // 2
-	hCorrMult.push_back( new TProfile( "Qy_{b}Qy_{c} vs mult", ";tracks;Qy_{b}Qy_{c}", 15,0,150 ) ); // 3
-	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{c} vs mult", ";tracks;Qx_{a}Qx_{c}", 15,0,150 ) ); // 4
-	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 15,0,150 ) ); // 5	
+	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{b} vs mult", ";tracks;Qx_{a}Qx_{b}", 20, 0, 100 ) ); // 0
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{b} vs mult", ";tracks;Qy_{a}Qy_{b}", 20, 0, 100 ) ); // 1
+	hCorrMult.push_back( new TProfile( "Qx_{b}Qx_{c} vs mult", ";tracks;Qx_{b}Qx_{c}", 20, 0, 100 ) ); // 2
+	hCorrMult.push_back( new TProfile( "Qy_{b}Qy_{c} vs mult", ";tracks;Qy_{b}Qy_{c}", 20, 0, 100 ) ); // 3
+	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{c} vs mult", ";tracks;Qx_{a}Qx_{c}", 20, 0, 100 ) ); // 4
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 20, 0, 100 ) ); // 5	
 }
 
 void Qvector3SE::Estimate()

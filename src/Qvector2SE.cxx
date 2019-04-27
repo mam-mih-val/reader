@@ -77,28 +77,23 @@ void Qvector2SE::Estimate()
 	for( auto &module : vModules )
 	{
 		TVector2 fAddition;
-		fAddition.SetMagPhi( module->GetEnergy(), module->GetPhi() );
+		fAddition.SetMagPhi( module->GetChargeZ(), module->GetPhi() );
 		fQvector.at(p%2)+=fAddition;
-		fSumCharge.at(p%2)+=module->GetEnergy();
+		fSumCharge.at(p%2)+=module->GetChargeZ();
 		fHitsInSE.at(p%2)+=1;
 		p++;
 	}
 	for(unsigned int i=0; i<2; i++)
 	{
-		if( fSumCharge.at(i) < 70. )
+		if( fSumCharge.at(i) < 1 )
 		{
 			fQvector.at(i).Set(-999.,-999.);
 			continue;
 		}
-		if( fHitsInSE.at(i) < 3 )
-		{
-			fQvector.at(i).Set( -999., -999. );
-			continue;
-		}
 		fQvector.at(i) /= fSumCharge.at(i);
-		if( fQvector.at(i).Mod() >= 1 )
-			cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
-			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
+		//if( fQvector.at(i).Mod() >= 1 )
+		//	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
+		//	" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << fSumCharge.at(i) << " hits in SE: " << fHitsInSE.at(i) << endl;
 	}
 }
 
@@ -138,8 +133,6 @@ void Qvector2SE::ComputeCorrelations()
 	hMeanCosine->Fill( fCentrality->GetCentralityClass(), cos( fQvector.at(0).Phi() - fQvector.at(1).Phi() ) );
 	if ( fQvector.at(0).X() > -990. && fQvector.at(1).X() > -990. )
 	{
-		// hDeltaPsiEP.at( (int)fCentrality->GetCentralityClass() )->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
-		//hPsiEP.back()->Fill( acos( cos(fQvector.at(0).Phi() - fQvector.at(1).Phi()) ) );
 		hCorrelation.at(0)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).X() ) );
 		hCorrelation.at(1)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).Y() * fQvector.at(1).Y() ) );
 		hCorrelation.at(2)->Fill( fCentrality->GetCentralityClass(), ( fQvector.at(0).X() * fQvector.at(1).Y() ) );

@@ -4,16 +4,14 @@ const double YCOR = 0.5*log(1.23*197+156.743) - 0.5*log(1.23*197-156.743);
 
 Reader::Reader(TString cFileName)
 {
-	cout << "Reade initialization" << endl;
+	cout << "Reader initialization" << endl;
     fChain = new TChain("DataTree");
     fChain->Add(cFileName);
     cout << fChain->GetEntries() << " events found" << endl;
 	fEvent = nullptr;
     fChain->SetBranchAddress("DTEvent", &fEvent);
 }
-    cout << argc << endl;
-    cout << argv[0] << endl;
-    cout << argv[1] << endl;
+
 Reader::~Reader()
 {
     delete fChain;
