@@ -83,8 +83,8 @@ void Qvector3SE::Estimate()
 			continue;
 		if( fEvent->GetPSDModule(i)->GetId() < 0 )
 			continue;
-		if( fEvent->GetPSDModule(i)->GetChargeZ() > 1 )
-			continue;
+//		if( fEvent->GetPSDModule(i)->GetChargeZ() > 1 )
+//			continue;
 		if( fEvent->GetPSDModule(i)->GetRing() >= 0 && fEvent->GetPSDModule(i)->GetRing() < 5 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
 		if( fEvent->GetPSDModule(i)->GetRing() == 5 || fEvent->GetPSDModule(i)->GetRing() == 6 )
@@ -343,8 +343,8 @@ void Qvector3SE::SavePictures(TString sFileName)
 	i=0;
 	for( auto histo : hCorrMult )
 	{
-		histo->SetLineWidth(5);
-		histo->SetMarkerSize(2);
+		histo->SetLineWidth(7);
+		histo->SetMarkerSize(8);
 		histo->SetLineColor(i);
 		histo->SetMarkerColor(i);
 		histo->SetMarkerStyle(20+i);
