@@ -84,8 +84,8 @@ void Reader::BuildQvector3SeHistograms(TString sPicName)
     }
 	cout << "Estimating resolution" << endl;
 	fQ->ComputeResolution();
+	fQ->SavePictures(sPicName);
 	fQ->SaveHistogramsToROOTFile(sPicName);
-	//fQ->SavePictures(sPicName);
 }
 
 void Reader::BuildFlow3SeHistograms(TString sPicName)
@@ -123,6 +123,6 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 			continue;
 		flow->Estimate();
     }
-	// flow->SavePictures(sPicName);
+	flow->SavePictures(sPicName);
 	flow->SaveHistogramsToRootFile(sPicName);
 }
