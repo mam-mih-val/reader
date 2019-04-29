@@ -81,8 +81,8 @@ void Qvector3SE::Estimate()
 	{
 		if( !fEvent->GetPSDModule(i)->HasPassedCuts() )
 			continue;
-//		if( fEvent->GetPSDModule(i)->GetId() < 0 )
-//			continue;
+		if( fEvent->GetPSDModule(i)->GetChargeZ > 1 )
+			continue;
 		if( fEvent->GetPSDModule(i)->GetRing() >= 0 && fEvent->GetPSDModule(i)->GetRing() < 5 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
 		if( fEvent->GetPSDModule(i)->GetRing() == 5 || fEvent->GetPSDModule(i)->GetRing() == 6 )
@@ -102,7 +102,7 @@ void Qvector3SE::Estimate()
 		{
 			float charge = module->GetChargeZ();
 			double phi = module->GetPhi();
-			TVector2 add;
+			TVector2 add;	
 			add.SetMagPhi( charge, phi );
 			fQvector.at(i)+=add;
 			SumCharge+=charge;
