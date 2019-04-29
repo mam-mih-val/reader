@@ -83,8 +83,6 @@ void Qvector3SE::Estimate()
 			continue;
 		if( fEvent->GetPSDModule(i)->GetId() < 0 )
 			continue;
-//		if( fEvent->GetPSDModule(i)->GetChargeZ() > 1 )
-//			continue;
 		if( fEvent->GetPSDModule(i)->GetRing() >= 0 && fEvent->GetPSDModule(i)->GetRing() < 5 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
 		if( fEvent->GetPSDModule(i)->GetRing() == 5 || fEvent->GetPSDModule(i)->GetRing() == 6 )
