@@ -23,7 +23,6 @@ void EventQA::InitHistograms()
     vHisto1D[hitsTOF_uncuted_selected]=new TH1F("hitsTOF_uncuted_selected",";hits in TOF+RPC uncuted selected;counts",250,0,250);
     vHisto1D[hitsTOF_matched] =     		new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",100,0,100);
     vHisto1D[hitsTOF_matched_selected]=		new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",100,0,100);
-	int nbins = fCentrality->GetNumClasses();
 	vHisto1D[histo_centrality] =			new TH1F("centrality",";centrality class;counts",20,0,100);
 	vHisto1D[histo_centrality_selected] =	new TH1F("centrality_selected",";centrality class;counts",20,0,100);
 
@@ -38,8 +37,13 @@ void EventQA::InitHistograms()
     vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",200,-1000,1000,200,-1000,1000);
     vHisto2D[hitsFW_X_Y_selected]=  new TH2F("selected hits in FW coordinates",";X, [mm];Y, [mm]",200,-1000,1000,200,-1000,1000);
 
-	vProfile[hits_centrality] = 		new TProfile("NumOfHits_centrality",";centrality class;Hits TOF+RPC",nbins,0,nbins);
-	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality class;Hits TOF+RPC",nbins,0,nbins);
+	vProfile[hits_centrality] = 		new TProfile("NumOfHits_centrality",";centrality class;Hits TOF+RPC",20,0,100);
+	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality class;Hits TOF+RPC",20,0,100);
+
+    for( int i=0; i<304; i++ )
+    {
+        hFwCharge.push_back( new TH2F( Form( "Discret Charge vs Signal in %i module", i ), Form("&i module; signal; charge", i), 20, 0, 20, 10, 0, 10 ) );
+    }
 }
 
 void EventQA::FillHistograms()
@@ -53,7 +57,7 @@ void EventQA::FillHistograms()
         vHisto2D[hitsFW_X_Y]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1));
 		SumCharge+=fPSDModule->GetChargeZ();
     }
-	vProfile[hits_centrality]->Fill( fCentrality->GetCentralityClass(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+	vProfile[hits_centrality]->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
     vHisto1D[tracksMDC]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
     vHisto1D[hitsTOF]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
     vHisto1D[chargeFW]->Fill( SumCharge );
@@ -80,7 +84,7 @@ void EventQA::FillHistograms()
 				SumCharge+=fPSDModule->GetChargeZ();
 			}
         } 
-		vProfile[hits_centrality_selected]->Fill( fCentrality->GetCentralityClass(), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
+		vProfile[hits_centrality_selected]->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
         vHisto1D[tracksMDC_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
         vHisto1D[hitsTOF_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
         vHisto1D[chargeFW_selected]->Fill( SumCharge );
@@ -94,6 +98,12 @@ void EventQA::FillHistograms()
         vHisto2D[hits_charge_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut), SumCharge );
         vHisto2D[vertexX_vertexY_selected]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );
         vHisto2D[hitsFW_X_Y_selected]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );  
+    }
+    int nPsdModules = fEvent->GetNPSDModules();
+    for(int i=0;i<nPsdModules;i++)
+    {
+        int id = fEvent->GetPSDModule(i)->GetId();
+        hFwCharge.at(id)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetChargeZ() );
     }
 }
 
@@ -186,11 +196,27 @@ void EventQA::SaveHistograms(TString PicName)
 	vProfile[hits_centrality_selected]->SetLineColor(1);
 	vProfile[hits_centrality_selected]->SetLineWidth(6);
 	vProfile[hits_centrality_selected]->Draw();
-
     for(int i=0; i<NumCanvases; i++)
     {
         TString sPath = "../histograms/Event_"+PicName+Form("_%i.png",i);
         vCanvas[i]->SaveAs(sPath);
+    }
+    auto canvas = new TCanvas( "Forward Wall", "", 900, 700 );
+    for( int i=0; i<hFwCharge.size(); i++ )
+    {
+        canvas->cd();
+        hFwCharge.at(i)->Draw();
+        if( i == 0 )
+        {
+            canvas->Print("Fw.pdf(", "pdf");
+            continue;
+        }
+        if( i == hFwCharge.size()-1 )
+        {
+            canvas->Print("Fw.pdf)", "pdf");
+            continue;
+        }
+        canvas->Print("Fw.pdf", "pdf");
     }
 }
 

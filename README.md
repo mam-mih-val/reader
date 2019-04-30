@@ -21,8 +21,14 @@ After the DataTree installation, make
     $ cmake ..
     $ make
     
-2. Using
+2. Usage
 
 Change current directory to your build and than simply launch DT_Reader as bash-script:
 
-    $ ./DT_Reader
+    $ ./DT_Reader [command] ["input filename"] ["output filename"]
+
+commands:
+
+      qa -        build Quality Assurance histograms
+      qvector -   build Q-vector histograms
+      flow -      build Flow histograms

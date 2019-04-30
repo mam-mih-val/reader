@@ -36,8 +36,8 @@ void Qvector3SE::InitializeHistograms()
 {
 	for(unsigned int i=0; i<iNumberOfSE; i++)
 	{
-		hMeanQx.push_back( new TProfile( Form("MeanQxSE%i",i),";Centrality;Qx", 8, 0, 40 ) );
-		hMeanQy.push_back( new TProfile( Form("MeanQySE%i",i),";Centrality;Qy", 8, 0, 40 ) );
+		hMeanQx.push_back( new TProfile( Form("MeanQxSE%i",i),";Centrality;Qx", 20, 0, 100 ) );
+		hMeanQy.push_back( new TProfile( Form("MeanQySE%i",i),";Centrality;Qy", 20, 0, 100 ) );
 		hQx.push_back( new TH1F( Form("QxSE%i",i),";Qx;counts",100,-1.5,1.5) );
 		hQy.push_back( new TH1F( Form("QySE%i",i),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPSE%i",i),";PsiEP;counts",100, 0, 6.3) );
@@ -48,20 +48,20 @@ void Qvector3SE::InitializeHistograms()
 		hQy.push_back( new TH1F( Form("QyRecentredSE%i",i-iNumberOfSE),";Qy;counts",100,-1.5,1.5) );
 		hPsiEP.push_back( new TH1F( Form("PsiEPRecentredSE%i",i-iNumberOfSE),";PsiEP;counts",100,0,6.3) );
 	}
-	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", 8, 0, 40) ); // 0
-	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", 8, 0, 40) ); // 1
-	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qy_{b}", 8, 0, 40) ); // 2
-	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", 8, 0, 40) ); // 3
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", 20, 0, 100) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", 20, 0, 100) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qy_{b}", 20, 0, 100) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", 20, 0, 100) ); // 3
 
-	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", 8, 0, 40) ); // 4
-	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", 8, 0, 40) ); // 5
-	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", 8, 0, 40) ); // 6
-	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", 8, 0, 40) ); // 7
+	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", 20, 0, 100) ); // 4
+	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", 20, 0, 100) ); // 5
+	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", 20, 0, 100) ); // 6
+	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", 20, 0, 100) ); // 7
 
-	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", 8, 0, 40) ); // 8
-	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", 8, 0, 40) ); // 9
-	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", 8, 0, 40) ); // 10
-	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", 8, 0, 40) ); // 11
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", 20, 0, 100) ); // 8
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", 20, 0, 100) ); // 9
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", 20, 0, 100) ); // 10
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", 20, 0, 100) ); // 11
 
 	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{b} vs mult", ";tracks;Qx_{a}Qx_{b}", 20, 0, 100 ) ); // 0
 	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{b} vs mult", ";tracks;Qy_{a}Qy_{b}", 20, 0, 100 ) ); // 1

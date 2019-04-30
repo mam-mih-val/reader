@@ -16,6 +16,7 @@
 #include "HADES_constants.h"
 
 using std::vector;
+using std::array;
 using std::cout;
 using std::endl;
 
@@ -66,7 +67,10 @@ class EventQA
     };
     TH1F* vHisto1D[Num1DHistos];
     TH2F* vHisto2D[Num2DHistos];
-	TProfile* vProfile[NumProfiles];
+	
+    vector<TH2F*> hFwCharge;
+   
+    TProfile* vProfile[NumProfiles];
     TCanvas* vCanvas[NumCanvases];
     Selector* fSelector;
 	Centrality* fCentrality;
