@@ -13,6 +13,7 @@
 
 #include "HADES_constants.h"
 #include "Centrality.h"
+#include "Selector.h"
 
 #define  DATATREE_SHINE
 #include "DataTreeEvent.h"
@@ -25,6 +26,7 @@ class Qvector
 {
     protected:
     unsigned int iNumberOfSE;
+	Selector* fSelector;
 	Centrality* fCentrality;
 	DataTreeEvent* fEvent;
     vector<TVector2> fQvector;

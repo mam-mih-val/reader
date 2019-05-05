@@ -110,6 +110,46 @@ Bool_t Selector::IsCorrectTrack(Int_t idx)
     return 1;
 }
 
+Bool_t Selector::IsCorrectFwHit(Int_t idx)
+{
+//    cout << "Charge: " << fEvent->GetPSDModule(idx)->GetEnergy() << " Beta: " << 
+//    fEvent->GetPSDModule(idx)->GetBeta() << " Ring: " << fEvent->GetPSDModule(idx)->GetRing() << endl;
+//    if( fEvent->GetPSDModule(idx)->GetEnergy() < 80.0 )
+//        return 0;
+    
+    short ring = fEvent->GetPSDModule(idx)->GetRing();
+    
+    if( ring < 1 )
+        return 0;
+    
+    if( ring > 10 )
+        return 0;
+    
+    if( ring <= 5 )
+    {
+        if( fEvent->GetPSDModule(idx)->GetBeta() < 0.84 )
+            return 0;
+        if( fEvent->GetPSDModule(idx)->GetBeta() > 1.0 )
+            return 0;
+    }
+    if( ring == 6 || ring == 7 )
+    {
+        if( fEvent->GetPSDModule(idx)->GetBeta() < 0.85 )
+            return 0;
+        if( fEvent->GetPSDModule(idx)->GetBeta() > 1.0 )
+            return 0;
+    }
+    if( ring >= 8 )
+    {
+        if( fEvent->GetPSDModule(idx)->GetBeta() < 0.8 )
+            return 0;
+        if( fEvent->GetPSDModule(idx)->GetBeta() > 1.0 )
+            return 0;
+    }
+
+    return 1; 
+}
+
 void Selector::CheckEventCuts()
 {
     if (  fEvent->GetVertexPositionComponent(2) > 0 || fEvent->GetVertexPositionComponent(2) < -60 )

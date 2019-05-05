@@ -51,6 +51,7 @@ class Selector
     ~Selector();
     Bool_t IsCorrectEvent(int iPT = -1);
     Bool_t IsCorrectTrack(Int_t idx);
+    Bool_t IsCorrectFwHit(Int_t idx);
 	void	SetStatOption(bool _bSaveStat = 1) { bSaveStat = _bSaveStat; }
     void    CheckEventCuts();
     void    CheckTrackCuts(Int_t idx);

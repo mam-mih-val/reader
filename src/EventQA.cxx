@@ -41,13 +41,19 @@ void EventQA::InitHistograms()
 	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality class;Hits TOF+RPC",20,0,100);
 
     for( int i=0; i<304; i++ )
-    {
-        hFwCharge.push_back( new TH2F( Form( "Discret Charge vs Signal in %i module", i ), Form("&i module; signal; charge", i), 20, 0, 20, 10, 0, 10 ) );
-    }
+        hFwCharge.push_back( new TH2F( Form( "Discret Charge vs Signal in %i module", i ), Form("%i module; signal; charge", i), 100, 0, 1000, 20, 0, 20 ) );
 }
 
 void EventQA::FillHistograms()
 {
+    int nPsdModules = fEvent->GetNPSDModules();
+    for(int i=0;i<nPsdModules;i++)
+    {
+        if( ! fEvent->GetPSDModule(i)->HasPassedCuts() )
+            continue;
+        int id = fEvent->GetPSDModule(i)->GetId();
+        hFwCharge.at(id)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetChargeZ() );
+    }
 	int iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fPSDModule;
 	int SumCharge = 0;
@@ -98,12 +104,6 @@ void EventQA::FillHistograms()
         vHisto2D[hits_charge_selected]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut), SumCharge );
         vHisto2D[vertexX_vertexY_selected]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );
         vHisto2D[hitsFW_X_Y_selected]->Fill( fEvent->GetVertexPositionComponent(0), fEvent->GetVertexPositionComponent(1) );  
-    }
-    int nPsdModules = fEvent->GetNPSDModules();
-    for(int i=0;i<nPsdModules;i++)
-    {
-        int id = fEvent->GetPSDModule(i)->GetId();
-        hFwCharge.at(id)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetChargeZ() );
     }
 }
 
@@ -205,18 +205,18 @@ void EventQA::SaveHistograms(TString PicName)
     for( int i=0; i<hFwCharge.size(); i++ )
     {
         canvas->cd();
-        hFwCharge.at(i)->Draw();
+        hFwCharge.at(i)->Draw("colz");
         if( i == 0 )
         {
-            canvas->Print("Fw.pdf(", "pdf");
+            canvas->Print("../histograms/Fw.pdf(", "pdf");
             continue;
         }
         if( i == hFwCharge.size()-1 )
         {
-            canvas->Print("Fw.pdf)", "pdf");
+            canvas->Print("../histograms/Fw.pdf)", "pdf");
             continue;
         }
-        canvas->Print("Fw.pdf", "pdf");
+        canvas->Print("../histograms/Fw.pdf", "pdf");
     }
 }
 

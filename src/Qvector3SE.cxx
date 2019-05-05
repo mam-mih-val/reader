@@ -1,9 +1,10 @@
 #include "Qvector3SE.h"
 
-Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Centrality* _centrality)
+Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality)
 {
 	fEvent = _fEvent;
 	fCentrality = _centrality;
+	fSelector = _selector;
 	iNumberOfSE = 3;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
@@ -79,15 +80,15 @@ void Qvector3SE::Estimate()
     array<vector<DataTreePSDModule*>, 3> SubEvent;
 	for(unsigned int i=0; i<iNPSDModules; i++)
 	{
-		if( !fEvent->GetPSDModule(i)->HasPassedCuts() )
+		if( !fSelector->IsCorrectFwHit(i) )
 			continue;
-		if( fEvent->GetPSDModule(i)->GetChargeZ() > 1 )
+		if( fEvent->GetPSDModule(i)->GetEnergy() > 120 )
 			continue;
-		if( fEvent->GetPSDModule(i)->GetRing() >= 0 && fEvent->GetPSDModule(i)->GetRing() < 5 )
+		if( fEvent->GetPSDModule(i)->GetRing() >= 1 && fEvent->GetPSDModule(i)->GetRing() < 6 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
-		if( fEvent->GetPSDModule(i)->GetRing() == 5 || fEvent->GetPSDModule(i)->GetRing() == 6 )
+		if( fEvent->GetPSDModule(i)->GetRing() == 6 || fEvent->GetPSDModule(i)->GetRing() == 7 )
 			SubEvent.at(1).push_back( fEvent->GetPSDModule(i) );
-		if( fEvent->GetPSDModule(i)->GetRing() >= 7 && fEvent->GetPSDModule(i)->GetRing() <= 9 )
+		if( fEvent->GetPSDModule(i)->GetRing() >= 8 && fEvent->GetPSDModule(i)->GetRing() <= 10 )
 			SubEvent.at(2).push_back( fEvent->GetPSDModule(i) );
 	}
 	for( int i=0; i<SubEvent.size(); i++ )
@@ -100,7 +101,7 @@ void Qvector3SE::Estimate()
 		float SumCharge=0;
 		for( auto &module : SubEvent.at(i) )
 		{
-			float charge = module->GetChargeZ();
+			float charge = module->GetEnergy();
 			double phi = module->GetPhi();
 			TVector2 add;	
 			add.SetMagPhi( charge, phi );
@@ -108,9 +109,9 @@ void Qvector3SE::Estimate()
 			SumCharge+=charge;
 		}
 		fQvector.at(i)/=SumCharge;
-		if( fQvector.at(i).Mod() > 1. )
-		 	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
-			" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << SumCharge << endl;
+		//if( fQvector.at(i).Mod() > 1. )
+		// 	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
+		//	" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << SumCharge << endl;
 	}
 }
 

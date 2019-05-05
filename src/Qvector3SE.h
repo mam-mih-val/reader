@@ -13,8 +13,8 @@
 #include "TFile.h"
 
 #include "HADES_constants.h"
-#include "Centrality.h"
 #include "Qvector.h"
+#include "Centrality.h"
 
 #define  DATATREE_SHINE
 #include "DataTreeEvent.h"
@@ -34,7 +34,7 @@ class Qvector3SE : public Qvector
 	void		EstimateResolution();
 
 	public:
-    Qvector3SE(DataTreeEvent* _fEvent, Centrality* _centrality);
+    Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality);
     ~Qvector3SE();
 	void		Compute(); // One computes Qvector without filling any histograms
     void        ComputeCorrections();
