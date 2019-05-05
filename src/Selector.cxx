@@ -114,8 +114,8 @@ Bool_t Selector::IsCorrectFwHit(Int_t idx)
 {
 //    cout << "Charge: " << fEvent->GetPSDModule(idx)->GetEnergy() << " Beta: " << 
 //    fEvent->GetPSDModule(idx)->GetBeta() << " Ring: " << fEvent->GetPSDModule(idx)->GetRing() << endl;
-//    if( fEvent->GetPSDModule(idx)->GetEnergy() < 80.0 )
-//        return 0;
+    if( fEvent->GetPSDModule(idx)->GetEnergy() < 80.0 )
+        return 0;
     
     short ring = fEvent->GetPSDModule(idx)->GetRing();
     

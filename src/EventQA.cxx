@@ -40,19 +40,17 @@ void EventQA::InitHistograms()
 	vProfile[hits_centrality] = 		new TProfile("NumOfHits_centrality",";centrality class;Hits TOF+RPC",20,0,100);
 	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality class;Hits TOF+RPC",20,0,100);
 
-    for( int i=0; i<304; i++ )
-        hFwCharge.push_back( new TH2F( Form( "Discret Charge vs Signal in %i module", i ), Form("%i module; signal; charge", i), 100, 0, 1000, 20, 0, 20 ) );
+    hFwCharge.push_back( new TH2F( "Module number vs Charge", ";signal;module Id", 100, 0, 1000, 304, 0, 304) );
 }
 
 void EventQA::FillHistograms()
 {
     int nPsdModules = fEvent->GetNPSDModules();
-    for(int i=0;i<nPsdModules;i++)
+    for(int i=0; i<nPsdModules; i++)
     {
-        if( ! fEvent->GetPSDModule(i)->HasPassedCuts() )
+        if( !fSelector->IsCorrectFwHit(i) )
             continue;
-        int id = fEvent->GetPSDModule(i)->GetId();
-        hFwCharge.at(id)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetChargeZ() );
+        hFwCharge.back()->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
     }
 	int iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fPSDModule;
@@ -202,22 +200,9 @@ void EventQA::SaveHistograms(TString PicName)
         vCanvas[i]->SaveAs(sPath);
     }
     auto canvas = new TCanvas( "Forward Wall", "", 900, 700 );
-    for( int i=0; i<hFwCharge.size(); i++ )
-    {
-        canvas->cd();
-        hFwCharge.at(i)->Draw("colz");
-        if( i == 0 )
-        {
-            canvas->Print("../histograms/Fw.pdf(", "pdf");
-            continue;
-        }
-        if( i == hFwCharge.size()-1 )
-        {
-            canvas->Print("../histograms/Fw.pdf)", "pdf");
-            continue;
-        }
-        canvas->Print("../histograms/Fw.pdf", "pdf");
-    }
+    canvas->cd()->SetLogz();
+    hFwCharge.back()->Draw("colz");
+    canvas->Print("../histograms/Fw.png", "png");
 }
 
 void EventQA::SaveHisogramsToROOTFile(TString FileName)
