@@ -122,8 +122,6 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 			continue;
 		fQ->ComputeCorrelations();
     }
-	// fQ->ComputeResolution();
-	// fQ->SavePictures(sPicName);
 	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, 14);
 	cout << "Estimating flow" << endl;
 	for(int i=0; i<lNEvents; i++)
