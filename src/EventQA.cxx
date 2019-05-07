@@ -41,6 +41,7 @@ void EventQA::InitHistograms()
 	vProfile[hits_centrality_selected]=	new TProfile("NumOfHits_centrality_selected",";centrality class;Hits TOF+RPC",20,0,100);
 
     hFwCharge.push_back( new TH2F( "Module number vs Charge", ";signal;module Id", 100, 0, 1000, 304, 0, 304) );
+    hFwCharge.push_back( new TH2F( "Module number vs Charge selected", ";selected signal;module Id", 100, 0, 1000, 304, 0, 304) );
 }
 
 void EventQA::FillHistograms()
@@ -48,9 +49,10 @@ void EventQA::FillHistograms()
     int nPsdModules = fEvent->GetNPSDModules();
     for(int i=0; i<nPsdModules; i++)
     {
+        hFwCharge.at(0)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
         if( !fSelector->IsCorrectFwHit(i) )
             continue;
-        hFwCharge.back()->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
+        hFwCharge.at(1)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
     }
 	int iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fPSDModule;
@@ -196,18 +198,22 @@ void EventQA::SaveHistograms(TString PicName)
 	vProfile[hits_centrality_selected]->Draw();
     for(int i=0; i<NumCanvases; i++)
     {
-        TString sPath = "../histograms/Event_"+PicName+Form("_%i.png",i);
+        TString sPath = PicName+Form("Event_%i.png",i);
         vCanvas[i]->SaveAs(sPath);
     }
-    auto canvas = new TCanvas( "Forward Wall", "", 900, 700 );
-    canvas->cd()->SetLogz();
-    hFwCharge.back()->Draw("colz");
-    canvas->Print("../histograms/Fw.png", "png");
+    vector<TCanvas*> canvas;
+    canvas.push_back( new TCanvas( "Forward Wall", "", 1500, 700 ) );
+    canvas.back()->Divide(2,1);
+    canvas.back()->cd(1)->SetLogz();
+    hFwCharge.at(0)->Draw("colz");
+    canvas.back()->cd(2)->SetLogz();
+    hFwCharge.at(1)->Draw("colz");
+    canvas.back()->Print(PicName+"_Fw.png", "png");
 }
 
 void EventQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = "../histograms/Event"+FileName+".root";
+    TString sPath = FileName+"Event.root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)

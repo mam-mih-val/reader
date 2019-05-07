@@ -74,7 +74,8 @@ class Reader
     void            FillCorrectionHistos();
     DataTreeEvent*  GetEvent(int idx=0);
     void            GetFlow(int iNumHarm=1);
-    void            BuildQAHistograms(TString sPicName);
+    void            BuildEventQaHistograms(TString sPicName);
+    void            BuildTrackQaHistograms(TString sPicName);
     void            InitFlowHistos();
 	void			BuildQvector3SeHistograms(TString sPicName);
 	void			BuildFlow3SeHistograms(TString sPicName);

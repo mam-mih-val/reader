@@ -1,7 +1,8 @@
 // usage:
 // ./DT_Reader [command] ["input filename"] ["output filename"]
 // commands:
-//      qa -        build Quality Assurance histograms
+//      eventqa -   build Quality Assurance histograms of Event varriables
+//      trackqa -   build Quality Assurance histograms of Track varriables
 //      qvector -   build Q-vector histograms
 //      flow -      build Flow histograms
 
@@ -18,9 +19,14 @@ int main(int argc, char** argv)
     }
     auto t = new Reader(argv[2]);
     std::string command = argv[1];
-    if( command == "qa" )
+    if( command == "eventqa" )
     {
-        t->BuildQAHistograms(argv[3]);
+        t->BuildEventQaHistograms(argv[3]);
+        return 0;
+    }
+    if( command == "trackqa" )
+    {
+        t->BuildTrackQaHistograms(argv[3]);
         return 0;
     }
     if( command == "qvector" )

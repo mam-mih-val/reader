@@ -30,11 +30,26 @@ DataTreeEvent* Reader::GetEvent(int idx)
     return fEvent;
 }
 
-void Reader::BuildQAHistograms(TString sPicName)
+void Reader::BuildEventQaHistograms(TString sPicName)
 {
 	Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent, "centrality_epcorr_apr12_gen8_2018_07.root");
     EventQA* fEventQA = new EventQA(fEvent, fSelector, fCentrality);
+    Long64_t lNEvents = fChain->GetEntries();
+    for(int i=0; i<lNEvents; i++)
+    {
+        fChain->GetEntry(i);
+		if( !fEvent->GetTrigger(HADES_constants::kPT2)->GetIsFired() )
+			continue;
+        fEventQA->FillHistograms();
+    }
+    fEventQA->SaveHistograms(sPicName);
+}
+
+void Reader::BuildTrackQaHistograms(TString sPicName)
+{
+	Selector* fSelector = new Selector(fEvent);
+	Centrality* fCentrality = new Centrality(fEvent, "centrality_epcorr_apr12_gen8_2018_07.root");
 	TrackQA* fTrackQA[NumOfParticles];
 	fTrackQA[all] = 		new TrackQA(fEvent,fSelector,-1);
 	fTrackQA[electron] = 	new TrackQA(fEvent,fSelector,3);
@@ -49,17 +64,12 @@ void Reader::BuildQAHistograms(TString sPicName)
     for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
-		if( !fEvent->GetTrigger(HADES_constants::kPT2)->GetIsFired() )
-			continue;
-        fEventQA->FillHistograms();
 		for(int j=0; j<NumOfParticles;j++) 
 			fTrackQA[j]->FillHistograms();
     }
-    fEventQA->SaveHistograms(sPicName);
 	for(int j=0; j<NumOfParticles;j++) 
 		fTrackQA[j]->SaveHistograms(sPicName);
 }
-
 void Reader::BuildQvector3SeHistograms(TString sPicName)
 {
 	Long64_t lNEvents = fChain->GetEntries();

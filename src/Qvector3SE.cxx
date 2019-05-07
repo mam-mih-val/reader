@@ -356,7 +356,7 @@ void Qvector3SE::SavePictures(TString sFileName)
 	cout << "Saving Pictures as PNG" << endl;
 	for( auto canvas : cCanvas )
 	{
-		canvas->SaveAs( "../histograms/"+sFileName+Form("_%i_%i_SE.png",i,iNumberOfSE) );
+		canvas->SaveAs( sFileName+Form("_%i_%i_SE.png",i,iNumberOfSE) );
 		i++;
 	}
 }
