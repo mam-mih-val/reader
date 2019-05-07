@@ -364,14 +364,14 @@ void Qvector3SE::SavePictures(TString sFileName)
 void Qvector3SE::EstimateResolution()
 {
 	auto cbin = hCorrelation.at(0)->FindBin( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) );
-	auto resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(8)->GetBinContent(cbin) / hCorrelation.at(4)->GetBinContent(cbin)/2;
-	auto resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(9)->GetBinContent(cbin) / hCorrelation.at(5)->GetBinContent(cbin)/2;
+	auto resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(8)->GetBinContent(cbin) / hCorrelation.at(4)->GetBinContent(cbin);
+	auto resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(9)->GetBinContent(cbin) / hCorrelation.at(5)->GetBinContent(cbin);
 	fResolution.at(0).Set( sqrt(resX), sqrt(resY) );
-	resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(8)->GetBinContent(cbin)/2;
-	resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(9)->GetBinContent(cbin)/2;
+	resX = hCorrelation.at(0)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(8)->GetBinContent(cbin);
+	resY = hCorrelation.at(1)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(9)->GetBinContent(cbin);
 	fResolution.at(1).Set( sqrt(resX), sqrt(resY) );
-	resX = hCorrelation.at(8)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(0)->GetBinContent(cbin)/2;
-	resY = hCorrelation.at(9)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(1)->GetBinContent(cbin)/2;
+	resX = hCorrelation.at(8)->GetBinContent(cbin) * hCorrelation.at(4)->GetBinContent(cbin) / hCorrelation.at(0)->GetBinContent(cbin);
+	resY = hCorrelation.at(9)->GetBinContent(cbin) * hCorrelation.at(5)->GetBinContent(cbin) / hCorrelation.at(1)->GetBinContent(cbin);
 	fResolution.at(2).Set( sqrt(resX), sqrt(resY) );
 }
 
