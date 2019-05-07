@@ -107,6 +107,7 @@ void Flow3SE::Estimate()
 
 void Flow3SE::SavePictures(TString sFileName)
 {
+	cout << "Saving pictures as png" << endl;
 	vector<TCanvas*> canvas;
 	vector<TLegend*> legend;
 	array< vector<THStack*>, 4> stack; // 1, 2 - V vs y; 3, 4 - V vs Pt
@@ -169,24 +170,29 @@ void Flow3SE::SavePictures(TString sFileName)
 			hRapidityOnX.at(se).at(i)->SetMarkerStyle(20+se);
 			hRapidityOnX.at(se).at(i)->SetMarkerSize(2);
 			hRapidityOnX.at(se).at(i)->SetLineWidth(2);
+			hRapidityOnX.at(se).at(i)->GetYaxis()->SetRangeUser(-0.5,0.5);
 
 			hRapidityOnY.at(se).at(i)->SetLineColor(se+1);
 			hRapidityOnY.at(se).at(i)->SetMarkerColor(se+1);
 			hRapidityOnY.at(se).at(i)->SetMarkerStyle(20+se);
 			hRapidityOnY.at(se).at(i)->SetMarkerSize(2);
 			hRapidityOnY.at(se).at(i)->SetLineWidth(2);
+			hRapidityOnY.at(se).at(i)->GetYaxis()->SetRangeUser(-0.5,0.5);
 			
 			hPtOnX.at(se).at(i)->SetLineColor(se+1);
 			hPtOnX.at(se).at(i)->SetMarkerColor(se+1);
 			hPtOnX.at(se).at(i)->SetMarkerStyle(20+se);
 			hPtOnX.at(se).at(i)->SetMarkerSize(2);
 			hPtOnX.at(se).at(i)->SetLineWidth(2);
+			hPtOnX.at(se).at(i)->GetYaxis()->SetRangeUser(0.0,0.3);
 			
 			hPtOnY.at(se).at(i)->SetLineColor(se+1);
 			hPtOnY.at(se).at(i)->SetMarkerColor(se+1);
 			hPtOnY.at(se).at(i)->SetMarkerStyle(20+se);
 			hPtOnY.at(se).at(i)->SetMarkerSize(2);
 			hPtOnY.at(se).at(i)->SetLineWidth(2);
+			hPtOnY.at(se).at(i)->GetYaxis()->SetRangeUser(0.0,0.3);
+
 		}
 	}
 	legend.push_back( new TLegend(0.1,0.8,0.38,0.9) );
@@ -203,14 +209,10 @@ void Flow3SE::SavePictures(TString sFileName)
 		for(int j=0; j<4; j++)
 		{
 			canvas.at(i)->cd(j+1);
-			if( i<2 && i>=0 )
-				stack.at(i).at(j)->GetYaxis()->SetRangeUser(-0.5,0.5);
-			if( i>=2 && i<4 )
-				stack.at(i).at(j)->GetYaxis()->SetRangeUser(0.0,0.3);
 			stack.at(i).at(j)->Draw();
 			legend.back()->Draw();
 		}
-		canvas.at(i)->SaveAs( sFileName+Form("%i",i)+".png" );
+		canvas.at(i)->SaveAs( sFileName+Form("flow_%i",i)+".png" );
 	}
 }
 
