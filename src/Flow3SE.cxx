@@ -203,6 +203,10 @@ void Flow3SE::SavePictures(TString sFileName)
 		for(int j=0; j<4; j++)
 		{
 			canvas.at(i)->cd(j+1);
+			if( i<2 && i>=0 )
+				stack.at(i).at(j)->GetYaxis()->SetRangeUser(-0.5,0.5);
+			if( i>=2 && i<4 )
+				stack.at(i).at(j)->GetYaxis()->SetRangeUser(0.0,0.3);
 			stack.at(i).at(j)->Draw();
 			legend.back()->Draw();
 		}
