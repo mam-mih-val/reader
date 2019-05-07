@@ -42,6 +42,7 @@ void EventQA::InitHistograms()
 
     hFwCharge.push_back( new TH2F( "Module number vs Charge", ";signal;module Id", 100, 0, 1000, 304, 0, 304) );
     hFwCharge.push_back( new TH2F( "Module number vs Charge selected", ";selected signal;module Id", 100, 0, 1000, 304, 0, 304) );
+    hFwCharge.push_back( new TH2F( "Module number vs Charge Behruz selected", ";selected by Behruz signal;module Id", 100, 0, 1000, 304, 0, 304) );
 }
 
 void EventQA::FillHistograms()
@@ -50,9 +51,10 @@ void EventQA::FillHistograms()
     for(int i=0; i<nPsdModules; i++)
     {
         hFwCharge.at(0)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
-        if( !fSelector->IsCorrectFwHit(i) )
-            continue;
-        hFwCharge.at(1)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
+        if( fSelector->IsCorrectFwHit(i) )
+            hFwCharge.at(1)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
+        if( fEvent->GetPSDModule(i)->HasPassedCuts() )
+            hFwCharge.at(2)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
     }
 	int iNPSDModules = fEvent->GetNPSDModules();
     DataTreePSDModule* fPSDModule;
@@ -202,12 +204,14 @@ void EventQA::SaveHistograms(TString PicName)
         vCanvas[i]->SaveAs(sPath);
     }
     vector<TCanvas*> canvas;
-    canvas.push_back( new TCanvas( "Forward Wall", "", 1500, 700 ) );
-    canvas.back()->Divide(2,1);
+    canvas.push_back( new TCanvas( "Forward Wall", "", 2400, 700 ) );
+    canvas.back()->Divide(3,1);
     canvas.back()->cd(1)->SetLogz();
     hFwCharge.at(0)->Draw("colz");
     canvas.back()->cd(2)->SetLogz();
     hFwCharge.at(1)->Draw("colz");
+    canvas.back()->cd(3)->SetLogz();
+    hFwCharge.at(2)->Draw("colz");
     canvas.back()->Print(PicName+"_Fw.png", "png");
 }
 
