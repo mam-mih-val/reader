@@ -200,8 +200,8 @@ void Qvector3SE::ComputeResolution()
 		auto resY = hCorrelation.at(1)->GetBinContent(i+1) * hCorrelation.at(9)->GetBinContent(i+1) / hCorrelation.at(5)->GetBinContent(i+1);
 		hResolutionX.at(0)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
 		hResolutionY.at(0)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
-		hResolutionX.at(0)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
-		hResolutionY.at(0)->SetPointError( i, 0.0, ErrY*sqrt(resY) );
+		hResolutionX.at(0)->SetPointError( i, 0.0, 0.5*ErrX*sqrt(resX) );
+		hResolutionY.at(0)->SetPointError( i, 0.0, 0.5*ErrY*sqrt(resY) );
 	}
 	for(int i=0; i<nbins;i++)
 	{
@@ -225,8 +225,8 @@ void Qvector3SE::ComputeResolution()
 		auto resY = hCorrelation.at(1)->GetBinContent(i+1) * hCorrelation.at(5)->GetBinContent(i+1) / hCorrelation.at(9)->GetBinContent(i+1);
 		hResolutionX.at(1)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
 		hResolutionY.at(1)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
-		hResolutionX.at(1)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
-		hResolutionY.at(1)->SetPointError( i, 0.0, ErrY*sqrt(resY) );
+		hResolutionX.at(1)->SetPointError( i, 0.0, 0.5*ErrX*sqrt(resX) );
+		hResolutionY.at(1)->SetPointError( i, 0.0, 0.5*ErrY*sqrt(resY) );
 	}
 	for(int i=0; i<nbins;i++)
 	{
@@ -250,8 +250,8 @@ void Qvector3SE::ComputeResolution()
 		auto resY = hCorrelation.at(9)->GetBinContent(i+1) * hCorrelation.at(5)->GetBinContent(i+1) / hCorrelation.at(1)->GetBinContent(i+1);
 		hResolutionX.at(2)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resX) );
 		hResolutionY.at(2)->SetPoint( i, (float) 2.5*(2*i+1), sqrt(resY) );
-		hResolutionX.at(2)->SetPointError( i, 0.0, ErrX*sqrt(resX) );
-		hResolutionY.at(2)->SetPointError( i, 0.0, ErrY*sqrt(resY) );
+		hResolutionX.at(2)->SetPointError( i, 0.0, 0.5*ErrX*sqrt(resX) );
+		hResolutionY.at(2)->SetPointError( i, 0.0, 0.5*ErrY*sqrt(resY) );
 	}
 }
 
