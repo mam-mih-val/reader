@@ -101,7 +101,7 @@ void Qvector3SE::Estimate()
 		float SumCharge=0;
 		for( auto &module : SubEvent.at(i) )
 		{
-			float charge = module->GetEnergy();
+			float charge = module->GetChargeZ();
 			double phi = module->GetPhi();
 			TVector2 add;	
 			add.SetMagPhi( charge, phi );
