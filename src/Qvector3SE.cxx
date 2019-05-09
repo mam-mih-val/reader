@@ -82,8 +82,8 @@ void Qvector3SE::Estimate()
 	{
 		if( !fSelector->IsCorrectFwHit(i) )
 			continue;
-		if( fEvent->GetPSDModule(i)->GetEnergy() > 120 )
-			continue;
+//		if( fEvent->GetPSDModule(i)->GetEnergy() > 120 )
+//			continue;
 		if( fEvent->GetPSDModule(i)->GetRing() >= 1 && fEvent->GetPSDModule(i)->GetRing() < 6 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
 		if( fEvent->GetPSDModule(i)->GetRing() == 6 || fEvent->GetPSDModule(i)->GetRing() == 7 )

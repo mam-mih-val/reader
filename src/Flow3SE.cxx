@@ -211,7 +211,7 @@ void Flow3SE::SavePictures(TString sFileName)
 	}
 	stack.at(4).push_back( new THStack( "v_{1}^{y} vs pt", ";pt, #frac{GeV}{c};v_{1}") );
 	for( int i=0; i<hPt.size(); i++ )
-		stack.at(4).back()->Add( hPt.at(i) );
+		stack.at(4).back()->Add( hPt.at(i));
 	for( int i=0; i<5; i++ )
 	{
 		for( int se=0; se<3; se++ )
