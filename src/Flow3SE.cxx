@@ -77,6 +77,14 @@ void Flow3SE::InitializeHistograms()
 		yPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 		yPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 	}
+	for( int se=0; se<3; se++ )
+	{
+		hResolution.at(se).push_back( new TProfile( Form("resolution, SE%i_{x}", se), "resolution, SP;centrality;R_{1}^{x}", 20, 0, 100 ) );
+		hResolution.at(se).push_back( new TProfile( Form("resolution, SE%i_{y}", se), "resolution, SP;centrality;R_{1}^{y}", 20, 0, 100 ) );
+	}
+	this->InitializeQvectorCorrelations();
+	hKinematics.push_back( new TH2F( "m^{2} vs p", ";p, #frac{GeV}{c};m^{2}, #frac{GeV^{2}}{c^{4}}", 100, -3.0, 3.0, 100, 0.0, 18.0 ) );
+	hKinematics.push_back( new TH2F( "pt vs y_{cm}", ";y_{cm};pt, #frac{GeV}{c}", 100, -1.0, 1.0, 100, 0.0, 3.0 ) );
 	for( auto &vector : xPt )
 		for( auto histo : vector )
 			histo->Sumw2();
@@ -85,8 +93,62 @@ void Flow3SE::InitializeHistograms()
 			histo->Sumw2();
 }
 
+void Flow3SE::InitializeQvectorCorrelations()
+{
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{b}", ";Centrality;Qx_{a}Qx_{b}", 10, 0, 50) ); // 0
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{b}", ";Centrality;Qy_{a}Qy_{b}", 10, 0, 50) ); // 1
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{b}", ";Centrality;Qx_{a}Qy_{b}", 10, 0, 50) ); // 2
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{b}", ";Centrality;Qy_{a}Qx_{b}", 10, 0, 50) ); // 3
+
+	hCorrelation.push_back( new TProfile("Qx_{b}Qx_{c}", ";Centrality;Qx_{b}Qx_{c}", 10, 0, 50) ); // 4
+	hCorrelation.push_back( new TProfile("Qy_{b}Qy_{c}", ";Centrality;Qy_{b}Qy_{c}", 10, 0, 50) ); // 5
+	hCorrelation.push_back( new TProfile("Qx_{b}Qy_{c}", ";Centrality;Qx_{b}Qx_{c}", 10, 0, 50) ); // 6
+	hCorrelation.push_back( new TProfile("Qy_{b}Qx_{c}", ";Centrality;Qy_{b}Qx_{c}", 10, 0, 50) ); // 7
+
+	hCorrelation.push_back( new TProfile("Qx_{a}Qx_{c}", ";Centrality;Qx_{a}Qx_{c}", 10, 0, 50) ); // 8
+	hCorrelation.push_back( new TProfile("Qy_{a}Qy_{c}", ";Centrality;Qy_{a}Qy_{c}", 10, 0, 50) ); // 9
+	hCorrelation.push_back( new TProfile("Qx_{a}Qy_{c}", ";Centrality;Qx_{a}Qx_{c}", 10, 0, 50) ); // 10
+	hCorrelation.push_back( new TProfile("Qy_{a}Qx_{c}", ";Centrality;Qy_{a}Qx_{c}", 10, 0, 50) ); // 11
+	this->InitializeQaHistograms();
+}
+
+void Flow3SE::InitializeObservableFlow()
+{
+	for( int se=0; se<3; se++ )
+	{
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.7, 0.7) ); // 0
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.7, 0.7) ); // 1
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.7, 0.7) ); // 2
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.7, 0.7) ); // 3
+		xObsRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.7, 0.7) ); // 4
+		xObsRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.7, 0.7) ); // 5
+
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.7, 0.7) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.7, 0.7) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.7, 0.7) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.7, 0.7) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.7, 0.7) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.7, 0.7) );
+	}
+	for(int i=0; i<3; i++)
+	{
+		xObsPt.at(i).push_back( new TProfile( Form( "-0.05 < y_{cm} < 0.05, SE%i_{x}",  i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 0
+		xObsPt.at(i).push_back( new TProfile( Form( "-0.25 < y_{cm} < -0.15, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 1
+		xObsPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 2
+		xObsPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 3
+		xObsPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 4
+		
+		yObsPt.at(i).push_back( new TProfile( Form( "-0.05 < y_{cm} < 0.05, SE%i_{y}",  i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "-0.25 < y_{cm} < -0.15, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+	}
+}
+
 void Flow3SE::Estimate()
 {
+	this->FillQaHistograms();
 	double BETA = sqrt( 1.0 - 0.938*0.938/1.23/1.23 );
 	auto ntracks = fEvent->GetNVertexTracks();
 	TVector3 b; b.SetXYZ(0,0,-BETA);
@@ -373,62 +435,17 @@ void Flow3SE::SaveYDependence(TString sFileName)
 
 void Flow3SE::SaveHistogramsToRootFile(TString sFileName)
 {
-	cout << "Saving pictures to ROOT file" << endl;
-	auto file = new TFile( sFileName+".root", "recreate" );
-	array< vector<TProfile*>, 3> hRapidityOnX;
-	array< vector<TProfile*>, 3> hRapidityOnY;
-	array< vector<TProfile*>, 3> hPtOnX;
-	array< vector<TProfile*>, 3> hPtOnY;
-	for( int se=0; se < 3; se++)
-	{
-		for(int i=0; i<4; i++)
-		{
-			hRapidityOnX.at(se).push_back( new TProfile( Form("v1_vs_y_on_X_cent_%i_SE%i", i, se), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
-			hRapidityOnX.at(se).back()->Sumw2();
-			hRapidityOnY.at(se).push_back( new TProfile( Form("v1_vs_y_on_Y_cent_%i_SE%i", i, se), ";rapidity, y_{cm};v{1}", 14, -0.7, 0.7 ) );
-			hRapidityOnY.at(se).back()->Sumw2();
-			hPtOnX.at(se).push_back( new TProfile( Form("v1_vs_pt_on_X_cent_%i_SE%i", i, se), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
-			hPtOnX.at(se).back()->Sumw2();
-			hPtOnY.at(se).push_back( new TProfile( Form("v1_vs_pt_on_Y_cent_%i_SE%i", i, se), ";pt, [#frac{GeV}{c}];v{1}", 7, 0., 1.4 ) );
-			hPtOnY.at(se).back()->Sumw2();		
-		}
-	}
-	for( int se=0; se<3; se++ )
-	{
-		for( int i=0; i<4; i++ )
-		{
-			for( int j=i*2; j<(i+1)*2; j++ )
-			{
-				float wRapX = xRapidity.at(se).at(j)->GetEntries();
-				float wRapY = yRapidity.at(se).at(j)->GetEntries();
-				float wPtX = xPt.at(se).at(j)->GetEntries();
-				float wPtY = yPt.at(se).at(j)->GetEntries();
-				hRapidityOnX.at(se).at(i)->Add( xRapidity.at(se).at(j), wRapX );
-				hRapidityOnY.at(se).at(i)->Add( yRapidity.at(se).at(j), wRapY );
-				hPtOnX.at(se).at(i)->Add( xPt.at(se).at(j), wPtX );
-				hPtOnY.at(se).at(i)->Add( yPt.at(se).at(j), wPtY );
-			}
-		}
-	}
+	auto file = new TFile(sFileName+".root");
 	file->cd();
-	for( auto &vec : hRapidityOnX )
+	for(int se=0; se<3; se++)
 	{
-		for( auto histo : vec )
+		for( auto histo : xRapidity.at(se) )
 			histo->Write();
-	}
-	for( auto &vec : hRapidityOnY )
-	{
-		for( auto histo : vec )
+		for( auto histo : yRapidity.at(se) )
 			histo->Write();
-	}
-	for( auto &vec : hPtOnX )
-	{
-		for( auto histo : vec )
+		for( auto histo : xPt.at(se) )
 			histo->Write();
-	}
-	for( auto &vec : hPtOnY )
-	{
-		for( auto histo : vec )
+		for( auto histo : yPt.at(se) )
 			histo->Write();
 	}
 	file->Close();

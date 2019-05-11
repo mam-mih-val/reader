@@ -32,6 +32,28 @@ class Flow3SE : public Flow
 	array< vector<TProfile*>, 3 > yRapidity;
 	array< vector<TProfile*>, 3 > xPt;
 	array< vector<TProfile*>, 3 > yPt;
+	array< vector<TProfile*>, 3 > xObsRapidity;
+	array< vector<TProfile*>, 3 > yObsRapidity;
+	array< vector<TProfile*>, 3 > xObsPt;
+	array< vector<TProfile*>, 3 > yObsPt;
+	array< vector<TProfile*>, 3 > hResolution;
+	enum eQvectorCorrelations{
+		QxAQxB=0,
+		QyAQyB,
+		QxAQyB,
+		QyAQxB,
+		QxBQxC,
+		QyBQyC,
+		QxBQyC,
+		QyBQxC,
+		QxAQxC,
+		QyAQyC,
+		QxAQyC,
+		QyAQxC,
+		kNumberOfCorrelations
+	};
+	void		InitializeQvectorCorrelations();
+	void		InitializeObservableFlow();
 	void		FillPtDependence(int trackIdx);
 	void		FillYDependence(int trackIdx);
 	void		SavePtDependence(TString sFileName);
