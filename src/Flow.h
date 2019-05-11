@@ -26,6 +26,7 @@ class Flow
 	int fNumberOfSE;
 	int fPid;
 	vector<TVector2> fUvector;
+	vector<TVector2> fFlow;
 	DataTreeEvent* fEvent;
 	Centrality* fCentrality;
 	Selector* fSelector;

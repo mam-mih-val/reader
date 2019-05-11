@@ -108,6 +108,8 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
+		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) < 20 || fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 30 )
+			continue;
 		if( !fSelector->IsCorrectEvent() )
 			continue;
 		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 40. )
@@ -118,6 +120,8 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
+		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) < 20 || fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 30 )
+			continue;
 		if( !fSelector->IsCorrectEvent() )
 			continue;
 		fQ->ComputeCorrelations();
@@ -127,6 +131,8 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 	for(int i=0; i<lNEvents; i++)
     {
 		fChain->GetEntry(i);
+		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) < 20 || fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 30 )
+			continue;
 		if( !fSelector->IsCorrectEvent() )
 			continue;
 		flow->Estimate();

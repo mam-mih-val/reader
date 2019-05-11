@@ -32,6 +32,10 @@ class Flow3SE : public Flow
 	array< vector<TProfile*>, 3 > yRapidity;
 	array< vector<TProfile*>, 3 > xPt;
 	array< vector<TProfile*>, 3 > yPt;
+	void		FillPtDependence(int trackIdx);
+	void		FillYDependence(int trackIdx);
+	void		SavePtDependence(TString sFileName);
+	void		SaveYDependence(TString sFileName);
 	Flow3SE() {};
 	public:
 	Flow3SE(DataTreeEvent* _event, Centrality* _centrality, Qvector3SE* _Qvector, Selector* _selector, int _pid=14);

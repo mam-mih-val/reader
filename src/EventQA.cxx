@@ -24,7 +24,9 @@ void EventQA::InitHistograms()
     vHisto1D[hitsTOF_matched] =     		new TH1F("hitsTOF_matched",";hits in TOF+RPC matched;counts",100,0,100);
     vHisto1D[hitsTOF_matched_selected]=		new TH1F("hitsTOF_matched_selected",";hits in TOF+RPC matched&selected;counts",100,0,100);
 	vHisto1D[histo_centrality] =			new TH1F("centrality",";centrality class;counts",20,0,100);
+    vHisto1D[histo_centrality]->Sumw2();
 	vHisto1D[histo_centrality_selected] =	new TH1F("centrality_selected",";centrality class;counts",20,0,100);
+    vHisto1D[histo_centrality_selected]->Sumw2();
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,250);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,250);
