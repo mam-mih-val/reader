@@ -1,6 +1,7 @@
 #pragma once
 #include "TVector2.h"
-#include "TProfile3D.h"
+#include "TH1F.h"
+#include "TH2F.h"
 #include "TCanvas.h"
 #include "TPad.h"
 #include "THStack.h"
@@ -26,18 +27,9 @@ class Flow
 	protected:
 	int fNumberOfSE;
 	int fPid;
-	vector<TVector2> fUvector;
-	vector<TVector2> fFlow;
-	DataTreeEvent* fEvent;
-	Centrality* fCentrality;
-	Selector* fSelector;
-	
-	array<TH2F*, kNumberOf1dQa> h1dQa;
-	array<TH2F*, kNumberOf2dQa> h2dQa;
-	
 	enum e1dQa{
 		kCentrality = 0,
-		kCentralityEsimator,
+		kCentralityEstimator,
 		kNumberOf1dQa
 	};
 	enum e2dQa{
@@ -49,14 +41,24 @@ class Flow
 		kFwZVsModuleId,
 		kNumberOf2dQa
 	};
-	virtual void InitializeQvectorCorrelations();
+	vector<TVector2> fUvector;
+	vector<TVector2> fFlow;
+	DataTreeEvent* fEvent;
+	Centrality* fCentrality;
+	Selector* fSelector;
+	
+	array<TH1F*, kNumberOf1dQa> h1dQa;
+	array<TH2F*, kNumberOf2dQa> h2dQa;
+	
+	
+	virtual void InitializeQvectorCorrelations() {};
 			void InitializeQaHistograms();
-	virtual void InitializeObservableFlow();
-	virtual void FillPtDependence(int trackIdx);
+	virtual void InitializeObservableFlow() {};
+	virtual void FillPtDependence(int trackIdx) {};
 			void FillQaHistograms();
-	virtual void FillYDependence(int trackIdx);
-	virtual void SavePtDependence(TString sFileName);
-	virtual void SaveYDependence(TString sFileName);
+	virtual void FillYDependence(int trackIdx) {};
+	virtual void SavePtDependence(TString sFileName) {};
+	virtual void SaveYDependence(TString sFileName) {};
 	Flow() {};
 	public:
 	~Flow() {};

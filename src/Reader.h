@@ -77,7 +77,7 @@ class Reader
     void            BuildEventQaHistograms(TString sPicName);
     void            BuildTrackQaHistograms(TString sPicName);
     void            InitFlowHistos();
-	void			BuildQvector3SeHistograms(TString sPicName);
-	void			BuildFlow3SeHistograms(TString sPicName);
+	void			BuildQvector3SeHistograms(TString sPicName, bool channelSelection=0, bool fwZ=0, bool protonSpectators=0);
+	void			BuildFlow3SeHistograms(TString sPicName, bool channelSelection=0, bool fwZ=0, bool protonSpectators=0);
     void            SaveFlowStatistics();
 };

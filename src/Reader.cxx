@@ -70,12 +70,12 @@ void Reader::BuildTrackQaHistograms(TString sPicName)
 	for(int j=0; j<NumOfParticles;j++) 
 		fTrackQA[j]->SaveHistograms(sPicName);
 }
-void Reader::BuildQvector3SeHistograms(TString sPicName)
+void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, bool fwZ, bool protonSpectators)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, fwZ, protonSpectators);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
@@ -98,18 +98,16 @@ void Reader::BuildQvector3SeHistograms(TString sPicName)
 	fQ->SaveHistogramsToROOTFile(sPicName);
 }
 
-void Reader::BuildFlow3SeHistograms(TString sPicName)
+void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, bool fwZ, bool protonSpectators)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, fwZ, protonSpectators);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
-		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) < 20 || fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 30 )
-			continue;
 		if( !fSelector->IsCorrectEvent() )
 			continue;
 		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 40. )
@@ -120,8 +118,6 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 	for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
-		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) < 20 || fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 30 )
-			continue;
 		if( !fSelector->IsCorrectEvent() )
 			continue;
 		fQ->ComputeCorrelations();
@@ -138,5 +134,5 @@ void Reader::BuildFlow3SeHistograms(TString sPicName)
 		flow->Estimate();
     }
 	flow->SavePictures(sPicName);
-	//flow->SaveHistogramsToRootFile(sPicName);
+	flow->SaveHistogramsToRootFile(sPicName);
 }

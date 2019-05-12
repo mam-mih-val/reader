@@ -34,7 +34,7 @@ class Qvector3SE : public Qvector
 	void		EstimateResolution();
 
 	public:
-    Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality);
+    Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality, bool _channelSelection=0, bool _fwZ=0, bool _protonSpectators=0);
     ~Qvector3SE();
 	void		Compute(); // One computes Qvector without filling any histograms
     void        ComputeCorrections();
@@ -42,6 +42,8 @@ class Qvector3SE : public Qvector
 	void		ComputeResolution(); 
 	void		Estimate();
 	void		InitializeHistograms();
+	vector<TGraphErrors*> GetResolutionXGraph() { return hResolutionX; }
+	vector<TGraphErrors*> GetResolutionYGraph() { return hResolutionY; }
 	TVector2	Resolution(int se=0) { return fResolution.at(se); }
 	void		SavePictures(TString sFileName);
 	void		SaveHistogramsToROOTFile(TString sFileName);

@@ -26,6 +26,9 @@ class Qvector
 {
     protected:
     unsigned int iNumberOfSE;
+	bool fChannelSelection;
+	bool fFwZ;
+	bool fProtonSpectators;
 	Selector* fSelector;
 	Centrality* fCentrality;
 	DataTreeEvent* fEvent;
@@ -47,9 +50,10 @@ class Qvector
     virtual void        Estimate() {};
 	virtual void		Compute() {}; // One computes Qvector without filling any histograms
 	virtual void		ComputeResolution() {}; 
-	virtual void		EstimateResolution() {};
 	virtual void		ComputeCorrelations() {};
     virtual void        ComputeCorrections() {};
+	virtual void		EstimateResolution() {};
+	vector<TProfile*>	GetCorrelationsHistograms() { return hCorrelation; }
 			float		X(int se=0) { return fQvector.at(se).X(); }
 			float		Y(int se=0) { return fQvector.at(se).Y(); }
 			float		Psi(int se=0) { return fQvector.at(se).Phi(); }
