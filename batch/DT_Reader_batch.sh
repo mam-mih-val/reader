@@ -2,15 +2,15 @@
 
 hadesroot=/cvmfs/hades.gsi.de/install/6.12.06/hydra2-4.9w/defall.sh 
 
-current_dir = $(pwd)
-partition = main
+current_dir=$(pwd)
+partition=main
 time=8:00:00
 executable=../build/DT_Reader
 
-file_list =     ${1}
-cmd =           ${2}
-config =        ${3}
-output_dir =    ${4}
+file_list=${1}
+cmd=${2}
+config=${3}
+output_dir=${4}
 
 log_dir=${output_dir}/log
 
