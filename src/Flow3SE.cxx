@@ -371,6 +371,8 @@ void Flow3SE::SavePtDependence(TString sFileName)
 	stack.back().back()->Draw("NOSTACK");
 	gPad->BuildLegend(0.1,0.75,0.5,0.9);
 	canvas.back()->SaveAs( sFileName+"_pt_2.png" );
+	for( auto canv : canvas )
+		delete canv;
 }
 
 void Flow3SE::SaveYDependence(TString sFileName)
@@ -452,6 +454,8 @@ void Flow3SE::SaveYDependence(TString sFileName)
 	stack.back().back()->Draw("NOSTACK");
 	gPad->BuildLegend(0.1,0.75,0.5,0.9);
 	canvas.back()->SaveAs( sFileName+"_y_2.png" );
+	for( auto canv : canvas )
+		delete canv;
 }
 
 void Flow3SE::SaveHistogramsToRootFile(TString sFileName)
