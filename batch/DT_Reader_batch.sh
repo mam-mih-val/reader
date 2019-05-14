@@ -1,3 +1,5 @@
+#!/bin/bash
+
 hadesroot=/cvmfs/hades.gsi.de/install/6.12.06/hydra2-4.9w/defall.sh 
 
 current_dir = $(pwd)
