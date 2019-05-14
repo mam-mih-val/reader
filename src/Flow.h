@@ -55,7 +55,7 @@ class Flow
 			void InitializeQaHistograms();
 	virtual void InitializeObservableFlow() {};
 	virtual void FillPtDependence(int trackIdx) {};
-			void FillQaHistograms();
+			void FillQaHistograms(bool channelSelection=0, bool protonSpectators=0);
 	virtual void FillYDependence(int trackIdx) {};
 	virtual void SavePtDependence(TString sFileName) {};
 	virtual void SaveYDependence(TString sFileName) {};

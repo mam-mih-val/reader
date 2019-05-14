@@ -57,6 +57,9 @@ class Qvector
 			float		X(int se=0) { return fQvector.at(se).X(); }
 			float		Y(int se=0) { return fQvector.at(se).Y(); }
 			float		Psi(int se=0) { return fQvector.at(se).Phi(); }
+			bool		ChannelSelection() { return fChannelSelection; }
+			bool		FwZ() { return fFwZ; }
+			bool		ProtonSpectators() { return fProtonSpectators; }
 	virtual void		InitializeHistograms() {};
 	virtual void		SavePictures(TString sFileName) {};
 	virtual void		SaveHistogramsToROOTFile(TString sFileName);
