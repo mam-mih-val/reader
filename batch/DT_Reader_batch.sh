@@ -17,7 +17,7 @@ log_dir=${output_dir}/log
 mkdir -p $output_dir
 mkdir -p $log_dir
 
-n_runs=$(cat file_list | wc -l)
+n_runs=$(cat $file_list | wc -l)
 
 job_range=1-$n_runs
 
