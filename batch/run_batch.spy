@@ -1,3 +1,5 @@
+#!/u/mmamaev/.local/bin/shellpy
+
 import sys
 
 hades_root = '/cvmfs/hades.gsi.de/install/6.12.06/hydra2-4.9w/defall.sh'
