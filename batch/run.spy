@@ -1,0 +1,51 @@
+import sys
+
+hades_root = '/cvmfs/hades.gsi.de/install/6.12.06/hydra2-4.9w/defall.sh'
+
+def batch(executable, file_list, command, config, output_dir) :
+    format='+%Y/%m/%d-%H:%M:%S'
+    print(`date format`)
+    job_num= int(`SLURM_ARRAY_TASK_ID`)
+    output_file=output_dir+"/"str(job_num)+".root"
+    file = open(file_list)
+    lines = file.readlines()
+    input_file == lines[job_num]
+    `source hades_root
+    `./executable input_file command config output_file
+    print "Job finnished"
+
+
+
+current_dir = str(`pwd`)
+partition = 'main'
+time="8:00:00"
+executable='../build/DT_Reader'
+
+if len(sys.argv) != 5 :
+    print("Error: Incorrect number of arguments")
+    sys.exit(1)
+
+file_list = sys.argv[1]
+command = sys.argv[2]
+config = sys.argv[3]
+output_dir = sys.argv[4]
+
+log_dir = output_dir+"/log"
+
+`
+mkdir -p output_dir
+mkdir -p log_dir
+`
+
+with open(file_list) as file:
+    n_runs = sum(1 for _ in file)
+
+job_range='1-'+str(n_runs)
+
+print "executable =",executable
+print "output_dir =",output_dir
+print "log_dir =", log_dir
+print "n_runs =", n_runs
+print "job_range =", job_range
+
+`sbatch -J DT_Reader -p partition -t time -a job_range -e log_dir+'/%A_%a.e' -o 'log_dir/%A_%a.o' batch(executable, file_list, command, config, output_dir)
