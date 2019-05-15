@@ -34,4 +34,4 @@ print "log_dir =", log_dir
 print "n_runs =", n_runs
 print "job_range =", job_range
 
-`sbatch -J DT_Reader -p partition -t time -a job_range -e log_dir+'/%A_%a.e' -o 'log_dir/%A_%a.o' $shellpy run_batch file_list command config output_dir
+`sbatch -J DT_Reader -p partition -t time -a job_range -e log_dir+'/%A_%a.e' -o 'log_dir/%A_%a.o' $shellpy run_batch.spy file_list command config output_dir
