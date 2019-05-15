@@ -133,6 +133,6 @@ void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, boo
 			continue;
 		flow->Estimate();
     }
-	flow->SavePictures(sPicName);
+	// flow->SavePictures(sPicName);
 	flow->SaveHistogramsToRootFile(sPicName);
 }
