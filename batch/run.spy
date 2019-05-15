@@ -6,7 +6,7 @@ def batch(executable, file_list, command, config, output_dir) :
     format='+%Y/%m/%d-%H:%M:%S'
     print(`date format`)
     job_num= int(`SLURM_ARRAY_TASK_ID`)
-    output_file=output_dir+"/"str(job_num)+".root"
+    output_file=output_dir+"/"+str(job_num)+".root"
     file = open(file_list)
     lines = file.readlines()
     input_file == lines[job_num]
