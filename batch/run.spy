@@ -26,7 +26,7 @@ mkdir -p log_dir
 with open(file_list) as file:
     n_runs = sum(1 for _ in file)
 
-job_range=Result( "0-"+str(n_runs) )
+job_range= `0-n_runs` 
 
 print "executable =",executable
 print "output_dir =",output_dir
