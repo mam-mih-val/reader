@@ -2,7 +2,7 @@ import sys
 
 hades_root = '/cvmfs/hades.gsi.de/install/6.12.06/hydra2-4.9w/defall.sh'
 
-def batch(executable, file_list, command, config, output_dir) :
+def run_batch(executable, file_list, command, config, output_dir) :
     format='+%Y/%m/%d-%H:%M:%S'
     print(`date format`)
     job_num= int(`SLURM_ARRAY_TASK_ID`)
@@ -48,4 +48,4 @@ print "log_dir =", log_dir
 print "n_runs =", n_runs
 print "job_range =", job_range
 
-`sbatch -J DT_Reader -p partition -t time -a job_range -e log_dir+'/%A_%a.e' -o 'log_dir/%A_%a.o' batch(executable, file_list, command, config, output_dir)
+`sbatch -J DT_Reader -p partition -t time -a job_range -e log_dir+'/%A_%a.e' -o 'log_dir/%A_%a.o' run_batch(executable, file_list, command, config, output_dir)
