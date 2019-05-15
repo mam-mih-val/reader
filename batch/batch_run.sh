@@ -6,7 +6,7 @@ date $format
 
 job_num=$(($SLURM_ARRAY_TASK_ID))
 output_file=$output_dir/$job_num.root
-input_file=`sed "${job_num}q;d" $file_list`
+input_file=`sed -n "${job_num}p" < $file_list`
 
 echo "loading " $hadesroot
 source $hadesroot
