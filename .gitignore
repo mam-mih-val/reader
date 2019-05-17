@@ -1,0 +1,14 @@
+histograms/*.*
+src/*.root
+src/*.png
+painter/*.root
+painter/*.png
+batch/*.spy
+*/*.root
+*/*.png
+*/*.pdf
+*/*.txt
+*.root
+*.png
+*.pdf
+*.txt
