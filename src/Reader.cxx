@@ -70,12 +70,12 @@ void Reader::BuildTrackQaHistograms(TString sPicName)
 	for(int j=0; j<NumOfParticles;j++) 
 		fTrackQA[j]->SaveHistograms(sPicName);
 }
-void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, bool fwZ, bool protonSpectators)
+void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, fwZ, protonSpectators);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
@@ -98,12 +98,12 @@ void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, 
 	fQ->SaveHistogramsToROOTFile(sPicName);
 }
 
-void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, bool fwZ, bool protonSpectators)
+void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, fwZ, protonSpectators);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {

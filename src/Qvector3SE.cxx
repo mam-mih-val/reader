@@ -1,13 +1,14 @@
 #include "Qvector3SE.h"
 
-Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality, bool _channelSelection, bool _fwZ, bool _protonSpectators)
+Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality, bool _channelSelection,  TString _signal, float _minSignal, float _maxSignal)
 {
 	fEvent = _fEvent;
 	fCentrality = _centrality;
 	fSelector = _selector;
 	fChannelSelection = _channelSelection;
-	fFwZ = _fwZ;
-	fProtonSpectators = _protonSpectators;
+	fSignal = _signal;
+	fMinSignal=_minSignal;
+	fMaxSignal=_maxSignal;
 	iNumberOfSE = 3;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
@@ -83,7 +84,7 @@ void Qvector3SE::Estimate()
     array<vector<DataTreePSDModule*>, 3> SubEvent;
 	for(unsigned int i=0; i<iNPSDModules; i++)
 	{
-		if( !fSelector->IsCorrectFwHit(i, fChannelSelection, fProtonSpectators) )
+		if( !fSelector->IsCorrectFwHit(i, fChannelSelection, fSignal, fMinSignal, fMaxSignal) )
 			continue;
 		if( fEvent->GetPSDModule(i)->GetRing() >= 1 && fEvent->GetPSDModule(i)->GetRing() < 6 )
 			SubEvent.at(0).push_back( fEvent->GetPSDModule(i) );
@@ -102,7 +103,11 @@ void Qvector3SE::Estimate()
 		float SumCharge=0;
 		for( auto &module : SubEvent.at(i) )
 		{
-			float charge = fFwZ ? module->GetChargeZ() : module->GetEnergy();
+			float charge = 0;
+			if( fSignal=="adc" || fSignal == "ADC" || fSignal == "Adc" )
+				charge = module->GetEnergy();
+			if( fSignal=="z" || fSignal=="Z" )
+				charge = module->GetChargeZ();
 			double phi = module->GetPhi();
 			TVector2 add;	
 			add.SetMagPhi( charge, phi );

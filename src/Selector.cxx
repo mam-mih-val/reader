@@ -110,17 +110,12 @@ Bool_t Selector::IsCorrectTrack(Int_t idx)
     return 1;
 }
 
-Bool_t Selector::IsCorrectFwHit(Int_t idx, bool channelSelection, bool protonsSignal)
+Bool_t Selector::IsCorrectFwHit(Int_t idx, bool channelSelection, TString signal, float minSignal, float maxSignal)
 {
     if( !channelSelection )
     {
         if( fEvent->GetPSDModule(idx)->GetEnergy() < 80.0 )
             return 0;
-        if( protonsSignal )
-        {
-            if( fEvent->GetPSDModule(idx)->GetEnergy()>120.0 )
-                return 0;
-        }
         short ring = fEvent->GetPSDModule(idx)->GetRing();
         
         if( ring < 1 )
@@ -155,12 +150,14 @@ Bool_t Selector::IsCorrectFwHit(Int_t idx, bool channelSelection, bool protonsSi
     {
         if( !fEvent->GetPSDModule(idx)->HasPassedCuts() )
             return 0;
-        if( protonsSignal )
-        {
-            if( fEvent->GetPSDModule(idx)->GetChargeZ() != 1 )
-                return 0;
-        }
     }
+    float charge = 0;
+    if( signal=="adc" || signal == "ADC" || signal == "Adc" )
+        charge = fEvent->GetPSDModule(idx)->GetEnergy();
+    if( signal=="z" || signal=="Z" )
+        charge = fEvent->GetPSDModule(idx)->GetChargeZ();
+    if( charge<=minSignal || charge>maxSignal )
+        return 0;
     return 1; 
 }
 

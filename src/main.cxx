@@ -19,57 +19,77 @@ int main(int argc, char** argv)
 {
     if(argc<4)
     {
-        cout << "Error: incorrect number of arguments" << endl;
+        std::cerr << "Error 1: incorrect number of arguments" << endl;
+        std::cerr << argc << " arguments were given, minimum 4 is required" << endl;
         return 1;
     }
-    auto reader = new Reader(argv[1]);
-    std::string command = argv[2];
-    std::string config = argv[3];
-    int channelSelection = (int)config.at(0)-'0';
-    int fwZ = (int)config.at(1)-'0';
-    int protons = (int)config.at(2)-'0';
-    switch (argc)
+    std::string command = argv[1];
+    bool channelSelection;
+    std::string signal="adc";
+    float minSignal=0;
+    float maxSignal=999;
+    auto reader = new Reader(argv[ argc-2 ]);
+    if(argc>4)
     {
-        case 4:
-            if( command == "eventqa" )
+        for(int i=2; i<argc-2; i+=2)
+        {
+            std::string flag=argv[i];
+            if(flag=="--signal")
             {
-                reader->BuildEventQaHistograms(argv[3]);
-                return 0;
+                signal=argv[i+1];
+                continue;
             }
-            if( command == "trackqa" )
+            if(flag=="--perchannel")
             {
-                reader->BuildTrackQaHistograms(argv[3]);
-                return 0;
+                channelSelection=std::atoi(argv[i+1]);
+                continue;
             }
-            if( command == "qvector" )
+            if(flag=="--min")
             {
-                reader->BuildQvector3SeHistograms(argv[3]);
-                return 0;
+                minSignal=std::atof(argv[i+1]);
+                continue;
             }
-            if( command == "flow" )
+            if(flag=="--max")
             {
-                reader->BuildFlow3SeHistograms(argv[3]);
-                return 0;
+                maxSignal=std::atof(argv[i+1]);
+                continue;
             }
-            break;
-        case 5:
-            if( command == "qvector" )
-            {
-                reader->BuildQvector3SeHistograms(argv[4], channelSelection, fwZ, protons);
-                return 0;
-            }
-            if( command == "flow" )
-            {
-                reader->BuildFlow3SeHistograms(argv[4], channelSelection, fwZ, protons);
-                return 0;
-            }
-            break;    
-        default:
-            cout << "Error: incorrect number of arguments" << endl;
-            return 1;
-            break;
+            std::cerr << "Error 3: Unknown flag" << endl;
+            std::cerr << "Only --signal, --perchannel, --min, --max flags are supported" << endl;
+            return 3;
+        }
     }
-    
-    cout << "Error: unknow command" << endl;
+    if( command=="eventqa" )
+    {
+        reader->BuildEventQaHistograms(argv[argc-1]);
+        return 0;
+    }
+    if( command=="trackqa" )
+    {
+        reader->BuildTrackQaHistograms(argv[argc-1]);
+        return 0;
+    }
+    if( command=="qvector" )
+    {
+        cout << "Configuration:" << endl;
+        cout << "Channel Selection: " << channelSelection << endl;
+        cout << "Signal type: " << signal << endl;
+        cout << "Minimal signal: " << minSignal << endl;
+        cout << "Maximal signal: " << maxSignal << endl;
+        reader->BuildQvector3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal);
+        return 0;
+    }
+    if( command=="flow" )
+    {
+        cout << "Configuration:" << endl;
+        cout << "Channel Selection: " << channelSelection << endl;
+        cout << "Signal type: " << signal << endl;
+        cout << "Minimal signal: " << minSignal << endl;
+        cout << "Maximal signal: " << maxSignal << endl;
+        reader->BuildFlow3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal);
+        return 0;
+    }
+    std::cerr << "Error 2: unknow command" << endl;
+    std::cerr << command << " is not known. Only eventqa, trackqa, qvector, flow commands are supported" << endl;
     return 2;
 }

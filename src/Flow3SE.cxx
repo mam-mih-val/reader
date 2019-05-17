@@ -123,7 +123,7 @@ void Flow3SE::InitializeObservableFlow()
 
 void Flow3SE::Estimate()
 {
-	this->FillQaHistograms( fQvector->ChannelSelection(), fQvector->ProtonSpectators() );
+	this->FillQaHistograms( fQvector->ChannelSelection(), fQvector->Signal(), fQvector->MinSignal(), fQvector->MaxSignal() );
 	double BETA = sqrt( 1.0 - 0.938*0.938/1.23/1.23 );
 	auto ntracks = fEvent->GetNVertexTracks();
 	TVector3 b; b.SetXYZ(0,0,-BETA);

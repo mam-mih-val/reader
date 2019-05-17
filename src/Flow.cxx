@@ -13,7 +13,7 @@ void Flow::InitializeQaHistograms()
     h2dQa.at(kFwZVsModuleId) = new TH2F( "FW-Module Id vs FW-Z", ";FW-Z;FW-Module Id", 20, 0.0, 20.0, 304, 0., 304.0 );
 }
 
-void Flow::FillQaHistograms(bool channelSelection, bool protonSpectators)
+void Flow::FillQaHistograms(bool channelSelection, TString signal, float minSignal, float maxSignal)
 {
     h1dQa.at(kCentrality)->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) );
     h1dQa.at(kCentralityEstimator)->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
@@ -42,11 +42,11 @@ void Flow::FillQaHistograms(bool channelSelection, bool protonSpectators)
     int sumAdc=0, sumZ=0;
     for(int i=0; i<nFwModules; i++)
     {
-        if( !fSelector->IsCorrectFwHit(i, channelSelection, protonSpectators) )
+        if( !fSelector->IsCorrectFwHit(i, channelSelection, signal, minSignal, maxSignal) )
             continue;
         h2dQa.at(kFwAdcVsModuleId)->Fill( fEvent->GetPSDModule(i)->GetEnergy(), fEvent->GetPSDModule(i)->GetId() );
-        h2dQa.at(kFwZVsModuleId)->Fill( fEvent->GetPSDModule(i)->GetChargeZ(), fEvent->GetPSDModule(i)->GetId() );
         sumAdc+=fEvent->GetPSDModule(i)->GetEnergy();
+        h2dQa.at(kFwZVsModuleId)->Fill( fEvent->GetPSDModule(i)->GetChargeZ(), fEvent->GetPSDModule(i)->GetId() );
         sumZ+=fEvent->GetPSDModule(i)->GetChargeZ();
     }
     h2dQa.at(kFwAdcVsEstimator)->Fill(fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut),sumAdc);
