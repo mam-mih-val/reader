@@ -19,8 +19,8 @@ int main(int argc, char** argv)
 {
     if(argc<4)
     {
-        std::cerr << "Error 1: incorrect number of arguments" << endl;
-        std::cerr << argc << " arguments were given, minimum 4 is required" << endl;
+        cout << "Error 1: incorrect number of arguments" << endl;
+        cout << argc << " arguments were given, minimum 4 is required" << endl;
         return 1;
     }
     std::string command = argv[1];
@@ -54,8 +54,8 @@ int main(int argc, char** argv)
                 maxSignal=std::atof(argv[i+1]);
                 continue;
             }
-            std::cerr << "Error 3: Unknown flag" << endl;
-            std::cerr << "Only --signal, --perchannel, --min, --max flags are supported" << endl;
+            cout << "Error 3: Unknown flag" << endl;
+            cout << "Only --signal, --perchannel, --min, --max flags are supported" << endl;
             return 3;
         }
     }
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
         reader->BuildFlow3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal);
         return 0;
     }
-    std::cerr << "Error 2: unknow command" << endl;
-    std::cerr << command << " is not known. Only eventqa, trackqa, qvector, flow commands are supported" << endl;
+    cout << "Error 2: unknow command" << endl;
+    cout << command << " is not known. Only eventqa, trackqa, qvector, flow commands are supported" << endl;
     return 2;
 }
