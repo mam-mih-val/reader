@@ -11,7 +11,8 @@ input_file=`sed -n "${job_num}p" < $file_list`
 echo "loading " $hadesroot
 source $hadesroot
 echo "executing $executable  $input_files $output_file $n_events"
-$executable $input_file $cmd $config $output_file
+
+$executable $cmd --signal $signal --perchannel $perchannel --min $min --max $max $input_file $output_file
 
 echo JOB FINISHED!
 date $format
