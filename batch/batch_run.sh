@@ -12,7 +12,7 @@ echo "loading " $hadesroot
 source $hadesroot
 echo "executing $executable  $input_files $output_file $n_events"
 
-$executable $cmd --signal $signal --perchannel $perchannel --min $min --max $max $input_file $output_file
+$executable $cmd --signal $signal --perchannel $perchannel --min $minSignal --max $maxSignal $input_file $output_file
 
 echo JOB FINISHED!
 date $format

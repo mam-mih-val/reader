@@ -69,4 +69,4 @@ echo Channel Selection=$channelSelection
 echo Minimal Signal=$minSignal
 echo Maximal Signal=$maxSignal
 
-sbatch -J DT_Reader -p $partition -t $time -a $job_range -e ${log_dir}/%A_%a.e -o ${log_dir}/%A_%a.o --export=executable=$executable,output_dir=$output_dir,file_list=$file_list,hadesroot=$hadesroot,cmd=$cmd,signal=$signal,perchannel=$perchannel,min=$minSignal,max=$maxSignal batch_run.sh
+sbatch -J DT_Reader -p $partition -t $time -a $job_range -e ${log_dir}/%A_%a.e -o ${log_dir}/%A_%a.o --export=executable=$executable,output_dir=$output_dir,file_list=$file_list,hadesroot=$hadesroot,cmd=$cmd,signal=$signal,perchannel=$perchannel,minSignal=$minSignal,maxSignal=$maxSignal batch_run.sh
