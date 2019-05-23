@@ -55,7 +55,7 @@ int main(int argc, char** argv)
                 continue;
             }
             cout << "Error 3: Unknown flag" << endl;
-            cout << "Only --signal, --perchannel, --min, --max flags are supported" << endl;
+            cout << "Flag: " << flag << " is given. Only --signal, --perchannel, --min, --max flags are supported" << endl;
             return 3;
         }
     }
