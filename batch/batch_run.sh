@@ -10,7 +10,8 @@ input_file=`sed -n "${job_num}p" < $file_list`
 
 echo "loading " $hadesroot
 source $hadesroot
-echo "executing $executable  $input_files $output_file $n_events"
+
+echo "executing $executable $cmd --signal $signal --perchannel $perchannel --min $minSignal --max $maxSignal $input_file $output_file"
 
 $executable $cmd --signal $signal --perchannel $perchannel --min $minSignal --max $maxSignal $input_file $output_file
 
