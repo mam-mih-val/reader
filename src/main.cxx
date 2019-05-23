@@ -54,9 +54,9 @@ int main(int argc, char** argv)
                 maxSignal=std::atof(argv[i+1]);
                 continue;
             }
-            cout << "Error 3: Unknown flag" << endl;
-            cout << "Flag: " << flag << " is given. Only --signal, --perchannel, --min, --max flags are supported" << endl;
-            return 3;
+            // cout << "Error 3: Unknown flag" << endl;
+            // cout << "Flag: " << flag << " is given. Only --signal, --perchannel, --min, --max flags are supported" << endl;
+            // return 3;
         }
     }
     if( command=="eventqa" )
