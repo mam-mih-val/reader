@@ -475,6 +475,8 @@ void Flow3SE::SaveHistogramsToRootFile(TString sFileName)
 		histo->Write();
 	for( auto histo : hCorrelation )
 		histo->Write();
+	for( auto histo : hProfileQa )
+		hsito->Write();
 	for(auto histo:hResolutionX)
 		histo->Write();
 	for(auto histo:hResolutionY)

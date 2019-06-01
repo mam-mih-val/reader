@@ -27,6 +27,11 @@ class Flow
 	protected:
 	int fNumberOfSE;
 	int fPid;
+	enum eProfilesQa{
+		kCosPhiYcm,
+		kSinPhiYcm,
+		kNumberOfQaProfiles
+	};
 	enum e1dQa{
 		kCentrality = 0,
 		kCentralityEstimator,
@@ -39,6 +44,8 @@ class Flow
 		kFwZVsEstimator,
 		kFwAdcVsModuleId,
 		kFwZVsModuleId,
+		kFwTimeVsModuleId,
+		kFwBetaVsModuleId,
 		kNumberOf2dQa
 	};
 	vector<TVector2> fUvector;
@@ -48,6 +55,7 @@ class Flow
 	Selector* fSelector;
 	
 	array<TH1F*, kNumberOf1dQa> h1dQa;
+	array<TProfile*, kNumberOfQaProfiles> hProfileQa;
 	array<TH2F*, kNumberOf2dQa> h2dQa;
 	
 	
