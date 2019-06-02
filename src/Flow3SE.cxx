@@ -49,19 +49,19 @@ void Flow3SE::InitializeHistograms()
 	auto nbins = 20;
 	for( int se=0; se<3; se++ )
 	{
-		xRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 15, -0.75, 0.75) ); // 0
-		xRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 15, -0.75, 0.75) ); // 1
-		xRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 15, -0.75, 0.75) ); // 2
-		xRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 15, -0.75, 0.75) ); // 3
-		xRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 15, -0.75, 0.75) ); // 4
-		xRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 15, -0.75, 0.75) ); // 5
+		xRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.75, 0.75) ); // 0
+		xRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.75, 0.75) ); // 1
+		xRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.75, 0.75) ); // 2
+		xRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.75, 0.75) ); // 3
+		xRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.75, 0.75) ); // 4
+		xRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 SE%i_{x}", se ), ";y_{cm}; v_{1}^{x}", 14, -0.75, 0.75) ); // 5
 
-		yRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 15, -0.75, 0.75) );
-		yRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 15, -0.75, 0.75) );
-		yRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 15, -0.75, 0.75) );
-		yRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 15, -0.75, 0.75) );
-		yRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 15, -0.75, 0.75) );
-		yRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 15, -0.75, 0.75) );
+		yRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.75, 0.75) );
+		yRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.75, 0.75) );
+		yRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.75, 0.75) );
+		yRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.75, 0.75) );
+		yRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.75, 0.75) );
+		yRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 SE%i_{y}", se ), ";y_{cm}; v_{1}^{y}", 14, -0.75, 0.75) );
 	}
 	for(int i=0; i<3; i++)
 	{
@@ -91,19 +91,19 @@ void Flow3SE::InitializeObservableFlow()
 {
 	for( int se=0; se<3; se++ )
 	{
-		xObsRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 15, -0.75, 0.75) ); // 0
-		xObsRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 15, -0.75, 0.75) ); // 1
-		xObsRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 15, -0.75, 0.75) ); // 2
-		xObsRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 15, -0.75, 0.75) ); // 3
-		xObsRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 15, -0.75, 0.75) ); // 4
-		xObsRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 15, -0.75, 0.75) ); // 5
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 14, -0.75, 0.75) ); // 0
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 14, -0.75, 0.75) ); // 1
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 14, -0.75, 0.75) ); // 2
+		xObsRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 14, -0.75, 0.75) ); // 3
+		xObsRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 14, -0.75, 0.75) ); // 4
+		xObsRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 obs SE%i_{x}", se ), ";y_{cm}; u_{1}^{x}*Q_{1}^{x}", 14, -0.75, 0.75) ); // 5
 
-		yObsRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 15, -0.75, 0.75) );
-		yObsRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 15, -0.75, 0.75) );
-		yObsRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 15, -0.75, 0.75) );
-		yObsRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 15, -0.75, 0.75) );
-		yObsRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 15, -0.75, 0.75) );
-		yObsRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 15, -0.75, 0.75) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.25 < pt < 0.3 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 14, -0.75, 0.75) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.4 < pt < 0.45 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 14, -0.75, 0.75) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.6 < pt < 0.65 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 14, -0.75, 0.75) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "0.8 < pt < 0.85 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 14, -0.75, 0.75) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "1.0 < pt < 1.05 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 14, -0.75, 0.75) );
+		yObsRapidity.at(se).push_back( new TProfile( Form( "1.2 < pt < 1.25 obs SE%i_{y}", se ), ";y_{cm}; u_{1}^{y}*Q_{1}^{y}", 14, -0.75, 0.75) );
 	}
 	for(int i=0; i<3; i++)
 	{
@@ -381,12 +381,12 @@ void Flow3SE::SaveYDependence(TString sFileName)
 	vector<TProfile*> hRapidity;
 	vector<TCanvas*> canvas;
 	array< vector<THStack*>, 3> stack;
-	hRapidity.push_back( new TProfile( "0.25 < pt < 0.3", ";y_{cm};v_{1}", 14, -0.7, 0.7) );	// 0
-	hRapidity.push_back( new TProfile( "0.4 < pt < 0.45", ";y_{cm};v_{1}", 14, -0.7, 0.7) );	// 1
-	hRapidity.push_back( new TProfile( "0.6 < pt < 0.65", ";y_{cm};v_{1}", 14, -0.7, 0.7) );	// 2
-	hRapidity.push_back( new TProfile( "0.8 < pt < 0.85", ";y_{cm};v_{1}", 14, -0.7, 0.7) );	// 3
-	hRapidity.push_back( new TProfile( "1.0 < pt < 1.05", ";y_{cm};v_{1}", 14, -0.7, 0.7) );	// 4
-	hRapidity.push_back( new TProfile( "1.2 < pt < 1.25", ";y_{cm};v_{1}", 14, -0.7, 0.7) );	// 5
+	hRapidity.push_back( new TProfile( "0.25 < pt < 0.3", ";y_{cm};v_{1}", 14, -0.75, 0.75) );	// 0
+	hRapidity.push_back( new TProfile( "0.4 < pt < 0.45", ";y_{cm};v_{1}", 14, -0.75, 0.75) );	// 1
+	hRapidity.push_back( new TProfile( "0.6 < pt < 0.65", ";y_{cm};v_{1}", 14, -0.75, 0.75) );	// 2
+	hRapidity.push_back( new TProfile( "0.8 < pt < 0.85", ";y_{cm};v_{1}", 14, -0.75, 0.75) );	// 3
+	hRapidity.push_back( new TProfile( "1.0 < pt < 1.05", ";y_{cm};v_{1}", 14, -0.75, 0.75) );	// 4
+	hRapidity.push_back( new TProfile( "1.2 < pt < 1.25", ";y_{cm};v_{1}", 14, -0.75, 0.75) );	// 5
 	for( int i=0; i<hRapidity.size(); i++ )
 	{
 		hRapidity.at(i)->Sumw2();
