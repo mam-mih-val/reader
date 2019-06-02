@@ -4,8 +4,8 @@ void Flow::InitializeQaHistograms()
 {
     h1dQa.at(kCentrality) = new TH1F( "centrality", ";centrality;entries", 20, 0.0, 100.0 );
     h1dQa.at(kCentralityEstimator) = new TH1F( "centrality estimator", ";TOF+RPC hits;entries", 250, 0.0, 250.0 );
-    hProfileQa.at(kCosPhiYcm) = new TProfile( "cos(#phi) vs y_{cm}", ";y_{cm}; <cos(#phi)>", 220, -1.1, 1.1 );
-    hProfileQa.at(kSinPhiYcm) = new TProfile( "sin(#phi) vs y_{cm}", ";y_{cm}; <sin(#phi)>", 220, -1.1, 1.1 );
+    hProfileQa.at(kCosPhiYcm) = new TProfile( "cos(#phi) vs y_{cm}", ";y_{cm}; <cos(#phi)>", 17, -0.85, 0.85 );
+    hProfileQa.at(kSinPhiYcm) = new TProfile( "sin(#phi) vs y_{cm}", ";y_{cm}; <sin(#phi)>", 17, -0.85, 0.85 );
     
     h2dQa.at(kM2VsP) = new TH2F( "m^{2} vs p", ";p, #frac{GeV}{c};m^{2}, #frac{GeV^{2}}{c^{4}}", 100, -3.0, 3.0, 100, 0, 18.0 );
     h2dQa.at(kPtVsY) = new TH2F( "pt vs y_{cm}", ";y_{cm};pt, #frac{GeV}{c}", 100, -1.0, 1.0, 100, 0, 3.0 );
