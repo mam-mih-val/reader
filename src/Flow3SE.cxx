@@ -65,17 +65,25 @@ void Flow3SE::InitializeHistograms()
 	}
 	for(int i=0; i<3; i++)
 	{
-		xPt.at(i).push_back( new TProfile( Form( "-0.05 < y_{cm} < 0.05, SE%i_{x}",  i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 0
-		xPt.at(i).push_back( new TProfile( Form( "-0.25 < y_{cm} < -0.15, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 1
-		xPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 2
-		xPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 3
-		xPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); // 4
+		xPt.at(i).push_back( new TProfile( Form( "-0.05 < y_{cm} < 0.05, SE%i_{x}",  i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 0
+		xPt.at(i).push_back( new TProfile( Form( "-0.25 < y_{cm} < -0.15, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 1
+		xPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 2
+		xPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 3
+		xPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 4
+		xPt.at(i).push_back( new TProfile( Form( "0.15 < y_{cm} < 0.25, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 5
+		xPt.at(i).push_back( new TProfile( Form( "0.35 < y_{cm} < 0.45, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 6
+		xPt.at(i).push_back( new TProfile( Form( "0.55 < y_{cm} < 0.65, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 7
+		xPt.at(i).push_back( new TProfile( Form( "0.65 < y_{cm} < 0.75, SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) ); 	// 8
 		
 		yPt.at(i).push_back( new TProfile( Form( "-0.05 < y_{cm} < 0.05, SE%i_{y}",  i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 		yPt.at(i).push_back( new TProfile( Form( "-0.25 < y_{cm} < -0.15, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 		yPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 		yPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 		yPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yPt.at(i).push_back( new TProfile( Form( "0.15 < y_{cm} < 0.25, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yPt.at(i).push_back( new TProfile( Form( "0.35 < y_{cm} < 0.45, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yPt.at(i).push_back( new TProfile( Form( "0.55 < y_{cm} < 0.65, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
+		yPt.at(i).push_back( new TProfile( Form( "0.65 < y_{cm} < 0.75, SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; v1_{x}", 25, 0.0, 2.5) );
 	}
 	this->InitializeQaHistograms();
 	this->InitializeObservableFlow();
@@ -112,12 +120,20 @@ void Flow3SE::InitializeObservableFlow()
 		xObsPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 2
 		xObsPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 3
 		xObsPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 4
+		xObsPt.at(i).push_back( new TProfile( Form( "0.25 < y_{cm} < 0.15, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 5
+		xObsPt.at(i).push_back( new TProfile( Form( "0.45 < y_{cm} < 0.35, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 6
+		xObsPt.at(i).push_back( new TProfile( Form( "0.65 < y_{cm} < 0.55, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 7
+		xObsPt.at(i).push_back( new TProfile( Form( "0.75 < y_{cm} < 0.65, obs SE%i_{x}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{x}*Q_{1}^{x}", 25, 0.0, 2.5) ); // 8
 		
 		yObsPt.at(i).push_back( new TProfile( Form( "-0.05 < y_{cm} < 0.05, obs SE%i_{y}",  i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
 		yObsPt.at(i).push_back( new TProfile( Form( "-0.25 < y_{cm} < -0.15, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
 		yObsPt.at(i).push_back( new TProfile( Form( "-0.45 < y_{cm} < -0.35, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
 		yObsPt.at(i).push_back( new TProfile( Form( "-0.65 < y_{cm} < -0.55, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
 		yObsPt.at(i).push_back( new TProfile( Form( "-0.75 < y_{cm} < -0.65, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "0.25 < y_{cm} < 0.15, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "0.45 < y_{cm} < 0.35, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "0.65 < y_{cm} < 0.55, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
+		yObsPt.at(i).push_back( new TProfile( Form( "0.75 < y_{cm} < 0.65, obs SE%i_{y}", i ), ";pt, [#frac{GeV}{c}]; u_{1}^{y}*Q_{1}^{y}", 25, 0.0, 2.5) );
 	}
 }
 
@@ -239,50 +255,86 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			continue;
 		fUvector.at(se).SetMagPhi(1,momentum.Phi());
 		if( momentum.Rapidity() > -0.05 && momentum.Rapidity() < 0.05 )
-			{
-				xPt.at(se).at(0)->Fill( momentum.Pt(), fFlow.at(se).X() );
-				yPt.at(se).at(0)->Fill( momentum.Pt(), fFlow.at(se).Y() );
-				if( fQvector->X(se) > -990.0 )
-					xObsPt.at(se).at(0)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
-				if( fQvector->Y(se) > -990.0 )
-					yObsPt.at(se).at(0)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
-			}
-			if( momentum.Rapidity() > -0.25 && momentum.Rapidity() < -0.15 )
-			{
-				xPt.at(se).at(1)->Fill( momentum.Pt(), fFlow.at(se).X() );
-				yPt.at(se).at(1)->Fill( momentum.Pt(), fFlow.at(se).Y() );
-				if( fQvector->X(se) > -990.0 )
-					xObsPt.at(se).at(1)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
-				if( fQvector->Y(se) > -990.0 )
-					yObsPt.at(se).at(1)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
-			}
-			if( momentum.Rapidity() > -0.45 && momentum.Rapidity() < -0.35 )
-			{
-				xPt.at(se).at(2)->Fill( momentum.Pt(), fFlow.at(se).X() );
-				yPt.at(se).at(2)->Fill( momentum.Pt(), fFlow.at(se).Y() );
-				if( fQvector->X(se) > -990.0 )
-					xObsPt.at(se).at(2)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
-				if( fQvector->Y(se) > -990.0 )
-					yObsPt.at(se).at(2)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
-			}
-			if( momentum.Rapidity() > -0.65 && momentum.Rapidity() < -0.55 )
-			{
-				xPt.at(se).at(3)->Fill( momentum.Pt(), fFlow.at(se).X() );
-				yPt.at(se).at(3)->Fill( momentum.Pt(), fFlow.at(se).Y() );
-				if( fQvector->X(se) > -990.0 )
-					xObsPt.at(se).at(3)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
-				if( fQvector->Y(se) > -990.0 )
-					yObsPt.at(se).at(3)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
-			}
-			if( momentum.Rapidity() > -0.75 && momentum.Rapidity() < -0.65 )
-			{
-				xPt.at(se).at(4)->Fill( momentum.Pt(), fFlow.at(se).X() );
-				yPt.at(se).at(4)->Fill( momentum.Pt(), fFlow.at(se).Y() );
-				if( fQvector->X(se) > -990.0 )
-					xObsPt.at(se).at(4)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
-				if( fQvector->Y(se) > -990.0 )
-					yObsPt.at(se).at(4)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
-			}
+		{
+			xPt.at(se).at(0)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(0)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(0)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(0)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > -0.25 && momentum.Rapidity() < -0.15 )
+		{
+			xPt.at(se).at(1)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(1)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(1)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(1)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > -0.45 && momentum.Rapidity() < -0.35 )
+		{
+			xPt.at(se).at(2)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(2)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(2)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(2)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > -0.65 && momentum.Rapidity() < -0.55 )
+		{
+			xPt.at(se).at(3)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(3)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(3)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(3)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > -0.75 && momentum.Rapidity() < -0.65 )
+		{
+			xPt.at(se).at(4)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(4)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(4)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(4)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > 0.15 && momentum.Rapidity() < 0.25 )
+		{
+			xPt.at(se).at(5)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(5)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(5)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(5)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > 0.35 && momentum.Rapidity() < 0.45 )
+		{
+			xPt.at(se).at(6)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(6)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(6)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(6)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > 0.55 && momentum.Rapidity() < 0.65 )
+		{
+			xPt.at(se).at(7)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(7)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(7)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(7)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
+		if( momentum.Rapidity() > 0.65 && momentum.Rapidity() < 0.75 )
+		{
+			xPt.at(se).at(8)->Fill( momentum.Pt(), fFlow.at(se).X() );
+			yPt.at(se).at(8)->Fill( momentum.Pt(), fFlow.at(se).Y() );
+			if( fQvector->X(se) > -990.0 )
+				xObsPt.at(se).at(8)->Fill( momentum.Pt(), fUvector.at(se).X()*fQvector->X(se) );
+			if( fQvector->Y(se) > -990.0 )
+				yObsPt.at(se).at(8)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
+		}
 	}
 }
 

@@ -8,7 +8,8 @@ void Flow::InitializeQaHistograms()
     hProfileQa.at(kSinPhiYcm) = new TProfile( "sin(#phi) vs y_{cm}", ";y_{cm}; <sin(#phi)>", 17, -0.85, 0.85 );
     
     h2dQa.at(kM2VsP) = new TH2F( "m^{2} vs p", ";p, #frac{GeV}{c};m^{2}, #frac{GeV^{2}}{c^{4}}", 100, -3.0, 3.0, 100, 0, 18.0 );
-    h2dQa.at(kPtVsY) = new TH2F( "pt vs y_{cm}", ";y_{cm};pt, #frac{GeV}{c}", 100, -1.0, 1.0, 100, 0, 3.0 );
+    h2dQa.at(kPtVsYforward) = new TH2F( "pt vs y_{cm} forward", ";y_{cm}^{fwrd};pt, #frac{GeV}{c}", 100, 0, 1.0, 300, 0, 3.0 );
+    h2dQa.at(kPtVsYbackward) = new TH2F( "pt vs y_{cm} backward", ";y_{cm}^{bwrd};pt, #frac{GeV}{c}", 100, 0, 1.0, 300, 0, 3.0 );
     h2dQa.at(kFwAdcVsEstimator) = new TH2F( "FW-ADC vs TOF+RPC-Hits", ";TOF+RPC-Hits;FW-ADC", 250, 0., 250.0, 100, 0.0, 8000.0 );
     h2dQa.at(kFwZVsEstimator) = new TH2F( "FW-Z vs TOF+RPC-Hits", ";TOF+RPC-Hits;FW-Z", 250, 0., 250.0, 100, 0.0, 100.0 );
     h2dQa.at(kFwAdcVsModuleId) = new TH2F( "FW-Module Id vs FW-ADC", ";FW-ADC;FW-Module Id", 100, 0.0, 1000.0, 304, 0., 304.0 );
@@ -29,7 +30,7 @@ void Flow::FillQaHistograms(bool channelSelection, TString signal, float minSign
     {
         if( !fSelector->IsCorrectTrack(i) )
             continue;
-        if( !fEvent->GetVertexTrack(i)->GetPdgId() )
+        if( fEvent->GetVertexTrack(i)->GetPdgId() != fPid )
             continue;
         auto momentum = fEvent->GetVertexTrack(i)->GetMomentum();
         auto tof = fEvent->GetTOFHit(i)->GetTime();
@@ -39,7 +40,10 @@ void Flow::FillQaHistograms(bool channelSelection, TString signal, float minSign
 		auto mass2 = momentum.P()*momentum.P()*(1-beta*beta)/(beta*beta);
         h2dQa.at(kM2VsP)->Fill(momentum.P(), mass2);
         momentum.Boost(boost);
-        h2dQa.at(kPtVsY)->Fill(momentum.Rapidity(),momentum.Pt());
+        if( momentum.Rapidity() >= 0 )
+            h2dQa.at(kPtVsYforward)->Fill(momentum.Rapidity(), momentum.Pt());
+        if( momentum.Rapidity() < 0 )
+            h2dQa.at(kPtVsYbackward)->Fill( abs(momentum.Rapidity()), momentum.Pt());
         hProfileQa.at(kCosPhiYcm)->Fill( momentum.Rapidity(), cos( momentum.Phi() ) );
         hProfileQa.at(kSinPhiYcm)->Fill( momentum.Rapidity(), sin( momentum.Phi() ) );
     }
@@ -60,7 +64,6 @@ void Flow::FillQaHistograms(bool channelSelection, TString signal, float minSign
         float z = fEvent->GetPSDModule(i)->GetPositionComponent(2);
         float distance = sqrt(x*x+y*y+z*z);
         float time = 299.792458*beta/distance;
-        // cout << time << endl;
         h2dQa.at(kFwBetaVsModuleId)->Fill( fEvent->GetPSDModule(i)->GetBeta(), fEvent->GetPSDModule(i)->GetId() );
         h2dQa.at(kFwTimeVsModuleId)->Fill( time, fEvent->GetPSDModule(i)->GetId() );
     }

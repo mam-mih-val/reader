@@ -39,7 +39,8 @@ class Flow
 	};
 	enum e2dQa{
 		kM2VsP,
-		kPtVsY,
+		kPtVsYforward,
+		kPtVsYbackward,
 		kFwAdcVsEstimator,
 		kFwZVsEstimator,
 		kFwAdcVsModuleId,
