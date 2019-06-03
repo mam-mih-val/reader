@@ -41,9 +41,9 @@ void Flow::FillQaHistograms(bool channelSelection, TString signal, float minSign
         h2dQa.at(kM2VsP)->Fill(momentum.P(), mass2);
         momentum.Boost(boost);
         if( momentum.Rapidity() >= 0 )
-            h2dQa.at(kPtVsYforward)->Fill(momentum.Rapidity(), momentum.Pt());
+            h2dQa.at(kPtVsYforward)->Fill( momentum.Rapidity(), momentum.Pt() );
         if( momentum.Rapidity() < 0 )
-            h2dQa.at(kPtVsYbackward)->Fill( abs(momentum.Rapidity()), momentum.Pt());
+            h2dQa.at(kPtVsYbackward)->Fill( fabs(momentum.Rapidity()), momentum.Pt());
         hProfileQa.at(kCosPhiYcm)->Fill( momentum.Rapidity(), cos( momentum.Phi() ) );
         hProfileQa.at(kSinPhiYcm)->Fill( momentum.Rapidity(), sin( momentum.Phi() ) );
     }
