@@ -43,7 +43,7 @@ void Reader::BuildEventQaHistograms(TString sPicName)
 			continue;
         fEventQA->FillHistograms();
     }
-    fEventQA->SaveHistograms(sPicName);
+    fEventQA->SaveHisogramsToROOTFile(sPicName);
 }
 
 void Reader::BuildTrackQaHistograms(TString sPicName)

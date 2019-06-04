@@ -219,7 +219,7 @@ void EventQA::SaveHistograms(TString PicName)
 
 void EventQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = FileName+"Event.root";
+    TString sPath = FileName+".root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)
@@ -229,6 +229,10 @@ void EventQA::SaveHisogramsToROOTFile(TString FileName)
     for(int i=0; i<Num2DHistos; i++)
     {
         vHisto2D[i]->Write();
+    }
+    for( int i=0; i<NumProfiles; i++ )
+    {
+        vProfile[i]->Write();
     }
     file->Close();
 }
