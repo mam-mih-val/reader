@@ -254,7 +254,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 		if( fFlow.at(se).Y() != fFlow.at(se).Y() )
 			continue;
 		fUvector.at(se).SetMagPhi(1,momentum.Phi());
-		if( momentum.Rapidity() > -0.05 && momentum.Rapidity() < 0.05 )
+		if( -0.05 < momentum.Rapidity() && momentum.Rapidity() < 0.05 )
 		{
 			xPt.at(se).at(0)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(0)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -263,7 +263,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(0)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > -0.25 && momentum.Rapidity() < -0.15 )
+		if( -0.25 < momentum.Rapidity() && momentum.Rapidity() < -0.15 )
 		{
 			xPt.at(se).at(1)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(1)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -272,7 +272,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(1)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > -0.45 && momentum.Rapidity() < -0.35 )
+		if( -0.45 < momentum.Rapidity() && momentum.Rapidity() < -0.35 )
 		{
 			xPt.at(se).at(2)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(2)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -281,7 +281,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(2)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > -0.65 && momentum.Rapidity() < -0.55 )
+		if( -0.65 < momentum.Rapidity() && momentum.Rapidity() < -0.55 )
 		{
 			xPt.at(se).at(3)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(3)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -290,7 +290,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(3)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > -0.75 && momentum.Rapidity() < -0.65 )
+		if( -0.75 < momentum.Rapidity() && momentum.Rapidity() < -0.65 )
 		{
 			xPt.at(se).at(4)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(4)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -299,7 +299,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(4)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > 0.15 && momentum.Rapidity() < 0.25 )
+		if( 0.15 < momentum.Rapidity() && momentum.Rapidity() < 0.25 )
 		{
 			xPt.at(se).at(5)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(5)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -308,7 +308,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(5)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > 0.35 && momentum.Rapidity() < 0.45 )
+		if( 0.35 < momentum.Rapidity() && momentum.Rapidity() < 0.45 )
 		{
 			xPt.at(se).at(6)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(6)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -317,7 +317,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(6)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > 0.55 && momentum.Rapidity() < 0.65 )
+		if( 0.55 < momentum.Rapidity() && momentum.Rapidity() < 0.65 )
 		{
 			xPt.at(se).at(7)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(7)->Fill( momentum.Pt(), fFlow.at(se).Y() );
@@ -326,7 +326,7 @@ void Flow3SE::FillPtDependence(int trackIdx)
 			if( fQvector->Y(se) > -990.0 )
 				yObsPt.at(se).at(7)->Fill( momentum.Pt(), fUvector.at(se).Y()*fQvector->Y(se) );
 		}
-		if( momentum.Rapidity() > 0.65 && momentum.Rapidity() < 0.75 )
+		if( 0.65 < momentum.Rapidity() && momentum.Rapidity() < 0.75 )
 		{
 			xPt.at(se).at(8)->Fill( momentum.Pt(), fFlow.at(se).X() );
 			yPt.at(se).at(8)->Fill( momentum.Pt(), fFlow.at(se).Y() );
