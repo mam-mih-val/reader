@@ -38,12 +38,12 @@ void TrackQA::InitHistograms()
 	vHisto2D[pt_pseudorapidity_selected]=		new TH2F( Form("pt&pseudorapidity_%i_selected",iPid),";pseudorapidity selected;pt selected, [GeV/c]",100,0,3,100,0,2.5);
 	vHisto2D[rapidity_pseudorapidity]=			new TH2F( Form("rapidity&pseudorapidity_%i",iPid),";pseudorapidity;rapidity",100,0,3,100,-1,2);
 	vHisto2D[rapidity_pseudorapidity_selected]= new TH2F( Form("rapidity&pseudorapidity_%i_selected",iPid),";pseudorapidity selected;rapidity selected",100,0,3,100,-1,2);
-	vHisto2D[dEdXTOF_p] =			  			new TH2F( Form("TOF_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} TOF",100,-2.5,2.5,100,0,20);
-	vHisto2D[dEdXTOF_p_selected] =	 			new TH2F( Form("TOF_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} TOF selected",100,-2.5,2.5,100,0,20);
-	vHisto2D[dEdXMDC_p] =			  			new TH2F( Form("MDC_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} MDC",100,-2.5,2.5,100,0,30);
-	vHisto2D[dEdXMDC_p_selected] =	 			new TH2F( Form("MDC_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} MDC selected",100,-2.5,2.5,100,0,30);
-	vHisto2D[beta_p] =	 						new TH2F( Form("beta&p_%i",iPid),";p, [GeV/c]; #beta",100,-2.5,2.5,100,0.,1.1);
-	vHisto2D[beta_p_selected] =	 				new TH2F( Form("beta&p_%i_selected",iPid),";p selected, [GeV/c]; #beta selected",100,-2.5,2.5,100,0.,1.1);
+	vHisto2D[dEdXTOF_p] =			  			new TH2F( Form("TOF_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} TOF",100,-2.5,4.0,100,0,20);
+	vHisto2D[dEdXTOF_p_selected] =	 			new TH2F( Form("TOF_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} TOF selected",100,-2.5,4.0,100,0,20);
+	vHisto2D[dEdXMDC_p] =			  			new TH2F( Form("MDC_dE/dx&p_%i",iPid),";p, [GeV/c]; #frac{dE}{dx} MDC",100,-2.5,4.0,100,0,30);
+	vHisto2D[dEdXMDC_p_selected] =	 			new TH2F( Form("MDC_dE/dx&p_%i_selected",iPid),";p selected, [GeV/c]; #frac{dE}{dx} MDC selected",100,-2.5,4.0,100,0,30);
+	vHisto2D[beta_p] =	 						new TH2F( Form("beta&p_%i",iPid),";p, [GeV/c]; #beta",100,-2.5,4.0,100,0.,1.1);
+	vHisto2D[beta_p_selected] =	 				new TH2F( Form("beta&p_%i_selected",iPid),";p selected, [GeV/c]; #beta selected",100,-2.5,4.0,100,0.,1.1);
 	vHisto2D[DCA_X_Y] = 						new TH2F( Form("DCA_X_Y_%i",iPid),"; DCA_X, [mm]; DCA_Y, [mm]",100,-30,30,100,30,30);
 	vHisto2D[DCA_X_Y_selected] = 				new TH2F( Form("DCA_X_Y_%i_selected",iPid),"; DCA_X, selected, [mm]; DCA_Y, selected, [mm]",100,-30,30,100,30,30);
 }
@@ -224,7 +224,7 @@ void TrackQA::SaveHistograms(TString PicName)
 
 void TrackQA::SaveHisogramsToROOTFile(TString FileName)
 {
-    TString sPath = "../histograms/Track_"+FileName+Form("_Pid_%i.root",iPid);
+    TString sPath = FileName+".root";
     TFile* file = new TFile(sPath,"recreate");
     file->cd();
     for(int i=0; i<Num1DHistos; i++)

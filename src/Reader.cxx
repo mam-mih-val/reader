@@ -50,25 +50,14 @@ void Reader::BuildTrackQaHistograms(TString sPicName)
 {
 	Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent, "centrality_epcorr_apr12_gen8_2018_07.root");
-	TrackQA* fTrackQA[NumOfParticles];
-	fTrackQA[all] = 		new TrackQA(fEvent,fSelector,-1);
-	fTrackQA[electron] = 	new TrackQA(fEvent,fSelector,3);
-	fTrackQA[positron] = 	new TrackQA(fEvent,fSelector,2);
-	fTrackQA[pi_minus] = 	new TrackQA(fEvent,fSelector,9);
-	fTrackQA[pi_plus] = 	new TrackQA(fEvent,fSelector,8);
-	fTrackQA[proton] = 		new TrackQA(fEvent,fSelector,14);
-	fTrackQA[deuteron] =  	new TrackQA(fEvent,fSelector,45);
-	fTrackQA[helium3] = 	new TrackQA(fEvent,fSelector,49);
-	fTrackQA[helium4] = 	new TrackQA(fEvent,fSelector,47);
+	TrackQA* fTrackQA = new TrackQA(fEvent,fSelector,-1);
     Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
         fChain->GetEntry(i);
-		for(int j=0; j<NumOfParticles;j++) 
-			fTrackQA[j]->FillHistograms();
+		fTrackQA->FillHistograms();
     }
-	for(int j=0; j<NumOfParticles;j++) 
-		fTrackQA[j]->SaveHistograms(sPicName);
+	fTrackQA->SaveHisogramsToROOTFile(sPicName);
 }
 void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal)
 {
