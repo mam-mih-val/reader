@@ -30,10 +30,10 @@ void EventQA::InitHistograms()
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,250);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,250);
-    vHisto2D[tracks_charge] =       new TH2F("tracks&charge",";tracks MDC;charge FW",100,0,100,150,0,150);
-    vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected",";selected tracks MDC;selected charge FW",100,0,100,150,0,150);
-    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;charge FW;",100,0,250,150,0,150);
-    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected charge FW",100,0,250,150,0,150);
+    vHisto2D[tracks_charge] =       new TH2F("tracks&charge","FW-ADC;tracks MDC;FW-ADC",100,0,100,150,0,9000);
+    vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected",";selected tracks MDC;selected FW-ADC",100,0,100,100,0,9000);
+    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;FW-ADC;",100,0,250,150,0,9000);
+    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected FW-ADC",100,0,250,150,0,9000);
     vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY",";vertex on X;vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",200,-1000,1000,200,-1000,1000);
@@ -65,7 +65,7 @@ void EventQA::FillHistograms()
     {
         fPSDModule = fEvent->GetPSDModule(j);
         vHisto2D[hitsFW_X_Y]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1));
-		SumCharge+=fPSDModule->GetChargeZ();
+		SumCharge+=fPSDModule->GetEnergy();
     }
 	vProfile[hits_centrality]->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
     vHisto1D[tracksMDC]->Fill( fEvent->GetCentralityEstimator(HADES_constants::kNselectedTracks) );
@@ -91,7 +91,7 @@ void EventQA::FillHistograms()
             if( fPSDModule->HasPassedCuts() )
 			{
                 vHisto2D[hitsFW_X_Y_selected]->Fill(fPSDModule->GetPositionComponent(0),fPSDModule->GetPositionComponent(1));
-				SumCharge+=fPSDModule->GetChargeZ();
+				SumCharge+=fPSDModule->GetEnergy();
 			}
         } 
 		vProfile[hits_centrality_selected]->Fill( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut), fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut) );
