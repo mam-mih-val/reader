@@ -15,8 +15,8 @@ void EventQA::InitHistograms()
     vHisto1D[tracksMDC_selected] =  new TH1F("tracksMDC_selected",";selected tracks MDC;counts",100,0,100);
     vHisto1D[hitsTOF] =             new TH1F("hitsTOF",";hits in TOF+RPC;counts",250,0,250);
     vHisto1D[hitsTOF_selected] =    new TH1F("hitsTOF_selected",";hits in TOF+RPC selected;counts",250,0,250);
-    vHisto1D[chargeFW] =            new TH1F("chargeFW",";charge in FW;counts",100,0,1000);
-    vHisto1D[chargeFW_selected] =   new TH1F("chargeFW_selected",";charge in FW selected;counts",100,0,1000);
+    vHisto1D[chargeFW] =            new TH1F("chargeFW",";charge in FW;counts",100,0,10000);
+    vHisto1D[chargeFW_selected] =   new TH1F("chargeFW_selected",";charge in FW selected;counts",100,0,10000);
     vHisto1D[vertexZ] =             new TH1F("vertexZ",";vertex on Z;conts",100,-100,10);
     vHisto1D[vertexZ_selected] =    new TH1F("vertexZ_selected",";vertex on Z, selected;counts",100,-100,10);
     vHisto1D[hitsTOF_uncuted] =     new TH1F("hitsTOF_uncuted",";hits in TOF+RPC uncuted;counts",250,0,250);
@@ -30,10 +30,10 @@ void EventQA::InitHistograms()
 
     vHisto2D[tracks_hits] =         new TH2F("tracks&hits",";tracks MDC;hits TOF+RPC",100,0,100,100,0,250);
     vHisto2D[tracks_hits_selected]= new TH2F("tracks&hits_selected",";selected tracks MDC;selected hits TOF+RPC",100,0,100,100,0,250);
-    vHisto2D[tracks_charge] =       new TH2F("tracks&charge","FW-ADC;tracks MDC;FW-ADC",100,0,100,100,0,1000);
-    vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected",";selected tracks MDC;selected FW-ADC",100,0,100,100,0,1000);
-    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;FW-ADC;",100,0,250,100,0,1000);
-    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected FW-ADC",100,0,250,100,0,1000);
+    vHisto2D[tracks_charge] =       new TH2F("tracks&charge","FW-ADC;tracks MDC;FW-ADC",100,0,100,100,0,10000);
+    vHisto2D[tracks_charge_selected]=new TH2F("tracks&charge_selected",";selected tracks MDC;selected FW-ADC",100,0,100,100,0,10000);
+    vHisto2D[hits_charge] =         new TH2F("hits&charge",";hits TOF+RPC;FW-ADC;",100,0,250,100,0,10000);
+    vHisto2D[hits_charge_selected] =new TH2F("hits&charge_selected",";selected hits TOF+RPC;selected FW-ADC",100,0,250,100,0,10000);
     vHisto2D[vertexX_vertexY] =     new TH2F("vertexX&vertexY",";vertex on X;vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[vertexX_vertexY_selected]=new TH2F("vertexX&vertexY_selected",";selected vertex on X;selected vertex on Y",100,-5,5,100,-5,5);
     vHisto2D[hitsFW_X_Y]=           new TH2F("hits in FW coordinates",";X, [mm];Y, [mm]",200,-1000,1000,200,-1000,1000);
