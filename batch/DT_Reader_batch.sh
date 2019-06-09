@@ -38,6 +38,7 @@ do
     shift ;;
     --pid) pidCode=$2
     echo found pid code = $pidCode
+    shift ;;
     --) shift
     break ;;
     # *) echo Error: incorrect option
