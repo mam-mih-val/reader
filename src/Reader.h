@@ -75,9 +75,9 @@ class Reader
     DataTreeEvent*  GetEvent(int idx=0);
     void            GetFlow(int iNumHarm=1);
     void            BuildEventQaHistograms(TString sPicName);
-    void            BuildTrackQaHistograms(TString sPicName);
+    void            BuildTrackQaHistograms(TString sPicName, int pid=14);
     void            InitFlowHistos();
 	void			BuildQvector3SeHistograms(TString sPicName, bool channelSelection=0, TString signal="adc", float minSignal=0, float maxSignal=9999);
-	void			BuildFlow3SeHistograms(TString sPicName, bool channelSelection=0, TString signal="adc", float minSignal=0, float maxSignal=9999);
+	void			BuildFlow3SeHistograms(TString sPicName, bool channelSelection=0, TString signal="adc", float minSignal=0, float maxSignal=9999, int pid=14);
     void            SaveFlowStatistics();
 };

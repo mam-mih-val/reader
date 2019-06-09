@@ -26,6 +26,7 @@ int main(int argc, char** argv)
     std::string command = argv[1];
     bool channelSelection;
     std::string signal="adc";
+    float pid=14;
     float minSignal=0;
     float maxSignal=999;
     auto reader = new Reader(argv[ argc-2 ]);
@@ -54,6 +55,11 @@ int main(int argc, char** argv)
                 maxSignal=std::atof(argv[i+1]);
                 continue;
             }
+            if(flag=="--pid")
+            {
+                pid=std::atof(argv[i+1]);
+                continue;
+            }
             // cout << "Error 3: Unknown flag" << endl;
             // cout << "Flag: " << flag << " is given. Only --signal, --perchannel, --min, --max flags are supported" << endl;
             // return 3;
@@ -66,7 +72,7 @@ int main(int argc, char** argv)
     }
     if( command=="trackqa" )
     {
-        reader->BuildTrackQaHistograms(argv[argc-1]);
+        reader->BuildTrackQaHistograms(argv[argc-1], pid);
         return 0;
     }
     if( command=="qvector" )
@@ -86,7 +92,7 @@ int main(int argc, char** argv)
         cout << "Signal type: " << signal << endl;
         cout << "Minimal signal: " << minSignal << endl;
         cout << "Maximal signal: " << maxSignal << endl;
-        reader->BuildFlow3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal);
+        reader->BuildFlow3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal, pid);
         return 0;
     }
     cout << "Error 2: unknow command" << endl;

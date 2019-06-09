@@ -46,11 +46,11 @@ void Reader::BuildEventQaHistograms(TString sPicName)
     fEventQA->SaveHisogramsToROOTFile(sPicName);
 }
 
-void Reader::BuildTrackQaHistograms(TString sPicName)
+void Reader::BuildTrackQaHistograms(TString sPicName, int pid)
 {
 	Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent, "centrality_epcorr_apr12_gen8_2018_07.root");
-	TrackQA* fTrackQA = new TrackQA(fEvent,fSelector,-1);
+	TrackQA* fTrackQA = new TrackQA(fEvent, fSelector, pid);
     Long64_t lNEvents = fChain->GetEntries();
     for(int i=0; i<lNEvents; i++)
     {
@@ -87,7 +87,7 @@ void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, 
 	fQ->SaveHistogramsToROOTFile(sPicName);
 }
 
-void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal)
+void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal, int pid)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
@@ -111,7 +111,7 @@ void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TSt
 			continue;
 		fQ->ComputeCorrelations();
     }
-	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, 14);
+	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, pid);
 	cout << "Estimating flow" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
