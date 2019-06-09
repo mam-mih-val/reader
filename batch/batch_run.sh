@@ -13,7 +13,7 @@ source $hadesroot
 
 echo "executing $executable $cmd --signal $signal --perchannel $channelSelection --min $minSignal --max $maxSignal --pid $pidCode $input_file $output_file"
 
-$executable $cmd --signal $signal --perchannel $channelSelection --min $minSignal --max $maxSignal $input_file $output_file
+$executable $cmd --signal $signal --perchannel $channelSelection --min $minSignal --max $maxSignal --pid $pidCode $input_file $output_file
 
 echo JOB FINISHED!
 date $format
