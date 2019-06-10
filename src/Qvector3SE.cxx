@@ -73,7 +73,7 @@ void Qvector3SE::InitializeHistograms()
 	hCorrMult.push_back( new TProfile( "Qx_{b}Qx_{c} vs mult", ";tracks;Qx_{b}Qx_{c}", 20, 0, 100 ) ); // 2
 	hCorrMult.push_back( new TProfile( "Qy_{b}Qy_{c} vs mult", ";tracks;Qy_{b}Qy_{c}", 20, 0, 100 ) ); // 3
 	hCorrMult.push_back( new TProfile( "Qx_{a}Qx_{c} vs mult", ";tracks;Qx_{a}Qx_{c}", 20, 0, 100 ) ); // 4
-	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 20, 0, 100 ) ); // 5	
+	hCorrMult.push_back( new TProfile( "Qy_{a}Qy_{c} vs mult", ";tracks;Qy_{a}Qy_{c}", 20, 0, 100 ) ); // 5
 }
 
 void Qvector3SE::Estimate()
@@ -95,7 +95,7 @@ void Qvector3SE::Estimate()
 	}
 	for( int i=0; i<SubEvent.size(); i++ )
 	{
-		if( SubEvent.at(i).size() < 3 )
+		if( SubEvent.at(i).size() < 1 )
 		{
 			fQvector.at(i).Set( -999., -999. );
 			continue;
@@ -109,14 +109,14 @@ void Qvector3SE::Estimate()
 			if( fSignal=="z" || fSignal=="Z" )
 				charge = module->GetChargeZ();
 			double phi = module->GetPhi();
-			TVector2 add;	
+			TVector2 add;
 			add.SetMagPhi( charge, phi );
 			fQvector.at(i)+=add;
 			SumCharge+=charge;
 		}
 		fQvector.at(i)/=SumCharge;
 		//if( fQvector.at(i).Mod() > 1. )
-		// 	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() << 
+		// 	cout << "SE: " << i+1 << " Qx=" << fQvector.at(i).X() << " Qy=" << fQvector.at(i).Y() <<
 		//	" |Q|=" << fQvector.at(i).Mod() << " charge of SE: " << SumCharge << endl;
 	}
 }
@@ -183,7 +183,7 @@ void Qvector3SE::ComputeResolution()
 		hResolutionX.back()->SetTitle(Form("R_{1,x}^{se%i}",i+1));
 		hResolutionY.back()->SetTitle(Form("R_{1,y}^{se%i}",i+1));
 	}
-	
+
 	for(int i=0; i<nbins;i++)
 	{
 		auto corrX0 = hCorrelation.at(0)->GetBinContent(i+1);
