@@ -83,7 +83,7 @@ void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, 
     }
 	cout << "Estimating resolution" << endl;
 	fQ->ComputeResolution();
-	fQ->SavePictures(sPicName);
+	// fQ->SavePictures(sPicName);
 	fQ->SaveHistogramsToROOTFile(sPicName);
 }
 

@@ -95,7 +95,7 @@ void Qvector3SE::Estimate()
 	}
 	for( int i=0; i<SubEvent.size(); i++ )
 	{
-		if( SubEvent.at(i).size() < 1 )
+		if( SubEvent.at(i).size() < 3 )
 		{
 			fQvector.at(i).Set( -999., -999. );
 			continue;
