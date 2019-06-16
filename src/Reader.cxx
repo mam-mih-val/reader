@@ -94,7 +94,7 @@ void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TSt
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal, 1);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal, harm);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
