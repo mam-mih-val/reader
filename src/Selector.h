@@ -26,7 +26,6 @@ class Selector
     enum event_cuts{
         cVeretexPositionZ = 0,
         cVeretexPositionXY, //1
-        cVertexQuality, //2
         cTriggerVertexClust, //3
         cTriggerVertexCand, //4
         cTriggerGoodStart, //5
@@ -56,5 +55,5 @@ class Selector
     void    CheckEventCuts();
     void    CheckTrackCuts(Int_t idx);
     void    DrawStatistics();
-    void    SaveStatistics();
+    void    SaveStatistics(TString fileName);
 };

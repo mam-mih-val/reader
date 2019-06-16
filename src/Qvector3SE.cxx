@@ -1,6 +1,6 @@
 #include "Qvector3SE.h"
 
-Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality, bool _channelSelection,  TString _signal, float _minSignal, float _maxSignal)
+Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality, bool _channelSelection,  TString _signal, float _minSignal, float _maxSignal, int _harm)
 {
 	fEvent = _fEvent;
 	fCentrality = _centrality;
@@ -9,6 +9,7 @@ Qvector3SE::Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* 
 	fSignal = _signal;
 	fMinSignal=_minSignal;
 	fMaxSignal=_maxSignal;
+	fHarm=_harm;
 	iNumberOfSE = 3;
 	for(unsigned int i=0;i<iNumberOfSE;i++)
 		fQvector.push_back( TVector2(0.,0.) );
@@ -110,7 +111,7 @@ void Qvector3SE::Estimate()
 				charge = module->GetChargeZ();
 			double phi = module->GetPhi();
 			TVector2 add;
-			add.SetMagPhi( charge, phi );
+			add.SetMagPhi( charge, fHarm*phi );
 			fQvector.at(i)+=add;
 			SumCharge+=charge;
 		}

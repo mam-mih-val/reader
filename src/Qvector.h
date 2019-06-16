@@ -30,6 +30,7 @@ class Qvector
 	TString fSignal;
 	float fMinSignal;
 	float fMaxSignal;
+	int	fHarm;
 	Selector* fSelector;
 	Centrality* fCentrality;
 	DataTreeEvent* fEvent;

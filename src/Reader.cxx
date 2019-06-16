@@ -44,6 +44,7 @@ void Reader::BuildEventQaHistograms(TString sPicName)
         fEventQA->FillHistograms();
     }
     fEventQA->SaveHisogramsToROOTFile(sPicName);
+	fSelector->SaveStatistics(sPicName);
 }
 
 void Reader::BuildTrackQaHistograms(TString sPicName, int pid)
@@ -58,13 +59,14 @@ void Reader::BuildTrackQaHistograms(TString sPicName, int pid)
 		fTrackQA->FillHistograms();
     }
 	fTrackQA->SaveHisogramsToROOTFile(sPicName);
+	fSelector->SaveStatistics(sPicName);
 }
-void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal)
+void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal, int harm)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal, harm);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
@@ -87,12 +89,12 @@ void Reader::BuildQvector3SeHistograms(TString sPicName, bool channelSelection, 
 	fQ->SaveHistogramsToROOTFile(sPicName);
 }
 
-void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal, int pid)
+void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TString signal, float minSignal, float maxSignal, int pid, int harm)
 {
 	Long64_t lNEvents = fChain->GetEntries();
     Selector* fSelector = new Selector(fEvent);
 	Centrality* fCentrality = new Centrality(fEvent,"centrality_epcorr_apr12_gen8_2018_07.root");
-	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal);
+	Qvector3SE* fQ =  new Qvector3SE(fEvent, fSelector, fCentrality, channelSelection, signal, minSignal, maxSignal, harm);
 	cout << "Filling correction histograms" << endl;
 	for(int i=0; i<lNEvents; i++)
     {
@@ -111,7 +113,7 @@ void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TSt
 			continue;
 		fQ->ComputeCorrelations();
     }
-	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, pid);
+	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, pid, harm);
 	cout << "Estimating flow" << endl;
 	for(int i=0; i<lNEvents; i++)
     {

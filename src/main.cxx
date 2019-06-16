@@ -29,6 +29,7 @@ int main(int argc, char** argv)
     float pid=14;
     float minSignal=0;
     float maxSignal=999;
+    int harm=1;
     auto reader = new Reader(argv[ argc-2 ]);
     if(argc>4)
     {
@@ -60,6 +61,11 @@ int main(int argc, char** argv)
                 pid=std::atof(argv[i+1]);
                 continue;
             }
+            if(flag=="--harmonic")
+            {
+                harm=std::atoi(argv[i+1]);
+                continue;
+            }
             // cout << "Error 3: Unknown flag" << endl;
             // cout << "Flag: " << flag << " is given. Only --signal, --perchannel, --min, --max flags are supported" << endl;
             // return 3;
@@ -82,7 +88,7 @@ int main(int argc, char** argv)
         cout << "Signal type: " << signal << endl;
         cout << "Minimal signal: " << minSignal << endl;
         cout << "Maximal signal: " << maxSignal << endl;
-        reader->BuildQvector3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal);
+        reader->BuildQvector3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal, harm);
         return 0;
     }
     if( command=="flow" )
@@ -92,7 +98,7 @@ int main(int argc, char** argv)
         cout << "Signal type: " << signal << endl;
         cout << "Minimal signal: " << minSignal << endl;
         cout << "Maximal signal: " << maxSignal << endl;
-        reader->BuildFlow3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal, pid);
+        reader->BuildFlow3SeHistograms(argv[argc-1], channelSelection, signal, minSignal, maxSignal, pid, harm);
         return 0;
     }
     cout << "Error 2: unknow command" << endl;

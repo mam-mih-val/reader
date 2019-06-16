@@ -27,6 +27,7 @@ class Flow
 	protected:
 	int fNumberOfSE;
 	int fPid;
+	int fHarm;
 	enum eProfilesQa{
 		kCosPhiYcm,
 		kSinPhiYcm,

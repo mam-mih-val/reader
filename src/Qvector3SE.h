@@ -34,7 +34,7 @@ class Qvector3SE : public Qvector
 	void		EstimateResolution();
 
 	public:
-    Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality,bool _channelSelection=0,  TString _signal="adc", float _minSignal=0, float _maxSignal=9999);
+    Qvector3SE(DataTreeEvent* _fEvent, Selector* _selector, Centrality* _centrality,bool _channelSelection=0,  TString _signal="adc", float _minSignal=0, float _maxSignal=9999, int _harm=1);
     ~Qvector3SE();
 	void		Compute(); // One computes Qvector without filling any histograms
     void        ComputeCorrections();

@@ -44,7 +44,7 @@ class Flow3SE : public Flow
 	void		SaveYDependence(TString sFileName);
 	Flow3SE() {};
 	public:
-	Flow3SE(DataTreeEvent* _event, Centrality* _centrality, Qvector3SE* _Qvector, Selector* _selector, int _pid=14);
+	Flow3SE(DataTreeEvent* _event, Centrality* _centrality, Qvector3SE* _Qvector, Selector* _selector, int _pid=14, int _harm=1);
 	~Flow3SE();
 	void 		Estimate();
 	void		InitializeHistograms();

@@ -1,12 +1,13 @@
 #include "Flow3SE.h"
 
-Flow3SE::Flow3SE(DataTreeEvent* _event, Centrality* _centrality, Qvector3SE* _Qvector, Selector* _selector, int _pid)
+Flow3SE::Flow3SE(DataTreeEvent* _event, Centrality* _centrality, Qvector3SE* _Qvector, Selector* _selector, int _pid, int _harm)
 {
 	fEvent = _event;
 	fCentrality = _centrality;
 	fQvector = _Qvector;
 	fSelector = _selector;
 	fPid = _pid;
+	fHarm= _harm;
 	cout << "All was linked successfully" << endl;
 	for(int i=0; i<3; i++)
 		fUvector.push_back( TVector2{0.,0.} );
@@ -154,7 +155,7 @@ void Flow3SE::Estimate()
 		TLorentzVector momentum = track->GetMomentum();
 		momentum.Boost(b);
 		for( auto &vector : fUvector )
-			vector.SetMagPhi( 1., momentum.Phi() );
+			vector.SetMagPhi( 1., fHarm*momentum.Phi() );
 		for( auto &vector : fFlow )
 			vector.Set( 0., 0. );
 		for( int se=0; se<3; se++ )
