@@ -11,6 +11,7 @@ channelSelection=0
 minSignal=0
 maxSignal=999
 pidCode=14
+nHarmonic=1
 
 while [ "$#" -gt "2" ]
 do
@@ -38,6 +39,9 @@ do
     shift ;;
     --pid) pidCode=$2
     echo found pid code = $pidCode
+    shift ;;
+    --harmonic) nHarmonic=$2
+    echo found harmonic = $nHarmonic
     shift ;;
     --) shift
     break ;;
@@ -74,4 +78,4 @@ echo Minimal Signal=$minSignal
 echo Maximal Signal=$maxSignal
 echo pid code=$pidCode
 
-sbatch -J DT_Reader -p $partition -t $time -a $job_range -e ${log_dir}/%A_%a.e -o ${log_dir}/%A_%a.o --export=executable=$executable,output_dir=$output_dir,file_list=$file_list,hadesroot=$hadesroot,cmd=$cmd,signal=$signal,channelSelection=$channelSelection,minSignal=$minSignal,maxSignal=$maxSignal,pidCode=$pidCode batch_run.sh
+sbatch -J DT_Reader -p $partition -t $time -a $job_range -e ${log_dir}/%A_%a.e -o ${log_dir}/%A_%a.o --export=executable=$executable,output_dir=$output_dir,file_list=$file_list,hadesroot=$hadesroot,cmd=$cmd,signal=$signal,channelSelection=$channelSelection,minSignal=$minSignal,maxSignal=$maxSignal,pidCode=$pidCode,nHarmonic=$nHarmonic batch_run.sh
