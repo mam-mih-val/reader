@@ -155,8 +155,15 @@ void Flow3SE::Estimate()
 			continue;
 		TLorentzVector momentum = track->GetMomentum();
 		momentum.Boost(b);
+		TVector2 unCorr;
+		int binx = hMeanUn.at(0)->GetXaxis()->FindBin( momentum.Rapidity() );
+		int biny = hMeanUn.at(0)->GetYaxis()->FindBin( momentum.Pt() );
+		unCorr.Set( hMeanUn.at(0)->GetBinContent(binx, biny), hMeanUn.at(1)->GetBinContent(binx, biny) );
 		for( auto &vector : fUvector )
+		{
 			vector.SetMagPhi( 1., fHarm*momentum.Phi() );
+			vector-=unCorr;
+		}
 		for( auto &vector : fFlow )
 			vector.Set( 0., 0. );
 		for( int se=0; se<3; se++ )
