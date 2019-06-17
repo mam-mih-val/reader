@@ -70,3 +70,29 @@ void Flow::FillQaHistograms(bool channelSelection, TString signal, float minSign
     h2dQa.at(kFwAdcVsEstimator)->Fill(fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut),sumAdc);
     h2dQa.at(kFwZVsEstimator)->Fill(fEvent->GetCentralityEstimator(HADES_constants::kNhitsTOF_RPC_cut),sumZ);
 }
+
+void Flow::InitializeMeanUn()
+{
+    hMeanUn.at(0) = new TProfile2D( "Mean_Unx", "<x_{n}>;y_{cm};pt, [GeV/c]", 16, -0.8, 0.8, 25, 0.0, 2.5 );
+    hMeanUn.at(1) = new TProfile2D( "Mean_Uny", "<y_{n}>;y_{cm};pt, [GeV/c]", 16, -0.8, 0.8, 25, 0.0, 2.5 );
+}
+
+
+void Flow::FillMeanUn()
+{
+	int nTracks = fEvent->GetNVertexTracks();
+    double BETA = sqrt( 1.0 - 0.938*0.938/1.23/1.23 );
+    TVector3 boost{0,0,-BETA};
+    for(int i=0; i<nTracks; i++)
+    {
+        auto track = fEvent->GetVertexTrack(i);
+        if( !fSelector->IsCorrectTrack(i) )
+            continue;
+        auto p = track->GetMomentum();
+        p.Boost(boost);
+        TVector2 un;
+        un.SetMagPhi(1.0, p.Phi());
+        hMeanUn.at(0)->Fill(p.Rapidity(), p.Pt(), un.X() ); 
+        hMeanUn.at(1)->Fill(p.Rapidity(), p.Pt(), un.Y() ); 
+    }
+}

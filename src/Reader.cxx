@@ -114,6 +114,16 @@ void Reader::BuildFlow3SeHistograms(TString sPicName, bool channelSelection, TSt
 		fQ->ComputeCorrelations();
     }
 	Flow3SE* flow = new Flow3SE(fEvent, fCentrality, fQ, fSelector, pid, harm);
+	cout << "Estimating mean Un" << endl;
+	for(int i=0; i<lNEvents; i++)
+    {
+		fChain->GetEntry(i);
+		if( fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) < 20 || fEvent->GetCentrality(HADES_constants::kNhitsTOF_RPC_cut) > 30 )
+			continue;
+		if( !fSelector->IsCorrectEvent() )
+			continue;
+		flow->FillMeanUn();
+    }
 	cout << "Estimating flow" << endl;
 	for(int i=0; i<lNEvents; i++)
     {

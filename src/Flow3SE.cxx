@@ -14,6 +14,7 @@ Flow3SE::Flow3SE(DataTreeEvent* _event, Centrality* _centrality, Qvector3SE* _Qv
 	for(int i=0; i<3; i++)
 		fFlow.push_back( TVector2{0.,0.} );
 	this->InitializeHistograms();
+	this->InitializeMeanUn();
 }
 
 Flow3SE::~Flow3SE()
@@ -533,6 +534,8 @@ void Flow3SE::SaveHistogramsToRootFile(TString sFileName)
 	for(auto histo:hResolutionX)
 		histo->Write();
 	for(auto histo:hResolutionY)
+		histo->Write();
+	for(auto histo:hMeanUn)
 		histo->Write();
 	file->cd("/Observable Flow/");
 	for( int se=0; se<3; se++ )

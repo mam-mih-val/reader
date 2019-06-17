@@ -13,6 +13,7 @@
 #include "Centrality.h"
 #include "Selector.h"
 #include "Qvector3SE.h"
+#include "TProfile2D.h"
 
 #define  DATATREE_SHINE
 #include "DataTreeEvent.h"
@@ -59,10 +60,12 @@ class Flow
 	array<TH1F*, kNumberOf1dQa> h1dQa;
 	array<TProfile*, kNumberOfQaProfiles> hProfileQa;
 	array<TH2F*, kNumberOf2dQa> h2dQa;
+	array<TProfile2D*, 2> hMeanUn;
 	
 	
 	virtual void InitializeQvectorCorrelations() {};
 			void InitializeQaHistograms();
+			void InitializeMeanUn();
 	virtual void InitializeObservableFlow() {};
 	virtual void FillPtDependence(int trackIdx) {};
 			void FillQaHistograms(bool channelSelection=0,  TString signal="adc", float minSignal=0, float maxSignal=9999);
@@ -74,6 +77,7 @@ class Flow
 	~Flow() {};
 	virtual void 		Estimate() {};
 	virtual void		InitializeHistograms() {};
+			void		FillMeanUn();
 	virtual void		SavePictures(TString sFileName) {};
 	virtual void		SaveHistogramsToRootFile(TString sFileName) {};
 };
